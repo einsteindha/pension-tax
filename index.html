@@ -1,0 +1,1459 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>연금계좌 세금 정리 | IdentiFi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #fff;
+  --bg2: #f5f7fa;
+  --bg3: #eef1f6;
+  --text: #1a1a2e;
+  --text2: #4a5568;
+  --text3: #718096;
+  --border: rgba(0,0,0,.1);
+  --border2: rgba(0,0,0,.18);
+  --blue: #378ADD;
+  --green: #1D9E75;
+  --amber: #BA7517;
+  --red: #D85A30;
+  --purple: #8B5CF6;
+  --radius: 8px;
+  --radius-lg: 12px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1a1b26;
+    --bg2: #24253a;
+    --bg3: #2d2e45;
+    --text: #e8eaf6;
+    --text2: #9fa8c0;
+    --text3: #6b7394;
+    --border: rgba(255,255,255,.08);
+    --border2: rgba(255,255,255,.15);
+  }
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Noto Sans KR', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* ── HEADER ── */
+.site-header {
+  background: #0D1B3E;
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.header-title h1 { font-size: 20px; font-weight: 700; color: #E8C97E; }
+.header-title p  { font-size: 12px; color: rgba(232,201,126,.55); margin-top: 2px; }
+.header-badge {
+  font-size: 11px; color: rgba(232,201,126,.7);
+  border: 1px solid rgba(232,201,126,.3);
+  padding: 4px 12px; border-radius: 20px; white-space: nowrap;
+}
+
+/* ── TAB NAV ── */
+.tab-nav {
+  display: flex;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.tab-btn {
+  flex: 1; min-width: 90px;
+  padding: 13px 10px;
+  border: none; background: transparent;
+  cursor: pointer; font-size: 13px; font-weight: 500;
+  color: var(--text3); font-family: inherit;
+  white-space: nowrap; border-bottom: 3px solid transparent;
+  transition: all .2s;
+}
+.tab-btn:hover { color: var(--text2); background: var(--bg3); }
+.tab-btn.active { color: var(--blue); border-bottom-color: var(--blue); background: var(--bg); }
+
+/* ── LAYOUT ── */
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+.container { max-width: 1080px; margin: 0 auto; padding: 24px; }
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
+.split-55 { grid-template-columns: 55% 1fr; }
+@media (max-width: 860px) { .split, .split-55 { grid-template-columns: 1fr; } }
+@media (max-width: 600px) { .container { padding: 14px; } .site-header { padding: 14px; } }
+
+/* ── CARD ── */
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+}
+.card + .card { margin-top: 14px; }
+.card-title {
+  font-size: 14px; font-weight: 700; color: var(--text);
+  margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
+}
+.card-title::before {
+  content: ''; width: 3px; height: 15px;
+  background: var(--blue); border-radius: 2px; flex-shrink: 0;
+}
+
+/* ── FORM ── */
+.form-group { margin-bottom: 14px; }
+.form-label {
+  display: block; font-size: 11px; font-weight: 700;
+  color: var(--text2); margin-bottom: 5px; letter-spacing: .3px;
+  text-transform: uppercase;
+}
+.form-hint { font-size: 11px; color: var(--text3); margin-top: 3px; }
+.inp-wrap { position: relative; display: flex; align-items: center; }
+.inp-wrap input[type="number"] {
+  width: 100%; padding: 9px 38px 9px 11px;
+  border: 1px solid var(--border2); border-radius: var(--radius);
+  background: var(--bg); color: var(--text);
+  font-size: 14px; font-family: inherit; transition: border-color .2s;
+}
+.inp-wrap input[type="number"]:focus { outline: none; border-color: var(--blue); }
+.inp-unit {
+  position: absolute; right: 10px;
+  font-size: 11px; color: var(--text3); pointer-events: none;
+}
+input[type="range"] { width: 100%; accent-color: var(--blue); cursor: pointer; height: 4px; }
+.range-row { display: flex; justify-content: space-between; font-size: 11px; color: var(--text3); margin-top: 3px; }
+.radio-group { display: flex; gap: 6px; flex-wrap: wrap; }
+.radio-opt { flex: 1; min-width: 70px; }
+.radio-opt input[type="radio"] { display: none; }
+.radio-opt label {
+  display: block; padding: 7px 10px; border: 1px solid var(--border2);
+  border-radius: var(--radius); cursor: pointer; font-size: 12px; font-weight: 500;
+  text-align: center; color: var(--text2); transition: all .2s; white-space: nowrap;
+}
+.radio-opt input:checked + label { background: var(--blue); color: #fff; border-color: var(--blue); }
+.divider { border: none; border-top: 1px solid var(--border); margin: 14px 0; }
+
+/* ── RESULT ── */
+.result-hero {
+  background: #0D1B3E; border-radius: var(--radius-lg);
+  padding: 18px 20px; margin-bottom: 14px;
+}
+.result-hero-label { font-size: 11px; color: rgba(232,201,126,.6); margin-bottom: 4px; }
+.result-hero-value { font-size: 26px; font-weight: 700; color: #E8C97E; line-height: 1.2; }
+.result-hero-sub { font-size: 12px; color: rgba(255,255,255,.5); margin-top: 5px; }
+
+.rrow {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 13px;
+}
+.rrow:last-child { border-bottom: none; }
+.rrow-label { color: var(--text2); }
+.rrow-val { font-weight: 600; }
+.rrow-val.green { color: var(--green); }
+.rrow-val.red   { color: var(--red); }
+.rrow-val.blue  { color: var(--blue); }
+.rrow-val.gold  { color: var(--amber); }
+
+.cmp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+.cmp-card {
+  background: var(--bg3); border: 2px solid var(--border);
+  border-radius: var(--radius); padding: 14px; text-align: center;
+}
+.cmp-card.winner { border-color: var(--green); background: rgba(29,158,117,.07); }
+.cmp-label { font-size: 11px; font-weight: 700; color: var(--text3); margin-bottom: 6px; letter-spacing: .3px; }
+.cmp-value { font-size: 20px; font-weight: 700; color: var(--text); }
+.cmp-card.winner .cmp-value { color: var(--green); }
+.cmp-detail { font-size: 11px; color: var(--text3); margin-top: 4px; }
+.badge-win {
+  display: inline-block; background: var(--green); color: #fff;
+  font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 10px; margin-top: 5px;
+}
+
+/* ── ALERT ── */
+.alert {
+  padding: 10px 13px; border-radius: var(--radius); font-size: 12px;
+  margin-bottom: 12px; line-height: 1.5;
+}
+.alert-info  { background: rgba(55,138,221,.1); color: var(--blue); border: 1px solid rgba(55,138,221,.2); }
+.alert-warn  { background: rgba(186,117,23,.1);  color: var(--amber); border: 1px solid rgba(186,117,23,.2); }
+.alert-green { background: rgba(29,158,117,.1);  color: var(--green); border: 1px solid rgba(29,158,117,.2); }
+
+/* ── SECTION TOGGLE ── */
+.section-toggle {
+  display: none;
+  border: 1px solid var(--border); border-radius: var(--radius-lg);
+  margin-top: 14px; overflow: hidden;
+}
+.section-toggle.visible { display: block; }
+.stoggle-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 16px; background: var(--bg3); cursor: pointer;
+  font-size: 13px; font-weight: 600; color: var(--text2);
+  border: none; width: 100%; text-align: left; font-family: inherit;
+  transition: background .2s;
+}
+.stoggle-header:hover { background: var(--border); }
+.stoggle-header .chev { transition: transform .25s; font-style: normal; font-size: 11px; }
+.stoggle-header.open .chev { transform: rotate(180deg); }
+.stoggle-body { padding: 16px; border-top: 1px solid var(--border); }
+.stoggle-body.hidden { display: none; }
+
+.sub-title {
+  font-size: 11px; font-weight: 700; color: var(--text3);
+  text-transform: uppercase; letter-spacing: .4px;
+  margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid var(--border);
+}
+
+/* ── MODE TOGGLE ── */
+.mode-toggle {
+  display: flex; background: var(--bg3); border: 1px solid var(--border2);
+  border-radius: var(--radius); padding: 3px; margin-bottom: 16px;
+}
+.mode-btn {
+  flex: 1; padding: 7px 12px; border: none; background: transparent;
+  cursor: pointer; font-size: 12px; font-weight: 500; color: var(--text3);
+  border-radius: 6px; transition: all .2s; font-family: inherit;
+}
+.mode-btn.active { background: var(--blue); color: #fff; }
+.mode-panel { display: none; }
+.mode-panel.active { display: block; }
+
+/* ── TAB 1: FLOW DIAGRAM ── */
+.flow-wrap {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0 16px;
+  align-items: start;
+}
+@media (max-width: 860px) { .flow-wrap { grid-template-columns: 1fr; } }
+.flow-stage { }
+.flow-head {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 16px; border-radius: var(--radius) var(--radius) 0 0;
+  font-weight: 700; font-size: 14px;
+}
+.flow-head .num {
+  width: 26px; height: 26px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700; flex-shrink: 0;
+}
+.flow-body {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-top: none; border-radius: 0 0 var(--radius) var(--radius); padding: 14px;
+}
+.flow-arrow {
+  display: flex; justify-content: center; align-items: center;
+  height: 28px; font-size: 18px; color: var(--text3);
+  display: none;
+}
+@media (max-width: 860px) { .flow-arrow { display: flex; } }
+
+.fitem {
+  display: flex; gap: 9px; padding: 8px 0;
+  border-bottom: 1px solid var(--border); font-size: 12px;
+  align-items: flex-start;
+}
+.fitem:last-child { border-bottom: none; padding-bottom: 0; }
+.fitem-dot {
+  width: 20px; height: 20px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700; flex-shrink: 0; margin-top: 1px;
+}
+.fitem-body { flex: 1; }
+.fitem-title { font-weight: 600; color: var(--text); font-size: 12px; }
+.fitem-desc  { font-size: 11px; color: var(--text3); margin-top: 2px; line-height: 1.4; }
+.fitem-rate  { font-size: 12px; font-weight: 700; white-space: nowrap; margin-top: 3px; }
+
+.flow-blue .flow-head { background: rgba(55,138,221,.12); color: var(--blue); }
+.flow-blue .flow-head .num { background: var(--blue); color: #fff; }
+.flow-blue .fitem-dot { background: rgba(55,138,221,.15); color: var(--blue); }
+.flow-purple .flow-head { background: rgba(139,92,246,.12); color: var(--purple); }
+.flow-purple .flow-head .num { background: var(--purple); color: #fff; }
+.flow-purple .fitem-dot { background: rgba(139,92,246,.15); color: var(--purple); }
+.flow-green .flow-head { background: rgba(29,158,117,.12); color: var(--green); }
+.flow-green .flow-head .num { background: var(--green); color: #fff; }
+.flow-green .fitem-dot { background: rgba(29,158,117,.15); color: var(--green); }
+
+.key-box {
+  background: var(--bg3); border-left: 3px solid var(--amber);
+  border-radius: 0 var(--radius) var(--radius) 0; padding: 14px 16px;
+  margin-top: 20px;
+}
+.key-box-title { font-size: 12px; font-weight: 700; color: var(--amber); margin-bottom: 8px; }
+.key-pt {
+  font-size: 12px; color: var(--text2); padding: 3px 0;
+  display: flex; gap: 8px; line-height: 1.5;
+}
+.key-pt::before { content: '·'; color: var(--amber); flex-shrink: 0; }
+
+/* ── MATRIX ── */
+.matrix-wrap { overflow-x: auto; margin-top: 14px; }
+table.matrix {
+  border-collapse: collapse; width: 100%;
+  font-size: 12px; min-width: 480px;
+}
+table.matrix th, table.matrix td {
+  border: 1px solid var(--border); padding: 8px 10px;
+  text-align: center; white-space: nowrap;
+}
+table.matrix th {
+  background: #0D1B3E; color: #E8C97E; font-weight: 600;
+}
+table.matrix .rh {
+  background: var(--bg3); font-weight: 600; color: var(--text2);
+  text-align: left; padding-left: 12px;
+}
+.matrix-legend {
+  display: flex; gap: 12px; flex-wrap: wrap;
+  font-size: 11px; margin-top: 10px; color: var(--text2);
+}
+.legend-dot {
+  width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; margin-top: 2px;
+}
+
+/* ── BREAKDOWN BOX ── */
+.breakdown {
+  background: var(--bg3); border-radius: var(--radius);
+  padding: 12px 14px; margin-top: 12px;
+}
+.breakdown-title { font-size: 11px; font-weight: 700; color: var(--text3); margin-bottom: 8px; }
+.breakdown-row {
+  display: flex; justify-content: space-between;
+  font-size: 12px; padding: 3px 0; color: var(--text2);
+}
+.breakdown-row.total {
+  border-top: 1px solid var(--border2); margin-top: 6px;
+  padding-top: 8px; font-weight: 700; color: var(--text);
+}
+
+/* ── FOOTER ── */
+.site-footer {
+  margin-top: 40px; padding: 20px 24px;
+  background: var(--bg2); border-top: 1px solid var(--border);
+}
+.disclaimer {
+  font-size: 11px; color: var(--text3); line-height: 1.9;
+  text-align: center; max-width: 800px; margin: 0 auto;
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-title">
+    <h1>연금계좌 세금 정리</h1>
+    <p>연금저축 · IRP 과세 구조 이해 및 세금 계산 (2025년 기준)</p>
+  </div>
+  <div class="header-badge">IdentiFi · 정원준 CFP</div>
+</header>
+
+<!-- TAB NAV -->
+<nav class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab(0)">① 세금 구조</button>
+  <button class="tab-btn" onclick="switchTab(1)">② 납입 세액공제</button>
+  <button class="tab-btn" onclick="switchTab(2)">③ 연금 수령 세금</button>
+  <button class="tab-btn" onclick="switchTab(3)">④ 퇴직금 IRP</button>
+</nav>
+
+<main>
+
+<!-- ════════════════════════════════════════════
+     TAB 1 : 세금 구조
+     ════════════════════════════════════════════ -->
+<div id="tab0" class="tab-content active">
+<div class="container">
+
+  <div class="flow-wrap">
+
+    <!-- 납입 -->
+    <div class="flow-stage flow-blue">
+      <div class="flow-head">
+        <div class="num">1</div>납입 단계
+      </div>
+      <div class="flow-body">
+        <div class="fitem">
+          <div class="fitem-dot">+</div>
+          <div class="fitem-body">
+            <div class="fitem-title">세액공제 혜택</div>
+            <div class="fitem-desc">연금저축 600만 + IRP 포함 합산 900만원까지 세액공제 가능</div>
+            <div class="fitem-rate" style="color:var(--blue)">13.2% 또는 16.5% 공제</div>
+          </div>
+        </div>
+        <div class="fitem">
+          <div class="fitem-dot">!</div>
+          <div class="fitem-body">
+            <div class="fitem-title">공제율 기준</div>
+            <div class="fitem-desc">총급여 5,500만원 이하(또는 종합소득 4,500만원 이하) → 16.5%<br>초과 → 13.2%</div>
+          </div>
+        </div>
+        <div class="fitem">
+          <div class="fitem-dot">i</div>
+          <div class="fitem-body">
+            <div class="fitem-title">한도 초과 납입</div>
+            <div class="fitem-desc">세액공제 한도 초과분은 나중에 비과세로 돌려받음</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 운용 -->
+    <div class="flow-stage flow-purple">
+      <div class="flow-head">
+        <div class="num">2</div>운용 단계
+      </div>
+      <div class="flow-body">
+        <div class="fitem">
+          <div class="fitem-dot">0</div>
+          <div class="fitem-body">
+            <div class="fitem-title">과세이연 (완전 비과세)</div>
+            <div class="fitem-desc">운용 기간 중 이자·배당·매매차익에 세금 없음</div>
+            <div class="fitem-rate" style="color:var(--purple)">운용수익 과세 0%</div>
+          </div>
+        </div>
+        <div class="fitem">
+          <div class="fitem-dot">vs</div>
+          <div class="fitem-body">
+            <div class="fitem-title">일반 계좌와 비교</div>
+            <div class="fitem-desc">일반 계좌 이자·배당: 15.4% 원천징수<br>금융소득 2,000만 초과: 종합과세</div>
+          </div>
+        </div>
+        <div class="fitem">
+          <div class="fitem-dot">↑</div>
+          <div class="fitem-body">
+            <div class="fitem-title">복리 효과 극대화</div>
+            <div class="fitem-desc">세금을 내지 않고 재투자 → 장기 복리 효과 극대화</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 수령 -->
+    <div class="flow-stage flow-green">
+      <div class="flow-head">
+        <div class="num">3</div>수령 단계
+      </div>
+      <div class="flow-body">
+        <div class="fitem">
+          <div class="fitem-dot">A</div>
+          <div class="fitem-body">
+            <div class="fitem-title">연금수령 (세액공제분 + 운용수익)</div>
+            <div class="fitem-desc">55세 이상, 5년 이상 수령 조건 충족 시</div>
+            <div class="fitem-rate" style="color:var(--green)">3.3 ~ 5.5% 저율 분리과세</div>
+          </div>
+        </div>
+        <div class="fitem">
+          <div class="fitem-dot">!</div>
+          <div class="fitem-body">
+            <div class="fitem-title">1,500만원 초과 시</div>
+            <div class="fitem-desc">연간 사적연금소득이 1,500만원 초과 → 분리과세(16.5%) 또는 종합과세 선택</div>
+          </div>
+        </div>
+        <div class="fitem">
+          <div class="fitem-dot">B</div>
+          <div class="fitem-body">
+            <div class="fitem-title">연금외수령 (중도해지·일시금)</div>
+            <div class="fitem-desc">세액공제받은 납입금 + 운용수익에 적용</div>
+            <div class="fitem-rate" style="color:var(--red)">기타소득세 16.5%</div>
+          </div>
+        </div>
+        <div class="fitem">
+          <div class="fitem-dot">0</div>
+          <div class="fitem-body">
+            <div class="fitem-title">세액공제 미적용 원금</div>
+            <div class="fitem-desc">한도 초과 납입분(세액공제 미적용)은 수령 시 비과세</div>
+            <div class="fitem-rate" style="color:var(--text3)">비과세</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /flow-wrap -->
+
+  <div class="key-box">
+    <div class="key-box-title">핵심 포인트</div>
+    <div class="key-pt">납입 시 세액공제(최대 16.5%) → 운용 중 완전 비과세 → 수령 시 저율(3.3~5.5%): 3단계 모두 세제 혜택</div>
+    <div class="key-pt">연금수령 시 세율(3.3~5.5%)이 해지 시 세율(16.5%)보다 훨씬 낮으므로 연금으로 수령하는 것이 유리</div>
+    <div class="key-pt">연간 사적연금소득 1,500만원 이하이면 분리과세 선택으로 종합소득 신고 불필요</div>
+    <div class="key-pt">퇴직금을 IRP로 수령한 후 연금으로 인출하면 퇴직소득세 30~40% 절감 가능</div>
+  </div>
+
+  <div style="margin-top:20px;">
+    <div class="card">
+      <div class="card-title">나이별 연금소득세율 (사적연금 · 지방소득세 포함)</div>
+      <div style="overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse;font-size:13px">
+          <tr style="background:var(--bg3)">
+            <th style="padding:10px 14px;text-align:left;border:1px solid var(--border);font-weight:600;color:var(--text2)">수령 나이</th>
+            <th style="padding:10px 14px;text-align:center;border:1px solid var(--border);font-weight:600;color:var(--text2)">세율</th>
+            <th style="padding:10px 14px;text-align:center;border:1px solid var(--border);font-weight:600;color:var(--text2)">종신형 연금보험</th>
+            <th style="padding:10px 14px;text-align:left;border:1px solid var(--border);font-weight:600;color:var(--text2)">비고</th>
+          </tr>
+          <tr>
+            <td style="padding:9px 14px;border:1px solid var(--border)">55 ~ 69세</td>
+            <td style="padding:9px 14px;border:1px solid var(--border);text-align:center;font-weight:700;color:var(--blue)">5.5%</td>
+            <td style="padding:9px 14px;border:1px solid var(--border);text-align:center;font-weight:700;color:var(--green)">4.4%</td>
+            <td style="padding:9px 14px;border:1px solid var(--border);font-size:12px;color:var(--text3)">확정기간형 기준</td>
+          </tr>
+          <tr style="background:var(--bg2)">
+            <td style="padding:9px 14px;border:1px solid var(--border)">70 ~ 79세</td>
+            <td style="padding:9px 14px;border:1px solid var(--border);text-align:center;font-weight:700;color:var(--green)">4.4%</td>
+            <td style="padding:9px 14px;border:1px solid var(--border);text-align:center;font-weight:700;color:var(--green)">4.4%</td>
+            <td style="padding:9px 14px;border:1px solid var(--border);font-size:12px;color:var(--text3)"></td>
+          </tr>
+          <tr>
+            <td style="padding:9px 14px;border:1px solid var(--border)">80세 이상</td>
+            <td style="padding:9px 14px;border:1px solid var(--border);text-align:center;font-weight:700;color:var(--amber)">3.3%</td>
+            <td style="padding:9px 14px;border:1px solid var(--border);text-align:center;font-weight:700;color:var(--green)">4.4%</td>
+            <td style="padding:9px 14px;border:1px solid var(--border);font-size:12px;color:var(--text3)">확정기간형이 유리할 수 있음</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     TAB 2 : 납입 세액공제
+     ════════════════════════════════════════════ -->
+<div id="tab1" class="tab-content">
+<div class="container">
+<div class="split split-55">
+
+  <!-- 입력 -->
+  <div>
+    <div class="card">
+      <div class="card-title">소득 정보</div>
+
+      <div class="form-group">
+        <label class="form-label">소득 유형</label>
+        <div class="radio-group">
+          <div class="radio-opt">
+            <input type="radio" name="incomeType" id="it_earned" value="earned" checked onchange="calcTC()">
+            <label for="it_earned">근로소득</label>
+          </div>
+          <div class="radio-opt">
+            <input type="radio" name="incomeType" id="it_comp" value="comp" onchange="calcTC()">
+            <label for="it_comp">종합소득</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group" id="tc_earnedGroup">
+        <label class="form-label" for="tc_salary">총급여 (연봉)</label>
+        <div class="inp-wrap">
+          <input type="number" id="tc_salary" value="60000000" min="0" step="1000000" oninput="calcTC()">
+          <span class="inp-unit">원</span>
+        </div>
+        <input type="range" id="tc_salaryR" min="0" max="200000000" step="1000000" value="60000000" oninput="syncR('tc_salary','tc_salaryR');calcTC()">
+        <div class="range-row"><span>0원</span><span>2억원</span></div>
+      </div>
+
+      <div class="form-group" id="tc_compGroup" style="display:none">
+        <label class="form-label" for="tc_comp">종합소득금액</label>
+        <div class="inp-wrap">
+          <input type="number" id="tc_comp" value="45000000" min="0" step="1000000" oninput="calcTC()">
+          <span class="inp-unit">원</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">납입액 입력</div>
+
+      <div class="form-group">
+        <label class="form-label" for="tc_ps">연금저축 연간 납입액</label>
+        <div class="inp-wrap">
+          <input type="number" id="tc_ps" value="6000000" min="0" max="18000000" step="100000" oninput="syncI('tc_ps','tc_psR');calcTC()">
+          <span class="inp-unit">원</span>
+        </div>
+        <input type="range" id="tc_psR" min="0" max="12000000" step="100000" value="6000000" oninput="syncR('tc_ps','tc_psR');calcTC()">
+        <div class="range-row"><span>0원</span><span>세액공제 한도 600만</span></div>
+        <div class="form-hint">세액공제 한도: 연간 600만원 (납입 한도 1,800만원)</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="tc_irp">IRP 연간 납입액</label>
+        <div class="inp-wrap">
+          <input type="number" id="tc_irp" value="3000000" min="0" max="18000000" step="100000" oninput="syncI('tc_irp','tc_irpR');calcTC()">
+          <span class="inp-unit">원</span>
+        </div>
+        <input type="range" id="tc_irpR" min="0" max="9000000" step="100000" value="3000000" oninput="syncR('tc_irp','tc_irpR');calcTC()">
+        <div class="range-row"><span>0원</span><span>합산 한도 900만</span></div>
+        <div class="form-hint">연금저축 + IRP 합산 세액공제 한도: 900만원</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 결과 -->
+  <div>
+    <div class="card">
+      <div class="card-title">세액공제 결과</div>
+
+      <div id="tc_rateAlert" class="alert alert-info"></div>
+
+      <div class="result-hero">
+        <div class="result-hero-label">연간 세액공제액</div>
+        <div class="result-hero-value" id="tc_credit">—</div>
+        <div class="result-hero-sub" id="tc_creditSub"></div>
+      </div>
+
+      <div class="rrow">
+        <span class="rrow-label">세액공제 대상 납입액</span>
+        <span class="rrow-val blue" id="tc_eligible">—</span>
+      </div>
+      <div class="rrow">
+        <span class="rrow-label">세액공제율</span>
+        <span class="rrow-val" id="tc_rate">—</span>
+      </div>
+      <div class="rrow">
+        <span class="rrow-label">실질 납입 부담액</span>
+        <span class="rrow-val" id="tc_net">—</span>
+      </div>
+      <div class="rrow">
+        <span class="rrow-label">월 환산 실질 부담</span>
+        <span class="rrow-val" id="tc_monthly">—</span>
+      </div>
+
+      <hr class="divider">
+
+      <div class="breakdown">
+        <div class="breakdown-title">공제 한도 계산 내역</div>
+        <div class="breakdown-row">
+          <span>연금저축 공제 대상</span>
+          <span id="tc_b_ps">—</span>
+        </div>
+        <div class="breakdown-row">
+          <span>IRP 추가 공제 가능액</span>
+          <span id="tc_b_irp">—</span>
+        </div>
+        <div class="breakdown-row total">
+          <span>합산 공제 대상액</span>
+          <span id="tc_b_total">—</span>
+        </div>
+      </div>
+
+      <div style="margin-top:12px">
+        <div class="rrow">
+          <span class="rrow-label" style="font-size:12px">연금저축 한도 초과 납입분</span>
+          <span class="rrow-val green" id="tc_psOver" style="font-size:12px">—</span>
+        </div>
+        <div class="rrow">
+          <span class="rrow-label" style="font-size:12px">IRP 한도 초과 납입분</span>
+          <span class="rrow-val green" id="tc_irpOver" style="font-size:12px">—</span>
+        </div>
+        <div class="form-hint" style="margin-top:6px">한도 초과분은 수령 시 비과세 처리됩니다</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     TAB 3 : 연금 수령 세금
+     ════════════════════════════════════════════ -->
+<div id="tab2" class="tab-content">
+<div class="container">
+<div class="split split-55">
+
+  <!-- 입력 -->
+  <div>
+    <div class="card">
+      <div class="card-title">연금 수령 정보</div>
+
+      <div class="form-group">
+        <label class="form-label" for="ps_amount">연간 연금 수령액</label>
+        <div class="inp-wrap">
+          <input type="number" id="ps_amount" value="12000000" min="0" step="100000" oninput="syncI('ps_amount','ps_amountR');calcPS()">
+          <span class="inp-unit">원</span>
+        </div>
+        <input type="range" id="ps_amountR" min="0" max="60000000" step="100000" value="12000000" oninput="syncR('ps_amount','ps_amountR');calcPS()">
+        <div class="range-row"><span>0원</span><span>6,000만원</span></div>
+        <div class="form-hint">세액공제 받은 납입금 + 운용수익 기준의 과세 연금소득액</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="ps_age">수령 시작 나이</label>
+        <div class="inp-wrap">
+          <input type="number" id="ps_age" value="65" min="55" max="100" oninput="calcPS()">
+          <span class="inp-unit">세</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">연금 유형</label>
+        <div class="radio-group">
+          <div class="radio-opt">
+            <input type="radio" name="psType" id="ps_fixed" value="fixed" checked onchange="calcPS()">
+            <label for="ps_fixed">확정기간형</label>
+          </div>
+          <div class="radio-opt">
+            <input type="radio" name="psType" id="ps_life" value="life" onchange="calcPS()">
+            <label for="ps_life">종신형 연금보험</label>
+          </div>
+        </div>
+        <div class="form-hint">종신형 연금보험: 나이와 관계없이 4.4% 적용</div>
+      </div>
+    </div>
+
+    <!-- 1,500만원 초과 시 노출 -->
+    <div id="ps_overSection" class="section-toggle">
+      <button class="stoggle-header" onclick="toggleSection('ps_over')">
+        <span>1,500만원 초과 — 종합과세 비교 입력</span>
+        <i class="chev" id="ps_over_chev">▼</i>
+      </button>
+      <div class="stoggle-body hidden" id="ps_over_body">
+
+        <div class="alert alert-warn">연간 사적연금소득이 1,500만원을 초과하면 분리과세(16.5%) 또는 종합과세 중 선택할 수 있습니다. 아래 정보를 입력하면 유리한 방법을 계산합니다.</div>
+
+        <div class="sub-title">타 소득 입력</div>
+
+        <div class="form-group">
+          <label class="form-label" for="ps_salary">근로소득 — 총급여</label>
+          <div class="inp-wrap">
+            <input type="number" id="ps_salary" value="0" min="0" step="1000000" oninput="calcPS()">
+            <span class="inp-unit">원</span>
+          </div>
+          <div class="form-hint">근로소득공제 자동 계산</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="ps_bizRev">사업소득 — 총수입금액</label>
+          <div class="inp-wrap">
+            <input type="number" id="ps_bizRev" value="0" min="0" step="1000000" oninput="calcPS()">
+            <span class="inp-unit">원</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="ps_bizExp">사업소득 — 필요경비</label>
+          <div class="inp-wrap">
+            <input type="number" id="ps_bizExp" value="0" min="0" step="1000000" oninput="calcPS()">
+            <span class="inp-unit">원</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="ps_otherRev">기타소득 — 총수입금액</label>
+          <div class="inp-wrap">
+            <input type="number" id="ps_otherRev" value="0" min="0" step="100000" oninput="calcPS()">
+            <span class="inp-unit">원</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="ps_otherExp">기타소득 — 필요경비</label>
+          <div class="inp-wrap">
+            <input type="number" id="ps_otherExp" value="0" min="0" step="100000" oninput="calcPS()">
+            <span class="inp-unit">원</span>
+          </div>
+          <div class="form-hint">미입력 시 수입금액의 60% 자동 적용</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="ps_intDiv">이자 · 배당소득</label>
+          <div class="inp-wrap">
+            <input type="number" id="ps_intDiv" value="0" min="0" step="100000" oninput="calcPS()">
+            <span class="inp-unit">원</span>
+          </div>
+          <div class="form-hint">2,000만원 초과분만 종합소득에 합산</div>
+        </div>
+
+        <hr class="divider">
+        <div class="sub-title">소득공제</div>
+
+        <div class="form-group">
+          <label class="form-label" for="ps_dep">부양가족 수 (본인 제외)</label>
+          <div class="inp-wrap">
+            <input type="number" id="ps_dep" value="0" min="0" max="20" oninput="calcPS()">
+            <span class="inp-unit">명</span>
+          </div>
+          <div class="form-hint">기본공제: (1 + 부양가족 수) × 150만원</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="ps_np">국민연금 보험료공제</label>
+          <div class="inp-wrap">
+            <input type="number" id="ps_np" value="0" min="0" step="100000" oninput="calcPS()">
+            <span class="inp-unit">원</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="ps_hi">건강보험료 특별공제</label>
+          <div class="inp-wrap">
+            <input type="number" id="ps_hi" value="0" min="0" step="100000" oninput="calcPS()">
+            <span class="inp-unit">원</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="ps_otherDed">기타 소득공제 (직접 입력)</label>
+          <div class="inp-wrap">
+            <input type="number" id="ps_otherDed" value="0" min="0" step="100000" oninput="calcPS()">
+            <span class="inp-unit">원</span>
+          </div>
+          <div class="form-hint">신용카드, 주택자금, 개인연금 등 합산</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- 결과 -->
+  <div>
+    <div class="card" id="ps_resultCard">
+      <div class="card-title">연금소득세 계산 결과</div>
+
+      <div id="ps_rateInfo" class="alert alert-info"></div>
+
+      <div class="result-hero">
+        <div class="result-hero-label">연간 연금소득세</div>
+        <div class="result-hero-value" id="ps_tax">—</div>
+        <div class="result-hero-sub" id="ps_taxSub"></div>
+      </div>
+
+      <div class="rrow">
+        <span class="rrow-label">적용 세율</span>
+        <span class="rrow-val blue" id="ps_rate">—</span>
+      </div>
+      <div class="rrow">
+        <span class="rrow-label">월별 세금</span>
+        <span class="rrow-val" id="ps_monthly">—</span>
+      </div>
+      <div class="rrow">
+        <span class="rrow-label">세후 연간 수령액</span>
+        <span class="rrow-val green" id="ps_netAnnual">—</span>
+      </div>
+      <div class="rrow">
+        <span class="rrow-label">세후 월 수령액</span>
+        <span class="rrow-val green" id="ps_netMonthly">—</span>
+      </div>
+
+      <!-- 1,500만원 초과 비교 -->
+      <div id="ps_overResult" style="display:none">
+        <hr class="divider">
+        <div style="font-size:13px;font-weight:600;color:var(--text2);margin-bottom:10px">과세 방법 비교</div>
+
+        <div class="cmp-grid">
+          <div class="cmp-card" id="ps_sepCard">
+            <div class="cmp-label">분리과세</div>
+            <div class="cmp-value" id="ps_sepTax">—</div>
+            <div class="cmp-detail">세율 16.5%</div>
+          </div>
+          <div class="cmp-card" id="ps_compCard">
+            <div class="cmp-label">종합과세</div>
+            <div class="cmp-value" id="ps_compTax">—</div>
+            <div class="cmp-detail" id="ps_compDetail">—</div>
+          </div>
+        </div>
+
+        <div id="ps_recommendation" class="alert" style="margin-top:12px;display:none"></div>
+
+        <div class="breakdown" id="ps_compBreakdown" style="display:none">
+          <div class="breakdown-title">종합과세 계산 내역</div>
+          <div class="breakdown-row"><span>연금소득금액</span><span id="ps_b_pension">—</span></div>
+          <div class="breakdown-row"><span>근로소득금액</span><span id="ps_b_earned">—</span></div>
+          <div class="breakdown-row"><span>사업소득금액</span><span id="ps_b_biz">—</span></div>
+          <div class="breakdown-row"><span>기타소득금액</span><span id="ps_b_other">—</span></div>
+          <div class="breakdown-row"><span>이자·배당(합산분)</span><span id="ps_b_intdiv">—</span></div>
+          <div class="breakdown-row total"><span>종합소득금액</span><span id="ps_b_total">—</span></div>
+          <div class="breakdown-row"><span>종합소득공제</span><span id="ps_b_ded">—</span></div>
+          <div class="breakdown-row total"><span>과세표준</span><span id="ps_b_base">—</span></div>
+          <div class="breakdown-row"><span>산출세액 (지방세 포함)</span><span id="ps_b_tax">—</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     TAB 4 : 퇴직금 IRP
+     ════════════════════════════════════════════ -->
+<div id="tab3" class="tab-content">
+<div class="container">
+<div class="split split-55">
+
+  <!-- 입력 -->
+  <div>
+    <div class="card">
+      <div class="card-title">계산 방식 선택</div>
+      <div class="mode-toggle">
+        <button class="mode-btn active" id="rt_mAuto" onclick="setRtMode('auto')">자동 계산 (근속연수 입력)</button>
+        <button class="mode-btn" id="rt_mManual" onclick="setRtMode('manual')">실효세율 직접 입력</button>
+      </div>
+
+      <!-- 자동 모드 -->
+      <div class="mode-panel active" id="rt_autoPanel">
+        <div class="form-group">
+          <label class="form-label" for="rt_pay">퇴직금(퇴직급여)</label>
+          <div class="inp-wrap">
+            <input type="number" id="rt_pay" value="200000000" min="0" step="1000000" oninput="syncI('rt_pay','rt_payR');calcRT()">
+            <span class="inp-unit">원</span>
+          </div>
+          <input type="range" id="rt_payR" min="0" max="1000000000" step="5000000" value="200000000" oninput="syncR('rt_pay','rt_payR');calcRT()">
+          <div class="range-row"><span>0원</span><span>10억원</span></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="rt_years">근속연수</label>
+          <div class="inp-wrap">
+            <input type="number" id="rt_years" value="20" min="1" max="50" oninput="syncI('rt_years','rt_yearsR');calcRT()">
+            <span class="inp-unit">년</span>
+          </div>
+          <input type="range" id="rt_yearsR" min="1" max="40" value="20" oninput="syncR('rt_years','rt_yearsR');calcRT()">
+          <div class="range-row"><span>1년</span><span>40년</span></div>
+        </div>
+      </div>
+
+      <!-- 수동 모드 -->
+      <div class="mode-panel" id="rt_manualPanel">
+        <div class="form-group">
+          <label class="form-label" for="rt_pay2">퇴직금(퇴직급여)</label>
+          <div class="inp-wrap">
+            <input type="number" id="rt_pay2" value="200000000" min="0" step="1000000" oninput="calcRT()">
+            <span class="inp-unit">원</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="rt_manRate">퇴직소득세 실효세율 (%)</label>
+          <div class="inp-wrap">
+            <input type="number" id="rt_manRate" value="10" min="0" max="50" step="0.1" oninput="calcRT()">
+            <span class="inp-unit">%</span>
+          </div>
+          <div class="form-hint">아래 참고 매트릭스에서 해당 구간을 확인하세요</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">연금 수령 기간</div>
+      <div class="form-group">
+        <label class="form-label" for="rt_pensionYears">IRP 연금 수령 기간</label>
+        <div class="radio-group">
+          <div class="radio-opt">
+            <input type="radio" name="rtPY" id="rtpy_10" value="10" checked onchange="calcRT()">
+            <label for="rtpy_10">10년 이하</label>
+          </div>
+          <div class="radio-opt">
+            <input type="radio" name="rtPY" id="rtpy_11" value="11" onchange="calcRT()">
+            <label for="rtpy_11">10년 초과</label>
+          </div>
+        </div>
+        <div class="form-hint">10년 이하: 퇴직소득세 30% 감면 / 10년 초과: 40% 감면</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 결과 -->
+  <div>
+    <div class="card">
+      <div class="card-title">퇴직소득세 계산 결과</div>
+
+      <div class="result-hero">
+        <div class="result-hero-label">일시금 수령 시 퇴직소득세</div>
+        <div class="result-hero-value" id="rt_lumpTax">—</div>
+        <div class="result-hero-sub" id="rt_lumpRate"></div>
+      </div>
+
+      <div class="rrow">
+        <span class="rrow-label">연금 수령 시 납부세액</span>
+        <span class="rrow-val blue" id="rt_pensionTax">—</span>
+      </div>
+      <div class="rrow">
+        <span class="rrow-label">연금 전환으로 절감되는 세금</span>
+        <span class="rrow-val green" id="rt_saved">—</span>
+      </div>
+      <div class="rrow">
+        <span class="rrow-label">절세율</span>
+        <span class="rrow-val green" id="rt_savedRate">—</span>
+      </div>
+
+      <div class="breakdown" id="rt_breakdown" style="display:none">
+        <div class="breakdown-title">자동 계산 내역</div>
+        <div class="breakdown-row"><span>퇴직소득금액</span><span id="rt_b_pay">—</span></div>
+        <div class="breakdown-row"><span>근속연수공제</span><span id="rt_b_ysd">—</span></div>
+        <div class="breakdown-row"><span>환산급여</span><span id="rt_b_conv">—</span></div>
+        <div class="breakdown-row"><span>환산급여공제</span><span id="rt_b_cd">—</span></div>
+        <div class="breakdown-row"><span>과세표준</span><span id="rt_b_base">—</span></div>
+        <div class="breakdown-row total"><span>퇴직소득세 (지방세 포함)</span><span id="rt_b_tax">—</span></div>
+      </div>
+
+      <div style="margin-top:14px">
+        <div class="cmp-grid">
+          <div class="cmp-card" id="rt_lumpCard">
+            <div class="cmp-label">일시금 수령</div>
+            <div class="cmp-value" id="rt_lumpNet">—</div>
+            <div class="cmp-detail">세금 전액 납부</div>
+          </div>
+          <div class="cmp-card winner" id="rt_pensionCard">
+            <div class="cmp-label">연금 수령</div>
+            <div class="cmp-value" id="rt_pensionNet">—</div>
+            <div class="cmp-detail" id="rt_pensionDetail">—</div>
+            <div class="badge-win" id="rt_discountBadge">—</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- 매트릭스 -->
+<div style="margin-top:20px">
+  <button class="stoggle-header" style="border-radius:var(--radius-lg);border:1px solid var(--border)" onclick="toggleSection('rt_matrix')">
+    <span>참고 — 퇴직소득세 실효세율 매트릭스 (근속연수 × 퇴직금 규모)</span>
+    <i class="chev" id="rt_matrix_chev">▼</i>
+  </button>
+  <div class="stoggle-body hidden" id="rt_matrix_body" style="border:1px solid var(--border);border-top:none;border-radius:0 0 var(--radius-lg) var(--radius-lg)">
+    <div class="alert alert-info" style="margin-bottom:12px">퇴직소득세 실효세율 (지방소득세 10% 포함). 퇴직금에 대한 세금 비율입니다. 색이 진할수록 높은 세율.</div>
+    <div class="matrix-wrap">
+      <table class="matrix" id="rt_matrix"></table>
+    </div>
+    <div class="matrix-legend" id="rt_legend"></div>
+  </div>
+</div>
+
+</div>
+</div>
+</div>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="disclaimer">
+    <strong>본 계산기는 교육·참고 목적으로 제공되며, 실제 투자·금융·세무 결정의 근거로 사용할 수 없습니다.</strong><br>
+    세율 및 공제 기준은 2025년 소득세법 기준이며, 개인 상황에 따라 실제 세금은 다를 수 있습니다.<br>
+    정확한 세금 계산은 세무사, 정확한 재무설계는 공인재무설계사(CFP)와 상담하시기 바랍니다.<br>
+    <span style="margin-top:6px;display:inline-block">IdentiFi · 정원준 CFP</span>
+  </div>
+</footer>
+
+<script>
+/* ══════════════════════════════════════
+   HELPERS
+══════════════════════════════════════ */
+const $ = id => document.getElementById(id);
+const v = id => parseFloat($(id).value) || 0;
+const fmt = n => Math.round(n).toLocaleString('ko-KR') + '원';
+const fmtN = n => Math.round(n).toLocaleString('ko-KR');
+const fmtPct = n => n.toFixed(2) + '%';
+
+function syncR(inputId, rangeId) {
+  $(inputId).value = $(rangeId).value;
+}
+function syncI(inputId, rangeId) {
+  $(rangeId).value = $(inputId).value;
+}
+
+/* ══════════════════════════════════════
+   TAB SWITCHING
+══════════════════════════════════════ */
+function switchTab(idx) {
+  document.querySelectorAll('.tab-content').forEach((el, i) => {
+    el.classList.toggle('active', i === idx);
+  });
+  document.querySelectorAll('.tab-btn').forEach((el, i) => {
+    el.classList.toggle('active', i === idx);
+  });
+  if (idx === 3) renderMatrix();
+}
+
+/* ══════════════════════════════════════
+   SECTION TOGGLE
+══════════════════════════════════════ */
+function toggleSection(key) {
+  const body = $(key + '_body');
+  const chev = $(key + '_chev');
+  const header = chev?.closest('.stoggle-header');
+  const isOpen = !body.classList.contains('hidden');
+  body.classList.toggle('hidden', isOpen);
+  if (chev) chev.style.transform = isOpen ? '' : 'rotate(180deg)';
+  if (header) header.classList.toggle('open', !isOpen);
+}
+
+/* ══════════════════════════════════════
+   BASE TAX (종합소득세율 2024년 기준)
+══════════════════════════════════════ */
+function baseTax(x) {
+  x = Math.max(0, x);
+  if (x <= 14_000_000)    return x * 0.06;
+  if (x <= 50_000_000)    return 840_000    + (x - 14_000_000) * 0.15;
+  if (x <= 88_000_000)    return 6_240_000  + (x - 50_000_000) * 0.24;
+  if (x <= 150_000_000)   return 15_360_000 + (x - 88_000_000) * 0.35;
+  if (x <= 300_000_000)   return 37_060_000 + (x - 150_000_000) * 0.38;
+  if (x <= 500_000_000)   return 94_060_000 + (x - 300_000_000) * 0.40;
+  if (x <= 1_000_000_000) return 174_060_000+ (x - 500_000_000) * 0.42;
+  return 384_060_000 + (x - 1_000_000_000) * 0.45;
+}
+
+/* ══════════════════════════════════════
+   근로소득공제
+══════════════════════════════════════ */
+function earnedDeduction(salary) {
+  if (salary <= 5_000_000)    return salary * 0.7;
+  if (salary <= 15_000_000)   return 3_500_000  + (salary - 5_000_000)  * 0.4;
+  if (salary <= 45_000_000)   return 7_500_000  + (salary - 15_000_000) * 0.15;
+  if (salary <= 100_000_000)  return 12_000_000 + (salary - 45_000_000) * 0.05;
+  return Math.min(14_750_000  + (salary - 100_000_000) * 0.02, 20_000_000);
+}
+
+/* ══════════════════════════════════════
+   연금소득공제
+══════════════════════════════════════ */
+function pensionDeduction(total) {
+  let d;
+  if (total <= 3_500_000)      d = total;
+  else if (total <= 7_000_000) d = 3_500_000  + (total - 3_500_000) * 0.4;
+  else if (total <= 14_000_000)d = 4_900_000  + (total - 7_000_000) * 0.2;
+  else if (total <= 20_000_000)d = 6_300_000  + (total - 14_000_000)* 0.1;
+  else                          d = 6_900_000  + (total - 20_000_000)* 0.05;
+  return Math.min(d, 9_000_000);
+}
+
+/* ══════════════════════════════════════
+   퇴직소득세 계산
+══════════════════════════════════════ */
+function calcRetirementTax(pay, years) {
+  years = Math.max(1, Math.round(years));
+  pay = Math.max(0, pay);
+
+  // 근속연수공제
+  let ysD;
+  if (years <= 5)        ysD = 1_000_000 * years;
+  else if (years <= 10)  ysD = 5_000_000  + 2_000_000 * (years - 5);
+  else if (years <= 20)  ysD = 15_000_000 + 2_500_000 * (years - 10);
+  else                   ysD = 40_000_000 + 3_000_000 * (years - 20);
+  ysD = Math.min(ysD, pay);
+
+  const net = Math.max(0, pay - ysD);
+  // 환산급여
+  const conv = net / years * 12;
+
+  // 환산급여공제
+  let cD;
+  if (conv <= 8_000_000)       cD = conv;
+  else if (conv <= 70_000_000) cD = 8_000_000   + (conv - 8_000_000)  * 0.6;
+  else if (conv <= 100_000_000)cD = 45_200_000  + (conv - 70_000_000) * 0.55;
+  else if (conv <= 300_000_000)cD = 61_700_000  + (conv - 100_000_000)* 0.45;
+  else                          cD = 151_700_000 + (conv - 300_000_000)* 0.35;
+
+  const taxBase = Math.max(0, conv - cD);
+  const convTax = baseTax(taxBase);
+  const retTax  = convTax / 12 * years;
+  const total   = retTax * 1.1;
+  const rate    = pay > 0 ? total / pay * 100 : 0;
+
+  return { ysD, conv, cD, taxBase, retTax, total, rate };
+}
+
+/* ══════════════════════════════════════
+   TAB 2 : 세액공제 계산
+══════════════════════════════════════ */
+function calcTC() {
+  const isEarned = $('it_earned').checked;
+  $('tc_earnedGroup').style.display = isEarned ? '' : 'none';
+  $('tc_compGroup').style.display   = isEarned ? 'none' : '';
+
+  const salary = v('tc_salary');
+  const comp   = v('tc_comp');
+  const ps     = v('tc_ps');
+  const irp    = v('tc_irp');
+
+  // 세액공제율 판단
+  let rate;
+  if (isEarned) {
+    rate = salary <= 55_000_000 ? 0.165 : 0.132;
+  } else {
+    rate = comp <= 45_000_000 ? 0.165 : 0.132;
+  }
+
+  // 공제 대상 계산
+  const psElig  = Math.min(ps, 6_000_000);
+  const irpRoom = 9_000_000 - psElig;           // IRP가 채울 수 있는 나머지
+  const irpElig = Math.min(irp, irpRoom);
+  const total   = psElig + irpElig;
+  const credit  = total * rate;
+
+  const psOver  = Math.max(0, ps - 6_000_000);
+  const irpOver = Math.max(0, irp - irpRoom);
+
+  const rateStr = (rate * 100).toFixed(1) + '%';
+  const income  = isEarned ? salary : comp;
+  const thresh  = isEarned ? 55_000_000 : 45_000_000;
+
+  $('tc_rateAlert').innerHTML =
+    `<strong>세액공제율 ${rateStr}</strong> — ` +
+    (isEarned ? '총급여' : '종합소득금액') +
+    ` ${fmtN(thresh/10000)}만원 ` +
+    (income <= thresh ? '이하' : '초과') +
+    ` 해당`;
+
+  $('tc_credit').textContent  = fmt(credit);
+  $('tc_creditSub').textContent = `월 환산 ${fmt(credit/12)}`;
+  $('tc_eligible').textContent = fmt(total);
+  $('tc_rate').textContent     = rateStr;
+  $('tc_net').textContent      = fmt(total - credit);
+  $('tc_monthly').textContent  = fmt((total - credit) / 12);
+
+  $('tc_b_ps').textContent     = fmt(psElig);
+  $('tc_b_irp').textContent    = fmt(irpElig);
+  $('tc_b_total').textContent  = fmt(total);
+  $('tc_psOver').textContent   = psOver  > 0 ? fmt(psOver)  : '없음';
+  $('tc_irpOver').textContent  = irpOver > 0 ? fmt(irpOver) : '없음';
+}
+
+/* ══════════════════════════════════════
+   TAB 3 : 연금 수령 세금
+══════════════════════════════════════ */
+function calcPS() {
+  const amount  = v('ps_amount');
+  const age     = v('ps_age') || 65;
+  const isLife  = $('ps_life').checked;
+  const over15M = amount > 15_000_000;
+
+  // 기본 세율 결정
+  let rate;
+  if (isLife) {
+    rate = 0.044;
+  } else {
+    if (age >= 80)      rate = 0.033;
+    else if (age >= 70) rate = 0.044;
+    else                rate = 0.055;
+  }
+
+  const tax     = amount * rate;
+  const netAnn  = amount - tax;
+
+  $('ps_rateInfo').innerHTML = `수령 나이 <strong>${age}세</strong> — 적용 세율 <strong>${(rate*100).toFixed(1)}%</strong>` +
+    (isLife ? ' (종신형)' : '') +
+    (over15M ? ' · <span style="color:var(--amber)">연간 수령액이 1,500만원을 초과하여 과세방법 선택 가능</span>' : '');
+
+  $('ps_tax').textContent       = fmt(tax);
+  $('ps_taxSub').textContent    = `연금소득세 ${(rate*100).toFixed(1)}% (지방소득세 포함)`;
+  $('ps_rate').textContent      = (rate*100).toFixed(1) + '%';
+  $('ps_monthly').textContent   = fmt(tax / 12);
+  $('ps_netAnnual').textContent = fmt(netAnn);
+  $('ps_netMonthly').textContent= fmt(netAnn / 12);
+
+  // 1,500만원 초과 섹션 노출
+  const overSec = $('ps_overSection');
+  overSec.classList.toggle('visible', over15M);
+
+  const overResult = $('ps_overResult');
+  overResult.style.display = over15M ? '' : 'none';
+
+  if (over15M) {
+    // 분리과세 16.5%
+    const sepTax = amount * 0.165;
+
+    // 종합과세 계산
+    const salary    = v('ps_salary');
+    const bizRev    = v('ps_bizRev');
+    const bizExp    = v('ps_bizExp');
+    const otherRev  = v('ps_otherRev');
+    const otherExpInput = v('ps_otherExp');
+    const otherExp  = otherExpInput > 0 ? otherExpInput : otherRev * 0.6;
+    const intDiv    = v('ps_intDiv');
+    const dep       = v('ps_dep') || 0;
+    const np        = v('ps_np');
+    const hi        = v('ps_hi');
+    const otherDed  = v('ps_otherDed');
+
+    const pensionAmt  = amount - pensionDeduction(amount);
+    const earnedAmt   = salary > 0 ? Math.max(0, salary - earnedDeduction(salary)) : 0;
+    const bizAmt      = Math.max(0, bizRev - bizExp);
+    const otherAmt    = Math.max(0, otherRev - otherExp);
+    const intDivAmt   = Math.max(0, intDiv - 20_000_000);
+
+    const totalIncome = pensionAmt + earnedAmt + bizAmt + otherAmt + intDivAmt;
+
+    const personalDed   = (1 + dep) * 1_500_000;
+    const totalDed      = personalDed + np + hi + otherDed;
+    const taxBaseComp   = Math.max(0, totalIncome - totalDed);
+    const compTaxRaw    = baseTax(taxBaseComp);
+    const compTax       = compTaxRaw * 1.1; // 지방소득세
+
+    const hasCompInput  = salary > 0 || bizRev > 0 || otherRev > 0 || intDiv > 0 || dep > 0 || np > 0 || hi > 0 || otherDed > 0;
+
+    $('ps_sepTax').textContent  = fmt(sepTax);
+    $('ps_compTax').textContent = hasCompInput ? fmt(compTax) : '소득 정보 입력 필요';
+    $('ps_compDetail').textContent = hasCompInput
+      ? `과세표준 ${fmtN(taxBaseComp/10000)}만원`
+      : '위 종합과세 항목 입력';
+
+    const rec    = $('ps_recommendation');
+    const sepCard  = $('ps_sepCard');
+    const compCard = $('ps_compCard');
+
+    if (hasCompInput) {
+      const better = compTax < sepTax ? 'comp' : 'sep';
+      sepCard.className  = 'cmp-card' + (better === 'sep'  ? ' winner' : '');
+      compCard.className = 'cmp-card' + (better === 'comp' ? ' winner' : '');
+
+      const diff = Math.abs(sepTax - compTax);
+      rec.style.display = '';
+      if (better === 'sep') {
+        rec.className = 'alert alert-info';
+        rec.innerHTML = `<strong>분리과세가 유리합니다.</strong> 종합과세 대비 약 ${fmt(diff)} 절세`;
+      } else {
+        rec.className = 'alert alert-green';
+        rec.innerHTML = `<strong>종합과세가 유리합니다.</strong> 분리과세 대비 약 ${fmt(diff)} 절세`;
+      }
+
+      $('ps_compBreakdown').style.display = '';
+      $('ps_b_pension').textContent  = fmt(pensionAmt);
+      $('ps_b_earned').textContent   = earnedAmt > 0 ? fmt(earnedAmt) : '—';
+      $('ps_b_biz').textContent      = bizAmt > 0    ? fmt(bizAmt)    : '—';
+      $('ps_b_other').textContent    = otherAmt > 0  ? fmt(otherAmt)  : '—';
+      $('ps_b_intdiv').textContent   = intDivAmt > 0 ? fmt(intDivAmt) : '—';
+      $('ps_b_total').textContent    = fmt(totalIncome);
+      $('ps_b_ded').textContent      = fmt(totalDed);
+      $('ps_b_base').textContent     = fmt(taxBaseComp);
+      $('ps_b_tax').textContent      = fmt(compTax);
+    } else {
+      sepCard.className  = 'cmp-card';
+      compCard.className = 'cmp-card';
+      rec.style.display  = 'none';
+      $('ps_compBreakdown').style.display = 'none';
+    }
+  }
+}
+
+/* ══════════════════════════════════════
+   TAB 4 : 퇴직소득세
+══════════════════════════════════════ */
+function setRtMode(mode) {
+  $('rt_mAuto').classList.toggle('active', mode === 'auto');
+  $('rt_mManual').classList.toggle('active', mode === 'manual');
+  $('rt_autoPanel').classList.toggle('active', mode === 'auto');
+  $('rt_manualPanel').classList.toggle('active', mode === 'manual');
+  calcRT();
+}
+
+function calcRT() {
+  const isAuto   = $('rt_mAuto').classList.contains('active');
+  const py10     = $('rtpy_10').checked; // 연금수령 10년 이하
+  const discount = py10 ? 0.30 : 0.40;  // 감면율
+
+  let pay, totalTax, rate, showBreakdown;
+
+  if (isAuto) {
+    pay = v('rt_pay');
+    const years = v('rt_years');
+    const res   = calcRetirementTax(pay, years);
+    totalTax    = res.total;
+    rate        = res.rate;
+    showBreakdown = true;
+
+    $('rt_b_pay').textContent  = fmt(pay);
+    $('rt_b_ysd').textContent  = fmt(res.ysD);
+    $('rt_b_conv').textContent = fmt(res.conv);
+    $('rt_b_cd').textContent   = fmt(res.cD);
+    $('rt_b_base').textContent = fmt(res.taxBase);
+    $('rt_b_tax').textContent  = fmt(res.total);
+  } else {
+    pay      = v('rt_pay2');
+    const mr = v('rt_manRate') / 100;
+    totalTax = pay * mr;
+    rate     = mr * 100;
+    showBreakdown = false;
+  }
+
+  $('rt_breakdown').style.display = showBreakdown ? '' : 'none';
+
+  const pensionTax  = totalTax * (1 - discount);
+  const saved       = totalTax - pensionTax;
+
+  $('rt_lumpTax').textContent    = fmt(totalTax);
+  $('rt_lumpRate').textContent   = `실효세율 ${rate.toFixed(2)}%`;
+  $('rt_pensionTax').textContent = fmt(pensionTax);
+  $('rt_saved').textContent      = fmt(saved);
+  $('rt_savedRate').textContent  = (discount * 100).toFixed(0) + '% 감면';
+
+  $('rt_lumpNet').textContent    = fmt(pay - totalTax);
+  $('rt_pensionNet').textContent = fmt(pay - pensionTax);
+  $('rt_pensionDetail').textContent = py10 ? '10년 이하 수령 (30% 감면)' : '10년 초과 수령 (40% 감면)';
+  $('rt_discountBadge').textContent = (discount * 100).toFixed(0) + '% 절세';
+}
+
+/* ══════════════════════════════════════
+   TAB 4 : 매트릭스 생성
+══════════════════════════════════════ */
+function renderMatrix() {
+  const pays  = [30_000_000, 50_000_000, 100_000_000, 200_000_000, 300_000_000, 500_000_000];
+  const years = [5, 10, 15, 20, 25, 30];
+  const payLabels = ['3천만', '5천만', '1억', '2억', '3억', '5억'];
+
+  const tbl = $('rt_matrix');
+  if (!tbl) return;
+
+  // header
+  let html = '<tr><th>근속연수 \\ 퇴직금</th>';
+  payLabels.forEach(l => { html += `<th>${l}원</th>`; });
+  html += '</tr>';
+
+  // rows
+  years.forEach(y => {
+    html += `<tr><td class="rh">${y}년</td>`;
+    pays.forEach(p => {
+      const res  = calcRetirementTax(p, y);
+      const r    = res.rate;
+      const bg   = rateColor(r);
+      const fg   = r > 10 ? '#fff' : '#1a1a2e';
+      html += `<td style="background:${bg};color:${fg};font-weight:600">${r.toFixed(1)}%</td>`;
+    });
+    html += '</tr>';
+  });
+
+  tbl.innerHTML = html;
+
+  // legend
+  const legend = $('rt_legend');
+  const stops = [
+    { label: '0~3%',   color: rateColor(1.5) },
+    { label: '3~6%',   color: rateColor(4.5) },
+    { label: '6~10%',  color: rateColor(8) },
+    { label: '10~15%', color: rateColor(12.5) },
+    { label: '15%+',   color: rateColor(18) },
+  ];
+  legend.innerHTML = stops.map(s =>
+    `<span style="display:flex;align-items:center;gap:5px">
+      <span class="legend-dot" style="background:${s.color}"></span>${s.label}
+    </span>`
+  ).join('');
+}
+
+function rateColor(r) {
+  if (r < 3)       return '#c8e6c9';  // very light green
+  if (r < 6)       return '#81c784';  // green
+  if (r < 10)      return '#ffcc02';  // yellow
+  if (r < 15)      return '#ff9800';  // orange
+  return '#e53935';                   // red
+}
+
+/* ══════════════════════════════════════
+   INIT
+══════════════════════════════════════ */
+calcTC();
+calcPS();
+calcRT();
+</script>
+</body>
+</html>
