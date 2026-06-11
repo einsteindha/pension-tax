@@ -354,7 +354,7 @@ table.matrix .rh {
 <header class="site-header">
   <div class="header-title">
     <h1>연금계좌 세금 정리</h1>
-    <p>연금저축 · IRP 과세 구조 이해 및 세금 계산 (2025년 기준)</p>
+    <p>연금저축 · IRP 과세 구조 이해 및 세금 계산 (2026년 기준)</p>
   </div>
   <div class="header-badge">IdentiFi · 정원준 CFP</div>
 </header>
@@ -947,15 +947,19 @@ table.matrix .rh {
         <label class="form-label" for="rt_pensionYears">IRP 연금 수령 기간</label>
         <div class="radio-group">
           <div class="radio-opt">
-            <input type="radio" name="rtPY" id="rtpy_10" value="10" checked onchange="calcRT()">
-            <label for="rtpy_10">10년 이하</label>
+            <input type="radio" name="rtPY" id="rtpy_u10" value="u10" checked onchange="calcRT()">
+            <label for="rtpy_u10">10년 이하</label>
           </div>
           <div class="radio-opt">
-            <input type="radio" name="rtPY" id="rtpy_11" value="11" onchange="calcRT()">
-            <label for="rtpy_11">10년 초과</label>
+            <input type="radio" name="rtPY" id="rtpy_u20" value="u20" onchange="calcRT()">
+            <label for="rtpy_u20">10 ~ 20년</label>
+          </div>
+          <div class="radio-opt">
+            <input type="radio" name="rtPY" id="rtpy_o20" value="o20" onchange="calcRT()">
+            <label for="rtpy_o20">20년 초과</label>
           </div>
         </div>
-        <div class="form-hint">10년 이하: 퇴직소득세 30% 감면 / 10년 초과: 40% 감면</div>
+        <div class="form-hint">10년 이하: 30% 감면 / 10~20년: 40% 감면 / 20년 초과: 50% 감면 (2026년 신설)</div>
       </div>
     </div>
   </div>
@@ -1349,8 +1353,11 @@ function setRtMode(mode) {
 
 function calcRT() {
   const isAuto   = $('rt_mAuto').classList.contains('active');
-  const py10     = $('rtpy_10').checked; // 연금수령 10년 이하
-  const discount = py10 ? 0.30 : 0.40;  // 감면율
+  // 연금수령 기간별 퇴직소득세 감면율 (2026년 기준)
+  let discount;
+  if ($('rtpy_u10').checked)      discount = 0.30; // 10년 이하: 30% 감면
+  else if ($('rtpy_u20').checked) discount = 0.40; // 10~20년: 40% 감면
+  else                             discount = 0.50; // 20년 초과: 50% 감면 (2026년 신설)
 
   let pay, totalTax, rate, showBreakdown;
 
@@ -1389,7 +1396,9 @@ function calcRT() {
 
   $('rt_lumpNet').textContent    = fmt(pay - totalTax);
   $('rt_pensionNet').textContent = fmt(pay - pensionTax);
-  $('rt_pensionDetail').textContent = py10 ? '10년 이하 수령 (30% 감면)' : '10년 초과 수령 (40% 감면)';
+  const detailMap = { u10: '10년 이하 수령 (30% 감면)', u20: '10~20년 수령 (40% 감면)', o20: '20년 초과 수령 (50% 감면)' };
+  const pyVal = document.querySelector('input[name="rtPY"]:checked').value;
+  $('rt_pensionDetail').textContent = detailMap[pyVal];
   $('rt_discountBadge').textContent = (discount * 100).toFixed(0) + '% 절세';
 }
 
