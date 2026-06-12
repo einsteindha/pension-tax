@@ -701,14 +701,35 @@ table.matrix .rh {
             <div style="font-size:13px;color:var(--text3)">↓</div>
           </div>
 
-          <!-- 층 1: 비과세 원금 -->
-          <div style="display:flex;align-items:stretch;border-radius:var(--radius) var(--radius) 0 0;overflow:hidden;border:1px solid rgba(42,124,111,.3)">
+          <!-- 층 1: 세액공제 미적용 원금 -->
+          <div style="display:flex;align-items:stretch;border-radius:var(--radius) var(--radius) 0 0;overflow:hidden;border:1px solid rgba(91,72,144,.3)">
+            <div style="width:5px;background:var(--purple);flex-shrink:0"></div>
+            <div style="flex:1;background:rgba(91,72,144,.06);padding:10px 12px;display:flex;align-items:center;gap:10px">
+              <div style="width:22px;height:22px;border-radius:50%;background:var(--purple);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-size:13px;flex-shrink:0">1</div>
+              <div style="flex:1">
+                <div style="font-size:13px;font-weight:600;color:var(--purple)">세액공제 미적용 원금</div>
+                <div style="font-size:11px;color:var(--text3);margin-top:1px">한도 초과 납입 · 소득요건 미충족 납입금</div>
+              </div>
+              <div style="text-align:right;flex-shrink:0">
+                <div style="font-size:11px;font-weight:700;color:var(--purple);background:rgba(91,72,144,.12);padding:3px 8px;border-radius:2px;white-space:nowrap">비과세</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 구분 화살표 -->
+          <div style="display:flex;align-items:center;background:var(--bg3);border-left:1px solid rgba(91,72,144,.3);border-right:1px solid rgba(42,124,111,.3);padding:3px 12px">
+            <div style="font-size:10px;color:var(--text3)">① 소진 후</div>
+            <div style="margin-left:auto;font-size:11px;color:var(--text3)">↓</div>
+          </div>
+
+          <!-- 층 2: 비과세 원금 -->
+          <div style="display:flex;align-items:stretch;overflow:hidden;border:1px solid rgba(42,124,111,.3);border-top:none">
             <div style="width:5px;background:var(--green);flex-shrink:0"></div>
             <div style="flex:1;background:rgba(42,124,111,.07);padding:10px 12px;display:flex;align-items:center;gap:10px">
-              <div style="width:22px;height:22px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-size:13px;flex-shrink:0">1</div>
+              <div style="width:22px;height:22px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-size:13px;flex-shrink:0">2</div>
               <div style="flex:1">
                 <div style="font-size:13px;font-weight:600;color:var(--green)">비과세 원금</div>
-                <div style="font-size:11px;color:var(--text3);margin-top:1px">한도 초과 납입 · 다운사이징 납입금</div>
+                <div style="font-size:11px;color:var(--text3);margin-top:1px">다운사이징 납입금 등</div>
               </div>
               <div style="text-align:right;flex-shrink:0">
                 <div style="font-size:11px;font-weight:700;color:var(--green);background:rgba(42,124,111,.12);padding:3px 8px;border-radius:2px;white-space:nowrap">비과세</div>
@@ -718,15 +739,15 @@ table.matrix .rh {
 
           <!-- 구분 화살표 -->
           <div style="display:flex;align-items:center;background:var(--bg3);border-left:1px solid rgba(42,124,111,.3);border-right:1px solid rgba(43,94,167,.3);padding:3px 12px">
-            <div style="font-size:10px;color:var(--text3)">① 소진 후</div>
+            <div style="font-size:10px;color:var(--text3)">② 소진 후</div>
             <div style="margin-left:auto;font-size:11px;color:var(--text3)">↓</div>
           </div>
 
-          <!-- 층 2: 이연퇴직소득 -->
+          <!-- 층 3: 이연퇴직소득 -->
           <div style="display:flex;align-items:stretch;overflow:hidden;border:1px solid rgba(43,94,167,.3);border-top:none">
             <div style="width:5px;background:var(--blue);flex-shrink:0"></div>
             <div style="flex:1;background:rgba(43,94,167,.07);padding:10px 12px;display:flex;align-items:center;gap:10px">
-              <div style="width:22px;height:22px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-size:13px;flex-shrink:0">2</div>
+              <div style="width:22px;height:22px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-size:13px;flex-shrink:0">3</div>
               <div style="flex:1">
                 <div style="font-size:13px;font-weight:600;color:var(--blue)">이연퇴직소득</div>
                 <div style="font-size:11px;color:var(--text3);margin-top:1px">퇴직급여 IRP 이전분</div>
@@ -740,15 +761,15 @@ table.matrix .rh {
 
           <!-- 구분 화살표 -->
           <div style="display:flex;align-items:center;background:var(--bg3);border-left:1px solid rgba(43,94,167,.3);border-right:1px solid rgba(196,147,63,.3);padding:3px 12px">
-            <div style="font-size:10px;color:var(--text3)">② 소진 후</div>
+            <div style="font-size:10px;color:var(--text3)">③ 소진 후</div>
             <div style="margin-left:auto;font-size:11px;color:var(--text3)">↓</div>
           </div>
 
-          <!-- 층 3: 세액공제분 + 운용수익 -->
+          <!-- 층 4: 세액공제분 + 운용수익 -->
           <div style="display:flex;align-items:stretch;border-radius:0 0 var(--radius) var(--radius);overflow:hidden;border:1px solid rgba(196,147,63,.35);border-top:none">
             <div style="width:5px;background:var(--gold);flex-shrink:0"></div>
             <div style="flex:1;background:var(--gold-pale);padding:10px 12px;display:flex;align-items:center;gap:10px">
-              <div style="width:22px;height:22px;border-radius:50%;background:var(--gold);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-size:13px;flex-shrink:0">3</div>
+              <div style="width:22px;height:22px;border-radius:50%;background:var(--gold);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-size:13px;flex-shrink:0">4</div>
               <div style="flex:1">
                 <div style="font-size:13px;font-weight:600;color:var(--amber)">세액공제분 + 운용수익</div>
                 <div style="font-size:11px;color:var(--text3);margin-top:1px">개인납입 세액공제금 · 이자·배당·매매차익</div>
@@ -762,7 +783,7 @@ table.matrix .rh {
         </div>
 
         <div class="alert alert-warn" style="margin-bottom:0;font-size:11px">
-          <strong>IRP에 퇴직급여 + 개인납입금이 섞인 경우:</strong> 비과세 원금 소진 후 퇴직소득(②)이 먼저 빠져나가고, 개인납입분(③)은 그 이후에 인출됩니다. 연금 수령 초기에는 퇴직소득세가 적용됩니다.
+          <strong>IRP에 퇴직급여 + 개인납입금이 섞인 경우:</strong> 비과세 원금 소진 후 퇴직소득(③)이 먼저 빠져나가고, 개인납입분(④)은 그 이후에 인출됩니다. 연금 수령 초기에는 퇴직소득세가 적용됩니다.
         </div>
       </div>
     </div>
