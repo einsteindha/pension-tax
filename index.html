@@ -773,8 +773,8 @@ table.matrix .rh {
           <input type="number" id="tc_ps" value="6000000" min="0" max="18000000" step="100000" oninput="syncI('tc_ps','tc_psR');updateKR('tc_ps');calcTC()">
           <span class="inp-unit">원</span>
         </div>
-        <input type="range" id="tc_psR" min="0" max="12000000" step="100000" value="6000000" oninput="syncR('tc_ps','tc_psR');calcTC()">
-        <div class="range-row"><span>0원</span><span>세액공제 한도 600만</span></div>
+        <input type="range" id="tc_psR" min="0" max="18000000" step="100000" value="6000000" oninput="syncR('tc_ps','tc_psR');updateKR('tc_ps');calcTC()">
+        <div class="range-row"><span>0원</span><span>1,800만원</span></div>
         <div class="form-hint">세액공제 한도: 연간 600만원 (납입 한도 1,800만원)</div>
       </div>
 
@@ -785,9 +785,50 @@ table.matrix .rh {
           <input type="number" id="tc_irp" value="3000000" min="0" max="18000000" step="100000" oninput="syncI('tc_irp','tc_irpR');updateKR('tc_irp');calcTC()">
           <span class="inp-unit">원</span>
         </div>
-        <input type="range" id="tc_irpR" min="0" max="9000000" step="100000" value="3000000" oninput="syncR('tc_irp','tc_irpR');calcTC()">
-        <div class="range-row"><span>0원</span><span>합산 한도 900만</span></div>
+        <input type="range" id="tc_irpR" min="0" max="18000000" step="100000" value="3000000" oninput="syncR('tc_irp','tc_irpR');updateKR('tc_irp');calcTC()">
+        <div class="range-row"><span>0원</span><span>1,800만원</span></div>
         <div class="form-hint">연금저축 + IRP 합산 세액공제 한도: 900만원</div>
+      </div>
+
+      <!-- 합산 납입 현황 바 -->
+      <div style="background:var(--bg3);border-radius:var(--radius);padding:12px;margin-bottom:14px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:7px">
+          <span style="font-size:12px;font-weight:600;color:var(--text2)">연금저축 + IRP 합산</span>
+          <span style="font-size:13px;font-weight:700" id="tc_totalSum">—</span>
+        </div>
+        <div style="height:7px;background:var(--bg);border-radius:4px;overflow:hidden">
+          <div id="tc_totalBarFill" style="height:100%;background:var(--blue);border-radius:4px;transition:width .3s;width:0%"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-top:3px">
+          <span>0원</span><span>납입 한도 1,800만원</span>
+        </div>
+        <div id="tc_totalWarn" class="alert alert-warn" style="display:none;margin-top:8px;margin-bottom:0"></div>
+      </div>
+
+      <hr class="divider">
+
+      <div class="form-group">
+        <label class="form-label" for="tc_isa">ISA 만기이전금액</label>
+        <div class="kr-num" id="tc_isa_kr"></div>
+        <div class="inp-wrap">
+          <input type="number" id="tc_isa" value="0" min="0" step="1000000" oninput="syncI('tc_isa','tc_isaR');updateKR('tc_isa');calcTC()">
+          <span class="inp-unit">원</span>
+        </div>
+        <input type="range" id="tc_isaR" min="0" max="100000000" step="1000000" value="0" oninput="syncR('tc_isa','tc_isaR');updateKR('tc_isa');calcTC()">
+        <div class="range-row"><span>0원</span><span>1억원</span></div>
+        <div class="form-hint">이전금액의 10%·최대 300만원을 추가 세액공제 대상으로 인정 (900만원 한도 외 별도)</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="tc_down">주택 다운사이징 납입금액</label>
+        <div class="kr-num" id="tc_down_kr"></div>
+        <div class="inp-wrap">
+          <input type="number" id="tc_down" value="0" min="0" step="1000000" oninput="syncI('tc_down','tc_downR');updateKR('tc_down');calcTC()">
+          <span class="inp-unit">원</span>
+        </div>
+        <input type="range" id="tc_downR" min="0" max="100000000" step="1000000" value="0" oninput="syncR('tc_down','tc_downR');updateKR('tc_down');calcTC()">
+        <div class="range-row"><span>0원</span><span>1억원</span></div>
+        <div class="form-hint">주택 처분 차액 납입 — 연간 1억원까지 추가 납입 허용, 수령 시 비과세 재원</div>
       </div>
     </div>
   </div>
@@ -833,6 +874,14 @@ table.matrix .rh {
         <div class="breakdown-row">
           <span>IRP 추가 공제 가능액</span>
           <span id="tc_b_irp">—</span>
+        </div>
+        <div class="breakdown-row" id="tc_b_isa_row" style="display:none">
+          <span>ISA 이전 추가 공제 대상</span>
+          <span id="tc_b_isa" style="color:var(--green)">—</span>
+        </div>
+        <div class="breakdown-row" id="tc_b_down_row" style="display:none">
+          <span>주택 다운사이징 납입 (비과세)</span>
+          <span id="tc_b_down" style="color:var(--green)">—</span>
         </div>
         <div class="breakdown-row total">
           <span>합산 공제 대상액</span>
@@ -1405,6 +1454,24 @@ function calcTC() {
   const comp   = v('tc_comp');
   const ps     = v('tc_ps');
   const irp    = v('tc_irp');
+  const isa    = v('tc_isa');
+  const down   = v('tc_down');
+
+  // 합산 납입 한도 표시 (연금저축 + IRP = 연간 1,800만원)
+  const totalInput = ps + irp;
+  const pct = Math.min(totalInput / 18_000_000 * 100, 100);
+  const barColor = totalInput > 18_000_000 ? 'var(--red)' : totalInput > 14_000_000 ? 'var(--amber)' : 'var(--blue)';
+  $('tc_totalSum').innerHTML =
+    `<strong style="color:${totalInput > 18_000_000 ? 'var(--red)' : 'var(--text)'}">${fmtN(Math.round(totalInput/10000))}만원</strong>` +
+    `<span style="color:var(--text3);font-size:11px;margin-left:4px">/ 1,800만원</span>`;
+  $('tc_totalBarFill').style.width = pct + '%';
+  $('tc_totalBarFill').style.background = barColor;
+  if (totalInput > 18_000_000) {
+    $('tc_totalWarn').style.display = '';
+    $('tc_totalWarn').textContent = `납입 한도(1,800만원) ${fmtN(Math.round((totalInput - 18_000_000)/10000))}만원 초과 — 초과분은 납입 불가합니다`;
+  } else {
+    $('tc_totalWarn').style.display = 'none';
+  }
 
   // 세액공제율 판단
   let rate;
@@ -1414,12 +1481,19 @@ function calcTC() {
     rate = comp <= 45_000_000 ? 0.165 : 0.132;
   }
 
-  // 공제 대상 계산
-  const psElig  = Math.min(ps, 6_000_000);
-  const irpRoom = 9_000_000 - psElig;           // IRP가 채울 수 있는 나머지
-  const irpElig = Math.min(irp, irpRoom);
-  const total   = psElig + irpElig;
-  const credit  = total * rate;
+  // 공제 대상 계산 (기본 연금저축 + IRP)
+  const psElig   = Math.min(ps, 6_000_000);
+  const irpRoom  = 9_000_000 - psElig;
+  const irpElig  = Math.min(irp, irpRoom);
+  const baseTotal = psElig + irpElig;
+  const baseCredit = baseTotal * rate;
+
+  // ISA 만기이전 추가 공제 (이전금액의 10%, 최대 300만원 — 900만원 한도 외 별도)
+  const isaElig  = Math.min(isa * 0.1, 3_000_000);
+  const isaCredit = isaElig * rate;
+
+  const total  = baseTotal + isaElig;
+  const credit = baseCredit + isaCredit;
 
   const psOver  = Math.max(0, ps - 6_000_000);
   const irpOver = Math.max(0, irp - irpRoom);
@@ -1435,15 +1509,29 @@ function calcTC() {
     (income <= thresh ? '이하' : '초과') +
     ` 해당`;
 
-  $('tc_credit').textContent  = fmt(credit);
-  $('tc_creditSub').textContent = `월 환산 ${fmt(credit/12)}`;
-  $('tc_eligible').textContent = fmt(total);
-  $('tc_rate').textContent     = rateStr;
-  $('tc_net').textContent      = fmt(total - credit);
-  $('tc_monthly').textContent  = fmt((total - credit) / 12);
+  $('tc_credit').textContent    = fmt(credit);
+  $('tc_creditSub').textContent = `월 환산 ${fmt(credit/12)}` + (isaCredit > 0 ? ` · ISA 추가 ${fmt(isaCredit)} 포함` : '');
+  $('tc_eligible').textContent  = fmt(total);
+  $('tc_rate').textContent      = rateStr;
+  $('tc_net').textContent       = fmt(total - credit);
+  $('tc_monthly').textContent   = fmt((total - credit) / 12);
 
-  $('tc_b_ps').textContent     = fmt(psElig);
-  $('tc_b_irp').textContent    = fmt(irpElig);
+  $('tc_b_ps').textContent  = fmt(psElig);
+  $('tc_b_irp').textContent = fmt(irpElig);
+
+  if (isaElig > 0) {
+    $('tc_b_isa_row').style.display = '';
+    $('tc_b_isa').textContent = `+${fmt(isaElig)}`;
+  } else {
+    $('tc_b_isa_row').style.display = 'none';
+  }
+  if (down > 0) {
+    $('tc_b_down_row').style.display = '';
+    $('tc_b_down').textContent = fmt(down) + ' (비과세)';
+  } else {
+    $('tc_b_down_row').style.display = 'none';
+  }
+
   $('tc_b_total').textContent  = fmt(total);
   $('tc_psOver').textContent   = psOver  > 0 ? fmt(psOver)  : '없음';
   $('tc_irpOver').textContent  = irpOver > 0 ? fmt(irpOver) : '없음';
