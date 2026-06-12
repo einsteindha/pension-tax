@@ -66,23 +66,38 @@ body {
 /* ── TAB NAV ── */
 .tab-nav {
   display: flex;
-  flex-wrap: wrap;
   background: var(--bg);
   border-bottom: 1px solid var(--bg3);
 }
+.tab-group {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  border-right: 1px solid var(--bg3);
+}
+.tab-group:last-child { border-right: none; }
+.tab-grp-hd {
+  font-size: 9px; font-weight: 600; color: var(--text3);
+  padding: 5px 12px 4px;
+  letter-spacing: .14em; text-transform: uppercase;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--bg3);
+}
+.tab-grp-tabs { display: flex; }
 .tab-btn {
-  flex: 1 1 auto;
-  padding: 13px 10px;
+  flex: 1;
+  padding: 11px 8px;
   border: none; background: transparent;
   cursor: pointer; font-size: 13px; font-weight: 400;
   color: var(--text3); font-family: inherit;
   white-space: nowrap; border-bottom: 2px solid transparent;
-  transition: all .2s; letter-spacing: .03em;
+  transition: all .2s; letter-spacing: .02em; text-align: center;
 }
 .tab-btn:hover { color: var(--text2); }
 .tab-btn.active { color: var(--text); border-bottom-color: var(--gold); }
-@media (max-width: 640px) {
-  .tab-btn { flex: 1 1 30%; font-size: 12px; padding: 11px 6px; text-align: center; }
+@media (max-width: 600px) {
+  .tab-btn { font-size: 11px; padding: 10px 4px; }
+  .tab-grp-hd { font-size: 8px; padding: 4px 8px 3px; }
 }
 
 /* ── LAYOUT ── */
@@ -393,11 +408,21 @@ table.matrix .rh {
 
 <!-- TAB NAV -->
 <nav class="tab-nav">
-  <button class="tab-btn active" onclick="switchTab(0)">① 세금 구조</button>
-  <button class="tab-btn" onclick="switchTab(1)">② 납입 세액공제</button>
-  <button class="tab-btn" onclick="switchTab(2)">③ 연금 수령 세금</button>
-  <button class="tab-btn" onclick="switchTab(3)">④ 퇴직금 IRP</button>
-  <button class="tab-btn" onclick="switchTab(4)">⑤ 통합 계산</button>
+  <div class="tab-group">
+    <div class="tab-grp-hd">납입</div>
+    <div class="tab-grp-tabs">
+      <button class="tab-btn active" onclick="switchTab(0)">① 세금 구조</button>
+      <button class="tab-btn" onclick="switchTab(1)">② 세액공제</button>
+    </div>
+  </div>
+  <div class="tab-group">
+    <div class="tab-grp-hd">인출</div>
+    <div class="tab-grp-tabs">
+      <button class="tab-btn" onclick="switchTab(2)">③ 연금 수령</button>
+      <button class="tab-btn" onclick="switchTab(3)">④ 퇴직금 IRP</button>
+      <button class="tab-btn" onclick="switchTab(4)">⑤ 통합 계산</button>
+    </div>
+  </div>
 </nav>
 
 <main>
