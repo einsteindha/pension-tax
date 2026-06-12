@@ -686,6 +686,85 @@ table.matrix .rh {
         </table>
         <div style="font-size:11px;color:var(--text3);margin-top:6px">종신수령은 80세 이상도 4.4% 고정 — 80세 이상은 확정기간형이 유리</div>
       </div>
+
+      <div class="card" style="margin-top:10px">
+        <div class="card-title">재원별 인출 순서</div>
+        <div style="font-size:11px;color:var(--text3);margin-bottom:12px">소득세법 시행령 제40조의2 — 재원이 섞여 있을 때 자동 적용</div>
+
+        <!-- 스택 다이어그램 -->
+        <div style="position:relative;margin-bottom:12px">
+
+          <!-- 인출 방향 화살표 레이블 -->
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px">
+            <div style="font-size:10px;color:var(--text3);letter-spacing:.1em;text-transform:uppercase">인출 방향</div>
+            <div style="flex:1;height:1px;background:var(--bg3)"></div>
+            <div style="font-size:13px;color:var(--text3)">↓</div>
+          </div>
+
+          <!-- 층 1: 비과세 원금 -->
+          <div style="display:flex;align-items:stretch;border-radius:var(--radius) var(--radius) 0 0;overflow:hidden;border:1px solid rgba(42,124,111,.3)">
+            <div style="width:5px;background:var(--green);flex-shrink:0"></div>
+            <div style="flex:1;background:rgba(42,124,111,.07);padding:10px 12px;display:flex;align-items:center;gap:10px">
+              <div style="width:22px;height:22px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-size:13px;flex-shrink:0">1</div>
+              <div style="flex:1">
+                <div style="font-size:13px;font-weight:600;color:var(--green)">비과세 원금</div>
+                <div style="font-size:11px;color:var(--text3);margin-top:1px">한도 초과 납입 · 다운사이징 납입금</div>
+              </div>
+              <div style="text-align:right;flex-shrink:0">
+                <div style="font-size:11px;font-weight:700;color:var(--green);background:rgba(42,124,111,.12);padding:3px 8px;border-radius:2px;white-space:nowrap">비과세</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 구분 화살표 -->
+          <div style="display:flex;align-items:center;background:var(--bg3);border-left:1px solid rgba(42,124,111,.3);border-right:1px solid rgba(43,94,167,.3);padding:3px 12px">
+            <div style="font-size:10px;color:var(--text3)">① 소진 후</div>
+            <div style="margin-left:auto;font-size:11px;color:var(--text3)">↓</div>
+          </div>
+
+          <!-- 층 2: 이연퇴직소득 -->
+          <div style="display:flex;align-items:stretch;overflow:hidden;border:1px solid rgba(43,94,167,.3);border-top:none">
+            <div style="width:5px;background:var(--blue);flex-shrink:0"></div>
+            <div style="flex:1;background:rgba(43,94,167,.07);padding:10px 12px;display:flex;align-items:center;gap:10px">
+              <div style="width:22px;height:22px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-size:13px;flex-shrink:0">2</div>
+              <div style="flex:1">
+                <div style="font-size:13px;font-weight:600;color:var(--blue)">이연퇴직소득</div>
+                <div style="font-size:11px;color:var(--text3);margin-top:1px">퇴직급여 IRP 이전분</div>
+              </div>
+              <div style="text-align:right;flex-shrink:0">
+                <div style="font-size:11px;font-weight:700;color:var(--blue);background:rgba(43,94,167,.1);padding:3px 8px;border-radius:2px;white-space:nowrap">퇴직소득세</div>
+                <div style="font-size:10px;color:var(--text3);margin-top:2px">30~50% 감면</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 구분 화살표 -->
+          <div style="display:flex;align-items:center;background:var(--bg3);border-left:1px solid rgba(43,94,167,.3);border-right:1px solid rgba(196,147,63,.3);padding:3px 12px">
+            <div style="font-size:10px;color:var(--text3)">② 소진 후</div>
+            <div style="margin-left:auto;font-size:11px;color:var(--text3)">↓</div>
+          </div>
+
+          <!-- 층 3: 세액공제분 + 운용수익 -->
+          <div style="display:flex;align-items:stretch;border-radius:0 0 var(--radius) var(--radius);overflow:hidden;border:1px solid rgba(196,147,63,.35);border-top:none">
+            <div style="width:5px;background:var(--gold);flex-shrink:0"></div>
+            <div style="flex:1;background:var(--gold-pale);padding:10px 12px;display:flex;align-items:center;gap:10px">
+              <div style="width:22px;height:22px;border-radius:50%;background:var(--gold);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-size:13px;flex-shrink:0">3</div>
+              <div style="flex:1">
+                <div style="font-size:13px;font-weight:600;color:var(--amber)">세액공제분 + 운용수익</div>
+                <div style="font-size:11px;color:var(--text3);margin-top:1px">개인납입 세액공제금 · 이자·배당·매매차익</div>
+              </div>
+              <div style="text-align:right;flex-shrink:0">
+                <div style="font-size:11px;font-weight:700;color:var(--amber);background:rgba(196,147,63,.15);padding:3px 8px;border-radius:2px;white-space:nowrap">연금소득세</div>
+                <div style="font-size:10px;color:var(--text3);margin-top:2px">3.3 ~ 5.5%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="alert alert-warn" style="margin-bottom:0;font-size:11px">
+          <strong>IRP에 퇴직급여 + 개인납입금이 섞인 경우:</strong> 비과세 원금 소진 후 퇴직소득(②)이 먼저 빠져나가고, 개인납입분(③)은 그 이후에 인출됩니다. 연금 수령 초기에는 퇴직소득세가 적용됩니다.
+        </div>
+      </div>
     </div>
 
   </div><!-- /flow-wrap -->
