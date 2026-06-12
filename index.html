@@ -76,6 +76,7 @@ body {
   border-right: 1px solid var(--bg3);
 }
 .tab-group:last-child { border-right: none; }
+.tab-group-sm { flex: 0 0 auto; }
 .tab-grp-hd {
   font-size: 9px; font-weight: 600; color: var(--text3);
   padding: 5px 12px 4px;
@@ -408,10 +409,15 @@ table.matrix .rh {
 
 <!-- TAB NAV -->
 <nav class="tab-nav">
+  <div class="tab-group tab-group-sm">
+    <div class="tab-grp-hd">개요</div>
+    <div class="tab-grp-tabs">
+      <button class="tab-btn active" onclick="switchTab(0)">① 세금 구조</button>
+    </div>
+  </div>
   <div class="tab-group">
     <div class="tab-grp-hd">납입</div>
     <div class="tab-grp-tabs">
-      <button class="tab-btn active" onclick="switchTab(0)">① 세금 구조</button>
       <button class="tab-btn" onclick="switchTab(1)">② 세액공제</button>
     </div>
   </div>
