@@ -390,171 +390,39 @@ table.matrix .rh {
 <div id="tab0" class="tab-content active">
 <div class="container">
 
-  <!-- ① 단계별 핵심 고려사항 -->
-  <div class="t1-overview">
-
-    <div style="background:rgba(55,138,221,.07);border:1px solid rgba(55,138,221,.25);border-radius:var(--radius-lg);padding:16px">
-      <div style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:10px;display:flex;align-items:center;gap:6px">
-        <span style="background:var(--blue);color:#fff;width:22px;height:22px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0">1</span>
-        적립(납입)
+  <!-- ① 적립(납입) -->
+  <div class="flow-stage flow-blue">
+    <div class="flow-head">
+      <div class="num">1</div>적립(납입)
+    </div>
+    <div class="flow-body">
+      <div class="fitem">
+        <div class="fitem-dot">+</div>
+        <div class="fitem-body">
+          <div class="fitem-title">세액공제 혜택</div>
+          <div class="fitem-desc">연금저축 600만 + IRP/DC형 포함 합산 900만원까지 세액공제 가능</div>
+          <div class="fitem-rate" style="color:var(--blue)">13.2% 또는 16.5% 공제</div>
+        </div>
       </div>
-      <div style="font-size:12px;color:var(--text2);line-height:1.8">
-        <div>· 세액공제 한도(900만원)까지 우선 납입</div>
-        <div>· 연금저축 vs IRP 분배 전략</div>
-        <div>· ISA 만기금 이전으로 추가 공제</div>
-        <div>· 주택 다운사이징 차액 추가 납입</div>
-        <div style="margin-top:6px;font-size:11px;color:var(--text3)">→ 빠를수록 과세이연 효과 극대화</div>
+      <div class="fitem">
+        <div class="fitem-dot">!</div>
+        <div class="fitem-body">
+          <div class="fitem-title">공제율 기준</div>
+          <div class="fitem-desc">총급여 5,500만원 이하(또는 종합소득 4,500만원 이하) → 16.5% · 초과 → 13.2%</div>
+        </div>
+      </div>
+      <div class="fitem">
+        <div class="fitem-dot">i</div>
+        <div class="fitem-body">
+          <div class="fitem-title">한도 초과 납입</div>
+          <div class="fitem-desc">세액공제 한도 초과분은 수령 시 비과세 원금으로 환급</div>
+        </div>
       </div>
     </div>
-
-    <div style="background:rgba(139,92,246,.07);border:1px solid rgba(139,92,246,.25);border-radius:var(--radius-lg);padding:16px">
-      <div style="font-size:13px;font-weight:700;color:var(--purple);margin-bottom:10px;display:flex;align-items:center;gap:6px">
-        <span style="background:var(--purple);color:#fff;width:22px;height:22px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0">2</span>
-        운용
-      </div>
-      <div style="font-size:12px;color:var(--text2);line-height:1.8">
-        <div>· 운용수익 과세이연 (세금 0%)</div>
-        <div>· 매도·재투자 시에도 과세 없음</div>
-        <div>· 수익성 높은 자산을 연금계좌에 배치</div>
-        <div>· 일반계좌 이자·배당 15.4% vs 0%</div>
-        <div style="margin-top:6px;font-size:11px;color:var(--text3)">→ 장기 복리 효과 극대화</div>
-      </div>
-    </div>
-
-    <div style="background:rgba(29,158,117,.07);border:1px solid rgba(29,158,117,.25);border-radius:var(--radius-lg);padding:16px">
-      <div style="font-size:13px;font-weight:700;color:var(--green);margin-bottom:10px;display:flex;align-items:center;gap:6px">
-        <span style="background:var(--green);color:#fff;width:22px;height:22px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0">3</span>
-        인출(수령)
-      </div>
-      <div style="font-size:12px;color:var(--text2);line-height:1.8">
-        <div>· 수령 요건: 만 55세 + 계좌개설 5년</div>
-        <div>· 연금수령한도 내에서 저율 과세</div>
-        <div>· 연 1,500만원 이하 → 3.3~5.5%</div>
-        <div>· 나이 들수록 세율 낮아짐</div>
-        <div style="margin-top:6px;font-size:11px;color:var(--text3)">→ 최대한 연금으로 수령</div>
-      </div>
-    </div>
-
   </div>
 
-  <!-- ② 세금 구조 플로우 -->
-  <div class="flow-wrap">
-
-    <!-- 납입 -->
-    <div class="flow-stage flow-blue">
-      <div class="flow-head">
-        <div class="num">1</div>적립(납입)
-      </div>
-      <div class="flow-body">
-        <div class="fitem">
-          <div class="fitem-dot">+</div>
-          <div class="fitem-body">
-            <div class="fitem-title">세액공제 혜택</div>
-            <div class="fitem-desc">연금저축 600만 + IRP 포함 합산 900만원까지 세액공제 가능</div>
-            <div class="fitem-rate" style="color:var(--blue)">13.2% 또는 16.5% 공제</div>
-          </div>
-        </div>
-        <div class="fitem">
-          <div class="fitem-dot">!</div>
-          <div class="fitem-body">
-            <div class="fitem-title">공제율 기준</div>
-            <div class="fitem-desc">총급여 5,500만원 이하(또는 종합소득 4,500만원 이하) → 16.5%<br>초과 → 13.2%</div>
-          </div>
-        </div>
-        <div class="fitem">
-          <div class="fitem-dot">i</div>
-          <div class="fitem-body">
-            <div class="fitem-title">한도 초과 납입</div>
-            <div class="fitem-desc">세액공제 한도 초과분은 나중에 비과세로 돌려받음</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 운용 -->
-    <div class="flow-stage flow-purple">
-      <div class="flow-head">
-        <div class="num">2</div>운용
-      </div>
-      <div class="flow-body">
-        <div class="fitem">
-          <div class="fitem-dot">0</div>
-          <div class="fitem-body">
-            <div class="fitem-title">과세이연 (완전 비과세)</div>
-            <div class="fitem-desc">운용 기간 중 이자·배당·매매차익에 세금 없음</div>
-            <div class="fitem-rate" style="color:var(--purple)">운용수익 과세 0%</div>
-          </div>
-        </div>
-        <div class="fitem">
-          <div class="fitem-dot">vs</div>
-          <div class="fitem-body">
-            <div class="fitem-title">일반 계좌와 비교</div>
-            <div class="fitem-desc">일반 계좌 이자·배당: 15.4% 원천징수<br>금융소득 2,000만 초과: 종합과세</div>
-          </div>
-        </div>
-        <div class="fitem">
-          <div class="fitem-dot">↑</div>
-          <div class="fitem-body">
-            <div class="fitem-title">복리 효과 극대화</div>
-            <div class="fitem-desc">세금을 내지 않고 재투자 → 장기 복리 효과 극대화</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 수령 -->
-    <div class="flow-stage flow-green">
-      <div class="flow-head">
-        <div class="num">3</div>인출(수령)
-      </div>
-      <div class="flow-body">
-        <div class="fitem">
-          <div class="fitem-dot">A</div>
-          <div class="fitem-body">
-            <div class="fitem-title">연금수령 (세액공제분 + 운용수익)</div>
-            <div class="fitem-desc">55세 이상, 5년 이상 수령 조건 충족 시</div>
-            <div class="fitem-rate" style="color:var(--green)">3.3 ~ 5.5% 저율 분리과세</div>
-          </div>
-        </div>
-        <div class="fitem">
-          <div class="fitem-dot">!</div>
-          <div class="fitem-body">
-            <div class="fitem-title">1,500만원 초과 시</div>
-            <div class="fitem-desc">연간 사적연금소득이 1,500만원 초과 → 분리과세(16.5%) 또는 종합과세 선택</div>
-          </div>
-        </div>
-        <div class="fitem">
-          <div class="fitem-dot">B</div>
-          <div class="fitem-body">
-            <div class="fitem-title">연금외수령 (중도해지·일시금)</div>
-            <div class="fitem-desc">세액공제받은 납입금 + 운용수익에 적용</div>
-            <div class="fitem-rate" style="color:var(--red)">기타소득세 16.5%</div>
-          </div>
-        </div>
-        <div class="fitem">
-          <div class="fitem-dot">0</div>
-          <div class="fitem-body">
-            <div class="fitem-title">세액공제 미적용 원금</div>
-            <div class="fitem-desc">한도 초과 납입분(세액공제 미적용)은 수령 시 비과세</div>
-            <div class="fitem-rate" style="color:var(--text3)">비과세</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div><!-- /flow-wrap -->
-
-  <div class="key-box">
-    <div class="key-box-title">핵심 포인트</div>
-    <div class="key-pt">납입 시 세액공제(최대 16.5%) → 운용 중 완전 비과세 → 수령 시 저율(3.3~5.5%): 3단계 모두 세제 혜택</div>
-    <div class="key-pt">연금수령 시 세율(3.3~5.5%)이 해지 시 세율(16.5%)보다 훨씬 낮으므로 연금으로 수령하는 것이 유리</div>
-    <div class="key-pt">연간 사적연금소득 1,500만원 이하이면 분리과세 선택으로 종합소득 신고 불필요</div>
-    <div class="key-pt">퇴직금을 IRP로 수령한 후 연금으로 인출하면 퇴직소득세 30~40% 절감 가능</div>
-  </div>
-
-  <!-- ③ 납입한도 vs 공제한도 -->
-  <div class="card" style="margin-top:20px">
-    <div class="card-title">납입한도 vs 세액공제한도 — 어떻게 다른가?</div>
+  <div class="card" style="margin-top:12px">
+    <div class="card-title">납입한도 vs 세액공제한도</div>
     <div class="alert alert-info" style="margin-bottom:14px">납입한도(얼마까지 넣을 수 있나)와 공제한도(세금혜택을 받는 금액)는 다릅니다. 공제한도를 초과해도 납입은 가능하며, 초과분은 수령 시 비과세로 돌려받습니다.</div>
 
     <div style="font-size:12px;font-weight:700;color:var(--text2);margin-bottom:6px">연금저축 단독 납입 시</div>
@@ -564,10 +432,10 @@ table.matrix .rh {
     </div>
     <div class="limit-ruler"><span>0</span><span>600만 (공제한도)</span><span>1,800만원/년 (납입한도)</span></div>
 
-    <div style="font-size:12px;font-weight:700;color:var(--text2);margin:14px 0 6px">연금저축 + IRP 합산</div>
+    <div style="font-size:12px;font-weight:700;color:var(--text2);margin:14px 0 6px">연금저축 + IRP/DC형 합산</div>
     <div class="limit-bar">
       <div class="limit-seg ls-a" style="flex:600">연금저축<br>공제 600만</div>
-      <div class="limit-seg ls-b" style="flex:300">IRP<br>추가 300만</div>
+      <div class="limit-seg ls-b" style="flex:300">IRP/DC형<br>추가 300만</div>
       <div class="limit-seg ls-c" style="flex:900">비과세 원금<br>최대 900만</div>
     </div>
     <div class="limit-ruler"><span>0</span><span>600만</span><span>900만 (합산 공제한도)</span><span>1,800만원/년</span></div>
@@ -577,7 +445,8 @@ table.matrix .rh {
         <div style="font-weight:700;color:var(--blue);margin-bottom:6px">공제 적용 구간</div>
         <div style="color:var(--text2);line-height:1.8">
           <div>· 연금저축: 최대 <strong>600만원/년</strong></div>
-          <div>· IRP 포함 합산: 최대 <strong>900만원/년</strong></div>
+          <div>· IRP/DC형 포함 합산: 최대 <strong>900만원/년</strong></div>
+          <div>· DC형 추가부담금: 납입 자체 한도 없음</div>
           <div>· 공제율: 16.5% 또는 13.2%</div>
         </div>
       </div>
@@ -592,9 +461,7 @@ table.matrix .rh {
     </div>
   </div>
 
-  <!-- ④ 특별 납입 방법 -->
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px">
-
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:12px">
     <div class="card">
       <div class="card-title" style="color:var(--purple)">ISA 만기금 연금계좌 이전</div>
       <div style="font-size:12px;color:var(--text2);line-height:1.9">
@@ -616,17 +483,94 @@ table.matrix .rh {
       </div>
       <div class="alert alert-warn" style="margin-top:10px;font-size:11px">구체적 한도·세제 적용은 세무사 또는 CFP 상담 권장</div>
     </div>
-
   </div>
 
-  <!-- ⑤ 수령 조건 & 연금수령한도 -->
-  <div class="card" style="margin-top:14px">
+  <!-- ② 운용 -->
+  <div class="flow-stage flow-purple" style="margin-top:24px">
+    <div class="flow-head">
+      <div class="num">2</div>운용
+    </div>
+    <div class="flow-body">
+      <div class="fitem">
+        <div class="fitem-dot">0</div>
+        <div class="fitem-body">
+          <div class="fitem-title">과세이연 (완전 비과세)</div>
+          <div class="fitem-desc">운용 기간 중 이자·배당·매매차익에 세금 없음</div>
+          <div class="fitem-rate" style="color:var(--purple)">운용수익 과세 0%</div>
+        </div>
+      </div>
+      <div class="fitem">
+        <div class="fitem-dot">vs</div>
+        <div class="fitem-body">
+          <div class="fitem-title">일반 계좌와 비교</div>
+          <div class="fitem-desc">일반 계좌 이자·배당: 15.4% 원천징수 · 금융소득 2,000만 초과: 종합과세</div>
+        </div>
+      </div>
+      <div class="fitem">
+        <div class="fitem-dot">↑</div>
+        <div class="fitem-body">
+          <div class="fitem-title">복리 효과 극대화</div>
+          <div class="fitem-desc">세금을 내지 않고 재투자 → 장기 복리 효과 극대화</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ③ 인출(수령) -->
+  <div class="flow-stage flow-green" style="margin-top:24px">
+    <div class="flow-head">
+      <div class="num">3</div>인출(수령)
+    </div>
+    <div class="flow-body">
+      <div class="fitem">
+        <div class="fitem-dot">▶</div>
+        <div class="fitem-body">
+          <div class="fitem-title">연금수령 요건 판단</div>
+          <div class="fitem-desc"><strong>개인납입금</strong>: 만 55세 이상 + 계좌개설 5년 이상 &nbsp;|&nbsp; <strong>퇴직급여</strong>: 만 55세 이상 (계좌 5년 요건 면제)</div>
+          <div class="fitem-rate" style="color:var(--text3)">요건 미충족 → 연금외수령 처리 (기타소득세 16.5%)</div>
+        </div>
+      </div>
+      <div class="fitem">
+        <div class="fitem-dot">A</div>
+        <div class="fitem-body">
+          <div class="fitem-title">연 1,500만원 이하 — 저율 분리과세</div>
+          <div class="fitem-desc">사적연금 수령액이 연 1,500만원 이하이면 분리과세로 종결 (종합소득 신고 불필요)</div>
+          <div class="fitem-rate" style="color:var(--green)">3.3% ~ 5.5% (나이별 차등 · 종신수령 4.4%)</div>
+        </div>
+      </div>
+      <div class="fitem">
+        <div class="fitem-dot">!</div>
+        <div class="fitem-body">
+          <div class="fitem-title">연 1,500만원 초과 — 과세 방법 선택</div>
+          <div class="fitem-desc">전액 분리과세(16.5%) 또는 다른 소득과 합산하여 종합과세 중 유리한 방법 선택</div>
+          <div class="fitem-rate" style="color:var(--amber)">분리과세 16.5% vs 종합과세 비교 필요</div>
+        </div>
+      </div>
+      <div class="fitem">
+        <div class="fitem-dot">B</div>
+        <div class="fitem-body">
+          <div class="fitem-title">연금외수령 (요건 미충족 · 중도해지 · 일시금)</div>
+          <div class="fitem-desc">세액공제받은 납입금 + 운용수익에 적용</div>
+          <div class="fitem-rate" style="color:var(--red)">기타소득세 16.5%</div>
+        </div>
+      </div>
+      <div class="fitem">
+        <div class="fitem-dot">0</div>
+        <div class="fitem-body">
+          <div class="fitem-title">세액공제 미적용 원금</div>
+          <div class="fitem-desc">한도 초과 납입분(세액공제 미적용)은 어떤 방식으로 수령해도 비과세</div>
+          <div class="fitem-rate" style="color:var(--text3)">비과세</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:12px">
     <div class="card-title">수령 조건 & 연금수령한도</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
       <div>
         <div class="sub-title">재원별 수령 개시 요건</div>
 
-        <!-- 개인 납입금 -->
         <div style="background:rgba(55,138,221,.07);border:1px solid rgba(55,138,221,.2);border-radius:var(--radius);padding:12px;margin-bottom:10px">
           <div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:8px">개인 납입금 (연금저축 · IRP 본인 납입)</div>
           <div style="font-size:12px;line-height:2">
@@ -641,7 +585,6 @@ table.matrix .rh {
           </div>
         </div>
 
-        <!-- 퇴직급여 -->
         <div style="background:rgba(29,158,117,.07);border:1px solid rgba(29,158,117,.2);border-radius:var(--radius);padding:12px;margin-bottom:10px">
           <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:8px">퇴직급여 (DC형·DB형·퇴직IRP 이전금)</div>
           <div style="font-size:12px;line-height:2">
@@ -678,8 +621,7 @@ table.matrix .rh {
     </div>
   </div>
 
-  <!-- ⑥ 나이별 세율표 -->
-  <div style="margin-top:14px;">
+  <div style="margin-top:12px">
     <div class="card">
       <div class="card-title">나이별 연금소득세율 (사적연금 · 지방소득세 포함)</div>
       <div style="overflow-x:auto">
@@ -711,6 +653,14 @@ table.matrix .rh {
         </table>
       </div>
     </div>
+  </div>
+
+  <div class="key-box">
+    <div class="key-box-title">핵심 포인트</div>
+    <div class="key-pt">납입 시 세액공제(최대 16.5%) → 운용 중 완전 비과세 → 수령 시 저율(3.3~5.5%): 3단계 모두 세제 혜택</div>
+    <div class="key-pt">연금수령 시 세율(3.3~5.5%)이 해지 시 세율(16.5%)보다 훨씬 낮으므로 연금으로 수령하는 것이 유리</div>
+    <div class="key-pt">연간 사적연금소득 1,500만원 이하이면 분리과세 선택으로 종합소득 신고 불필요</div>
+    <div class="key-pt">퇴직금을 IRP로 수령한 후 연금으로 인출하면 퇴직소득세 30~40% 절감 가능</div>
   </div>
 
 </div>
