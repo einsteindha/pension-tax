@@ -884,34 +884,36 @@ table.matrix .rh {
       </div>
 
       <div class="form-group">
-        <label class="form-label" for="ps_age">수령 시작 나이</label>
+        <label class="form-label" for="ps_open_age">계좌 개설 나이</label>
         <div class="inp-wrap">
-          <input type="number" id="ps_age" value="65" min="55" max="100" oninput="calcPS()">
+          <input type="number" id="ps_open_age" value="45" min="18" max="90" oninput="calcPS()">
           <span class="inp-unit">세</span>
         </div>
+        <div class="form-hint">수령 가능 최소 나이 = max(55세, 개설나이+5세) 자동 계산</div>
       </div>
 
       <div class="form-group">
-        <label class="form-label" for="ps_cur_age">현재 나이 (연차 계산)</label>
+        <label class="form-label" for="ps_cur_age">현재 나이 (수령 나이)</label>
         <div class="inp-wrap">
-          <input type="number" id="ps_cur_age" value="65" min="55" max="100" oninput="calcPS()">
+          <input type="number" id="ps_cur_age" value="65" min="18" max="100" oninput="calcPS()">
           <span class="inp-unit">세</span>
         </div>
-        <div class="form-hint" id="ps_yr_info">수령 연차: 1년차</div>
+        <div class="form-hint" id="ps_yr_info">수령 연차: —</div>
       </div>
 
       <div class="form-group">
-        <label class="form-label">계좌 개설 기준</label>
+        <label class="form-label">계좌 개설 시기</label>
         <div class="radio-group">
           <div class="radio-opt">
             <input type="radio" name="ps_acct_type" id="ps_post2013" value="post2013" checked onchange="calcPS()">
-            <label for="ps_post2013">2013년 이후 (10년)</label>
+            <label for="ps_post2013">2013년 3월 이후 (10년 기준)</label>
           </div>
           <div class="radio-opt">
             <input type="radio" name="ps_acct_type" id="ps_pre2013" value="pre2013" onchange="calcPS()">
-            <label for="ps_pre2013">2013년 이전 (5년)</label>
+            <label for="ps_pre2013">2013년 2월 이전 (5년 기준)</label>
           </div>
         </div>
+        <div class="form-hint">한도 기준일: 2013년 3월 1일 소득세법 시행령 개정</div>
       </div>
 
       <div class="form-group">
@@ -1644,22 +1646,31 @@ function calcTC() {
    TAB 3 : 연금 수령 + 수령한도 매트릭스
 ══════════════════════════════════════ */
 function calcPS() {
-  const amount  = v('ps_amount');
-  const age     = v('ps_age') || 65;
-  const curAge  = v('ps_cur_age') || age;
-  const isLife  = $('ps_life').checked;
-  const isPre   = $('ps_pre2013') && $('ps_pre2013').checked;
-  const over15M = amount > 15000000;
+  const amount   = v('ps_amount');
+  const openAge  = v('ps_open_age') || 40;
+  const curAge   = v('ps_cur_age') || 65;
+  const isLife   = $('ps_life').checked;
+  const isPre    = $('ps_pre2013') && $('ps_pre2013').checked;
+  const over15M  = amount > 15000000;
 
-  // 연금수령연차
-  const yr    = Math.max(1, Math.round(curAge - age + 1));
+  // 연금수령 가능 최초 나이 = max(55세, 개설나이+5세)
+  const eligibleAge = Math.max(55, openAge + 5);
+  // 연금수령연차 = 수령 가능 시점부터 카운트 (수령가능나이 = 1년차)
+  const yr    = curAge >= eligibleAge ? Math.max(1, Math.round(curAge - eligibleAge + 1)) : 0;
   const maxYr = isPre ? 5 : 10;
+
   if ($('ps_yr_info')) {
-    $('ps_yr_info').textContent = curAge > age
-      ? '수령 시작(' + age + '세) → 현재(' + curAge + '세) = ' + yr + '년차' + (yr > maxYr ? ' (한도 없음 구간)' : '')
-      : age + '세 수령 시작 → 1년차';
+    if (curAge < eligibleAge) {
+      $('ps_yr_info').textContent = '수령 불가 — 수령 가능 나이: ' + eligibleAge + '세 (만 55세 + 개설 후 5년)';
+      $('ps_yr_info').style.color = 'var(--red)';
+    } else {
+      $('ps_yr_info').textContent = '수령 가능 나이 ' + eligibleAge + '세 → 현재 ' + curAge + '세 = ' + yr + '년차' + (yr > maxYr ? ' (한도 없음 구간)' : '');
+      $('ps_yr_info').style.color = '';
+    }
   }
 
+  // 나이별 세율은 현재 나이(수령 나이) 기준
+  const age = curAge;
   let rate;
   if (isLife) { rate = 0.044; }
   else { if (age >= 80) rate = 0.033; else if (age >= 70) rate = 0.044; else rate = 0.055; }
@@ -1667,7 +1678,7 @@ function calcPS() {
   const tax    = amount * rate;
   const netAnn = amount - tax;
 
-  $('ps_rateInfo').innerHTML = '수령 나이 <strong>' + age + '세</strong> · ' + yr + '년차 · 세율 <strong>' + (rate*100).toFixed(1) + '%</strong>' +
+  $('ps_rateInfo').innerHTML = '수령 나이 <strong>' + age + '세</strong>' + (yr > 0 ? ' · <strong>' + yr + '년차</strong>' : '') + ' · 세율 <strong>' + (rate*100).toFixed(1) + '%</strong>' +
     (isLife ? ' (종신 — 4.4% 고정)' : '') +
     (over15M ? ' · <span style="color:var(--amber)">1,500만원 초과 → 과세방법 선택</span>' : '');
 
@@ -1735,7 +1746,7 @@ function renderLimitMatrix(curYr, isPre, balance) {
   if (!el) return;
   const maxYr = isPre ? 5 : 10;
   const denom0 = isPre ? 6 : 11;
-  const note = isPre ? '2013년 이전 계좌 — 5년 기준 (6년차부터 한도 없음)' : '2013년 이후 계좌 — 10년 기준 (11년차부터 한도 없음)';
+  const note = isPre ? '2013년 2월 이전 개설 — 5년 기준 (6년차부터 한도 없음)' : '2013년 3월 이후 개설 — 10년 기준 (11년차부터 한도 없음)';
 
   let html = '<div style="font-size:11px;color:var(--text3);margin-bottom:8px">한도 = 평가액 ÷ (' + denom0 + ' − 연차) × 120% &nbsp;·&nbsp; ' + note + '</div>';
   html += '<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12px;min-width:300px">';
