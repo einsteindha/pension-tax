@@ -1224,8 +1224,13 @@ table.matrix .rh {
 
       <div class="result-hero">
         <div class="result-hero-label">일시금 수령 시 퇴직소득세</div>
-        <div class="result-hero-value" id="rt_lumpTax">—</div>
-        <div class="result-hero-sub" id="rt_lumpRate"></div>
+        <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:4px">
+          <div class="result-hero-value" id="rt_lumpTax">—</div>
+          <div style="background:rgba(232,201,126,.15);border:1px solid rgba(232,201,126,.3);border-radius:8px;padding:6px 14px;text-align:center">
+            <div style="font-size:10px;color:rgba(232,201,126,.55);margin-bottom:2px;letter-spacing:.4px">실효세율</div>
+            <div style="font-size:20px;font-weight:700;color:#E8C97E;line-height:1" id="rt_lumpRate">—</div>
+          </div>
+        </div>
       </div>
 
       <div class="rrow">
@@ -1272,18 +1277,13 @@ table.matrix .rh {
 </div>
 
 <!-- 매트릭스 -->
-<div style="margin-top:20px">
-  <button class="stoggle-header" style="border-radius:var(--radius-lg);border:1px solid var(--border)" onclick="toggleSection('rt_matrix')">
-    <span>참고 — 퇴직소득세 실효세율 매트릭스 (근속연수 × 퇴직금 규모)</span>
-    <i class="chev" id="rt_matrix_chev">▼</i>
-  </button>
-  <div class="stoggle-body hidden" id="rt_matrix_body" style="border:1px solid var(--border);border-top:none;border-radius:0 0 var(--radius-lg) var(--radius-lg)">
-    <div class="alert alert-info" style="margin-bottom:12px">퇴직소득세 실효세율 (지방소득세 10% 포함). 퇴직금에 대한 세금 비율입니다. 색이 진할수록 높은 세율.</div>
-    <div class="matrix-wrap">
-      <table class="matrix" id="rt_matrix"></table>
-    </div>
-    <div class="matrix-legend" id="rt_legend"></div>
+<div class="card" style="margin-top:20px">
+  <div class="card-title">퇴직소득세 실효세율 매트릭스</div>
+  <div class="alert alert-info" style="margin-bottom:12px">지방소득세 10% 포함 실효세율. 색이 진할수록 높은 세율.</div>
+  <div class="matrix-wrap">
+    <table class="matrix" id="rt_matrix"></table>
   </div>
+  <div class="matrix-legend" id="rt_legend"></div>
 </div>
 
 </div>
@@ -1719,7 +1719,7 @@ function calcRT() {
   const saved       = totalTax - pensionTax;
 
   $('rt_lumpTax').textContent    = fmt(totalTax);
-  $('rt_lumpRate').textContent   = `실효세율 ${rate.toFixed(2)}%`;
+  $('rt_lumpRate').textContent   = rate.toFixed(2) + '%';
   $('rt_pensionTax').textContent = fmt(pensionTax);
   $('rt_saved').textContent      = fmt(saved);
   $('rt_savedRate').textContent  = (discount * 100).toFixed(0) + '% 감면';
