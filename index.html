@@ -691,99 +691,143 @@ table.matrix .rh {
         <div class="card-title">재원별 인출 순서</div>
         <div style="font-size:11px;color:var(--text3);margin-bottom:12px">소득세법 시행령 제40조의2 — 재원이 섞여 있을 때 자동 적용</div>
 
-        <!-- 스택 다이어그램 -->
-        <div style="position:relative;margin-bottom:12px">
+        <!-- 범례 -->
+        <div style="display:flex;flex-wrap:wrap;gap:5px 10px;margin-bottom:12px">
+          <span style="display:inline-flex;align-items:center;gap:4px;font-size:10px;color:var(--text2)"><span style="width:16px;height:16px;border-radius:50%;background:var(--purple);color:#fff;font-size:9px;display:inline-flex;align-items:center;justify-content:center;font-weight:700">①</span>비과세 (공제X 원금)</span>
+          <span style="display:inline-flex;align-items:center;gap:4px;font-size:10px;color:var(--text2)"><span style="width:16px;height:16px;border-radius:50%;background:var(--green);color:#fff;font-size:9px;display:inline-flex;align-items:center;justify-content:center;font-weight:700">②</span>비과세 (ISA·다운사이징)</span>
+          <span style="display:inline-flex;align-items:center;gap:4px;font-size:10px;color:var(--text2)"><span style="width:16px;height:16px;border-radius:50%;background:var(--blue);color:#fff;font-size:9px;display:inline-flex;align-items:center;justify-content:center;font-weight:700">③</span>퇴직소득세 (30~50% 감면)</span>
+          <span style="display:inline-flex;align-items:center;gap:4px;font-size:10px;color:var(--text2)"><span style="width:16px;height:16px;border-radius:50%;background:var(--gold);color:#fff;font-size:9px;display:inline-flex;align-items:center;justify-content:center;font-weight:700">④</span>연금소득세 3.3~5.5%</span>
+        </div>
 
-          <!-- 인출 방향 화살표 레이블 -->
-          <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px">
-            <div style="font-size:10px;color:var(--text3);letter-spacing:.1em;text-transform:uppercase">인출 방향</div>
-            <div style="flex:1;height:1px;background:var(--bg3)"></div>
-            <div style="font-size:13px;color:var(--text3)">↓</div>
-          </div>
-
-          <!-- 층 1: 세액공제 미적용 원금 -->
-          <div style="display:flex;align-items:stretch;border-radius:var(--radius) var(--radius) 0 0;overflow:hidden;border:1px solid rgba(91,72,144,.3)">
-            <div style="width:5px;background:var(--purple);flex-shrink:0"></div>
-            <div style="flex:1;background:rgba(91,72,144,.06);padding:10px 12px;display:flex;align-items:center;gap:10px">
-              <div style="width:22px;height:22px;border-radius:50%;background:var(--purple);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-size:13px;flex-shrink:0">1</div>
-              <div style="flex:1">
-                <div style="font-size:13px;font-weight:600;color:var(--purple)">세액공제 미적용 원금</div>
-                <div style="font-size:11px;color:var(--text3);margin-top:1px">한도 초과 납입 · 소득요건 미충족 납입금</div>
+        <!-- IRP (퇴직금 포함) -->
+        <div style="font-size:10px;font-weight:700;color:var(--text2);letter-spacing:.08em;text-transform:uppercase;margin-bottom:5px">IRP (퇴직금 포함)</div>
+        <div style="display:flex;gap:6px;align-items:flex-start;margin-bottom:14px">
+          <div style="flex:1;border:1.5px solid var(--bg3);border-radius:var(--radius-lg);overflow:hidden">
+            <div style="display:grid;grid-template-columns:40px 1fr 1fr 1fr;background:var(--bg3)">
+              <div></div>
+              <div style="padding:4px 5px;font-size:9px;color:var(--text3);text-align:center;border-left:1px solid var(--bg2);line-height:1.4">이연<br>퇴직소득</div>
+              <div style="padding:4px 5px;font-size:9px;color:var(--text3);text-align:center;border-left:1px solid var(--bg2);line-height:1.4">자기부담금<br>세액공제O</div>
+              <div style="padding:4px 5px;font-size:9px;color:var(--text3);text-align:center;border-left:1px solid var(--bg2);line-height:1.4">자기부담금<br>세액공제X</div>
+            </div>
+            <!-- 원금 행 -->
+            <div style="display:grid;grid-template-columns:40px 1fr 1fr 1fr;border-top:1px solid var(--bg3)">
+              <div style="padding:5px 4px;font-size:9px;color:var(--text3);background:var(--bg2);display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.3">원<br>금</div>
+              <div style="padding:8px 6px;background:rgba(43,94,167,.08);border-left:3px solid var(--blue);display:flex;align-items:center;gap:5px">
+                <span style="width:18px;height:18px;border-radius:50%;background:var(--blue);color:#fff;font-size:10px;display:inline-flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0">③</span>
+                <span style="font-size:10px;color:var(--blue);font-weight:600;line-height:1.3">퇴직소득세<br><span style="font-weight:400;color:var(--text3);font-size:9px">30~50% 감면</span></span>
               </div>
-              <div style="text-align:right;flex-shrink:0">
-                <div style="font-size:11px;font-weight:700;color:var(--purple);background:rgba(91,72,144,.12);padding:3px 8px;border-radius:2px;white-space:nowrap">비과세</div>
+              <div style="padding:8px 6px;background:var(--gold-pale);border-left:3px solid var(--gold);display:flex;align-items:center;gap:5px">
+                <span style="width:18px;height:18px;border-radius:50%;background:var(--gold);color:#fff;font-size:10px;display:inline-flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0">④</span>
+                <span style="font-size:10px;color:var(--amber);font-weight:600">연금소득세</span>
+              </div>
+              <div style="padding:8px 6px;background:rgba(91,72,144,.07);border-left:3px solid var(--purple);display:flex;align-items:center;gap:5px">
+                <span style="width:18px;height:18px;border-radius:50%;background:var(--purple);color:#fff;font-size:10px;display:inline-flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0">①</span>
+                <span style="font-size:10px;color:var(--purple);font-weight:600">비과세</span>
+              </div>
+            </div>
+            <!-- 운용수익 행 -->
+            <div style="display:grid;grid-template-columns:40px 1fr 1fr 1fr;border-top:1px solid var(--bg3)">
+              <div style="padding:5px 4px;font-size:9px;color:var(--text3);background:var(--bg2);display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.3">운용<br>수익</div>
+              <div style="padding:8px 6px;background:rgba(43,94,167,.05);border-left:3px solid var(--blue);display:flex;align-items:center;gap:5px">
+                <span style="width:18px;height:18px;border-radius:50%;background:var(--blue);color:#fff;font-size:10px;display:inline-flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0">③</span>
+                <span style="font-size:10px;color:var(--blue);font-weight:600">퇴직소득세</span>
+              </div>
+              <div style="padding:8px 6px;background:var(--gold-pale);border-left:3px solid var(--gold);display:flex;align-items:center;gap:5px">
+                <span style="width:18px;height:18px;border-radius:50%;background:var(--gold);color:#fff;font-size:10px;display:inline-flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0">④</span>
+                <span style="font-size:10px;color:var(--amber);font-weight:600">연금소득세</span>
+              </div>
+              <div style="padding:8px 6px;background:var(--gold-pale);border-left:3px solid var(--gold);display:flex;align-items:center;gap:5px">
+                <span style="width:18px;height:18px;border-radius:50%;background:var(--gold);color:#fff;font-size:10px;display:inline-flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0">④</span>
+                <span style="font-size:10px;color:var(--amber);font-weight:600">연금소득세</span>
               </div>
             </div>
           </div>
-
-          <!-- 구분 화살표 -->
-          <div style="display:flex;align-items:center;background:var(--bg3);border-left:1px solid rgba(91,72,144,.3);border-right:1px solid rgba(42,124,111,.3);padding:3px 12px">
-            <div style="font-size:10px;color:var(--text3)">① 소진 후</div>
-            <div style="margin-left:auto;font-size:11px;color:var(--text3)">↓</div>
-          </div>
-
-          <!-- 층 2: 비과세 원금 -->
-          <div style="display:flex;align-items:stretch;overflow:hidden;border:1px solid rgba(42,124,111,.3);border-top:none">
-            <div style="width:5px;background:var(--green);flex-shrink:0"></div>
-            <div style="flex:1;background:rgba(42,124,111,.07);padding:10px 12px;display:flex;align-items:center;gap:10px">
-              <div style="width:22px;height:22px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-size:13px;flex-shrink:0">2</div>
-              <div style="flex:1">
-                <div style="font-size:13px;font-weight:600;color:var(--green)">비과세 원금</div>
-                <div style="font-size:11px;color:var(--text3);margin-top:1px">다운사이징 납입금 등</div>
+          <!-- 외부 유입 -->
+          <div style="display:flex;flex-direction:column;gap:5px;padding-top:26px">
+            <div style="display:flex;align-items:center;gap:3px">
+              <span style="font-size:13px;color:var(--text3)">←</span>
+              <div style="border:1px solid rgba(42,124,111,.4);border-radius:var(--radius);padding:5px 8px;background:rgba(42,124,111,.06)">
+                <div style="font-size:10px;font-weight:600;color:var(--green);white-space:nowrap">ISA 만기</div>
+                <div style="display:inline-flex;align-items:center;gap:3px;margin-top:2px">
+                  <span style="width:14px;height:14px;border-radius:50%;background:var(--green);color:#fff;font-size:8px;display:inline-flex;align-items:center;justify-content:center;font-weight:700">②</span>
+                  <span style="font-size:9px;color:var(--text3)">비과세</span>
+                </div>
               </div>
-              <div style="text-align:right;flex-shrink:0">
-                <div style="font-size:11px;font-weight:700;color:var(--green);background:rgba(42,124,111,.12);padding:3px 8px;border-radius:2px;white-space:nowrap">비과세</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:3px">
+              <span style="font-size:13px;color:var(--text3)">←</span>
+              <div style="border:1px solid rgba(42,124,111,.4);border-radius:var(--radius);padding:5px 8px;background:rgba(42,124,111,.06)">
+                <div style="font-size:10px;font-weight:600;color:var(--green);white-space:nowrap">주택다운사이징</div>
+                <div style="display:inline-flex;align-items:center;gap:3px;margin-top:2px">
+                  <span style="width:14px;height:14px;border-radius:50%;background:var(--green);color:#fff;font-size:8px;display:inline-flex;align-items:center;justify-content:center;font-weight:700">②</span>
+                  <span style="font-size:9px;color:var(--text3)">비과세</span>
+                </div>
               </div>
             </div>
           </div>
+        </div>
 
-          <!-- 구분 화살표 -->
-          <div style="display:flex;align-items:center;background:var(--bg3);border-left:1px solid rgba(42,124,111,.3);border-right:1px solid rgba(43,94,167,.3);padding:3px 12px">
-            <div style="font-size:10px;color:var(--text3)">② 소진 후</div>
-            <div style="margin-left:auto;font-size:11px;color:var(--text3)">↓</div>
-          </div>
-
-          <!-- 층 3: 이연퇴직소득 -->
-          <div style="display:flex;align-items:stretch;overflow:hidden;border:1px solid rgba(43,94,167,.3);border-top:none">
-            <div style="width:5px;background:var(--blue);flex-shrink:0"></div>
-            <div style="flex:1;background:rgba(43,94,167,.07);padding:10px 12px;display:flex;align-items:center;gap:10px">
-              <div style="width:22px;height:22px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-size:13px;flex-shrink:0">3</div>
-              <div style="flex:1">
-                <div style="font-size:13px;font-weight:600;color:var(--blue)">이연퇴직소득</div>
-                <div style="font-size:11px;color:var(--text3);margin-top:1px">퇴직급여 IRP 이전분</div>
+        <!-- 연금저축 (자기부담금만) -->
+        <div style="font-size:10px;font-weight:700;color:var(--text2);letter-spacing:.08em;text-transform:uppercase;margin-bottom:5px">연금저축 (자기부담금만)</div>
+        <div style="display:flex;gap:6px;align-items:flex-start;margin-bottom:12px">
+          <div style="flex:1;border:1.5px solid var(--bg3);border-radius:var(--radius-lg);overflow:hidden">
+            <div style="display:grid;grid-template-columns:40px 1fr 1fr;background:var(--bg3)">
+              <div></div>
+              <div style="padding:4px 5px;font-size:9px;color:var(--text3);text-align:center;border-left:1px solid var(--bg2);line-height:1.4">자기부담금<br>세액공제O</div>
+              <div style="padding:4px 5px;font-size:9px;color:var(--text3);text-align:center;border-left:1px solid var(--bg2);line-height:1.4">자기부담금<br>세액공제X</div>
+            </div>
+            <!-- 원금 행 -->
+            <div style="display:grid;grid-template-columns:40px 1fr 1fr;border-top:1px solid var(--bg3)">
+              <div style="padding:5px 4px;font-size:9px;color:var(--text3);background:var(--bg2);display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.3">원<br>금</div>
+              <div style="padding:8px 6px;background:var(--gold-pale);border-left:3px solid var(--gold);display:flex;align-items:center;gap:5px">
+                <span style="width:18px;height:18px;border-radius:50%;background:var(--gold);color:#fff;font-size:10px;display:inline-flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0">④</span>
+                <span style="font-size:10px;color:var(--amber);font-weight:600">연금소득세</span>
               </div>
-              <div style="text-align:right;flex-shrink:0">
-                <div style="font-size:11px;font-weight:700;color:var(--blue);background:rgba(43,94,167,.1);padding:3px 8px;border-radius:2px;white-space:nowrap">퇴직소득세</div>
-                <div style="font-size:10px;color:var(--text3);margin-top:2px">30~50% 감면</div>
+              <div style="padding:8px 6px;background:rgba(91,72,144,.07);border-left:3px solid var(--purple);display:flex;align-items:center;gap:5px">
+                <span style="width:18px;height:18px;border-radius:50%;background:var(--purple);color:#fff;font-size:10px;display:inline-flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0">①</span>
+                <span style="font-size:10px;color:var(--purple);font-weight:600">비과세</span>
+              </div>
+            </div>
+            <!-- 운용수익 행 -->
+            <div style="display:grid;grid-template-columns:40px 1fr 1fr;border-top:1px solid var(--bg3)">
+              <div style="padding:5px 4px;font-size:9px;color:var(--text3);background:var(--bg2);display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.3">운용<br>수익</div>
+              <div style="padding:8px 6px;background:var(--gold-pale);border-left:3px solid var(--gold);display:flex;align-items:center;gap:5px">
+                <span style="width:18px;height:18px;border-radius:50%;background:var(--gold);color:#fff;font-size:10px;display:inline-flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0">④</span>
+                <span style="font-size:10px;color:var(--amber);font-weight:600">연금소득세</span>
+              </div>
+              <div style="padding:8px 6px;background:var(--gold-pale);border-left:3px solid var(--gold);display:flex;align-items:center;gap:5px">
+                <span style="width:18px;height:18px;border-radius:50%;background:var(--gold);color:#fff;font-size:10px;display:inline-flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0">④</span>
+                <span style="font-size:10px;color:var(--amber);font-weight:600">연금소득세</span>
               </div>
             </div>
           </div>
-
-          <!-- 구분 화살표 -->
-          <div style="display:flex;align-items:center;background:var(--bg3);border-left:1px solid rgba(43,94,167,.3);border-right:1px solid rgba(196,147,63,.3);padding:3px 12px">
-            <div style="font-size:10px;color:var(--text3)">③ 소진 후</div>
-            <div style="margin-left:auto;font-size:11px;color:var(--text3)">↓</div>
-          </div>
-
-          <!-- 층 4: 세액공제분 + 운용수익 -->
-          <div style="display:flex;align-items:stretch;border-radius:0 0 var(--radius) var(--radius);overflow:hidden;border:1px solid rgba(196,147,63,.35);border-top:none">
-            <div style="width:5px;background:var(--gold);flex-shrink:0"></div>
-            <div style="flex:1;background:var(--gold-pale);padding:10px 12px;display:flex;align-items:center;gap:10px">
-              <div style="width:22px;height:22px;border-radius:50%;background:var(--gold);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-size:13px;flex-shrink:0">4</div>
-              <div style="flex:1">
-                <div style="font-size:13px;font-weight:600;color:var(--amber)">세액공제분 + 운용수익</div>
-                <div style="font-size:11px;color:var(--text3);margin-top:1px">개인납입 세액공제금 · 이자·배당·매매차익</div>
+          <!-- 외부 유입 -->
+          <div style="display:flex;flex-direction:column;gap:5px;padding-top:26px">
+            <div style="display:flex;align-items:center;gap:3px">
+              <span style="font-size:13px;color:var(--text3)">←</span>
+              <div style="border:1px solid rgba(42,124,111,.4);border-radius:var(--radius);padding:5px 8px;background:rgba(42,124,111,.06)">
+                <div style="font-size:10px;font-weight:600;color:var(--green);white-space:nowrap">ISA 만기</div>
+                <div style="display:inline-flex;align-items:center;gap:3px;margin-top:2px">
+                  <span style="width:14px;height:14px;border-radius:50%;background:var(--green);color:#fff;font-size:8px;display:inline-flex;align-items:center;justify-content:center;font-weight:700">②</span>
+                  <span style="font-size:9px;color:var(--text3)">비과세</span>
+                </div>
               </div>
-              <div style="text-align:right;flex-shrink:0">
-                <div style="font-size:11px;font-weight:700;color:var(--amber);background:rgba(196,147,63,.15);padding:3px 8px;border-radius:2px;white-space:nowrap">연금소득세</div>
-                <div style="font-size:10px;color:var(--text3);margin-top:2px">3.3 ~ 5.5%</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:3px">
+              <span style="font-size:13px;color:var(--text3)">←</span>
+              <div style="border:1px solid rgba(42,124,111,.4);border-radius:var(--radius);padding:5px 8px;background:rgba(42,124,111,.06)">
+                <div style="font-size:10px;font-weight:600;color:var(--green);white-space:nowrap">주택다운사이징</div>
+                <div style="display:inline-flex;align-items:center;gap:3px;margin-top:2px">
+                  <span style="width:14px;height:14px;border-radius:50%;background:var(--green);color:#fff;font-size:8px;display:inline-flex;align-items:center;justify-content:center;font-weight:700">②</span>
+                  <span style="font-size:9px;color:var(--text3)">비과세</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
         <div class="alert alert-warn" style="margin-bottom:0;font-size:11px">
-          <strong>IRP에 퇴직급여 + 개인납입금이 섞인 경우:</strong> 비과세 원금 소진 후 퇴직소득(③)이 먼저 빠져나가고, 개인납입분(④)은 그 이후에 인출됩니다. 연금 수령 초기에는 퇴직소득세가 적용됩니다.
+          <strong>인출 순서:</strong> ① 세액공제X 원금(비과세) → ② ISA·다운사이징 비과세 재원 → ③ 이연퇴직소득(퇴직소득세, IRP만) → ④ 세액공제O 원금+운용수익(연금소득세)
         </div>
       </div>
     </div>
