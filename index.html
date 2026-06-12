@@ -770,10 +770,10 @@ table.matrix .rh {
         <label class="form-label" for="tc_ps">연금저축 연간 납입액</label>
         <div class="kr-num" id="tc_ps_kr"></div>
         <div class="inp-wrap">
-          <input type="number" id="tc_ps" value="6000000" min="0" max="18000000" step="100000" oninput="syncI('tc_ps','tc_psR');updateKR('tc_ps');calcTC()">
+          <input type="number" id="tc_ps" value="6000000" min="0" max="18000000" step="100000" oninput="syncI('tc_ps','tc_psR');updateKR('tc_ps');capIRP();calcTC()">
           <span class="inp-unit">원</span>
         </div>
-        <input type="range" id="tc_psR" min="0" max="18000000" step="100000" value="6000000" oninput="syncR('tc_ps','tc_psR');updateKR('tc_ps');calcTC()">
+        <input type="range" id="tc_psR" min="0" max="18000000" step="100000" value="6000000" oninput="syncR('tc_ps','tc_psR');updateKR('tc_ps');capIRP();calcTC()">
         <div class="range-row"><span>0원</span><span>1,800만원</span></div>
         <div class="form-hint">세액공제 한도: 연간 600만원 (납입 한도 1,800만원)</div>
       </div>
@@ -782,10 +782,10 @@ table.matrix .rh {
         <label class="form-label" for="tc_irp">IRP 연간 납입액</label>
         <div class="kr-num" id="tc_irp_kr"></div>
         <div class="inp-wrap">
-          <input type="number" id="tc_irp" value="3000000" min="0" max="18000000" step="100000" oninput="syncI('tc_irp','tc_irpR');updateKR('tc_irp');calcTC()">
+          <input type="number" id="tc_irp" value="3000000" min="0" max="18000000" step="100000" oninput="syncI('tc_irp','tc_irpR');updateKR('tc_irp');capPS();calcTC()">
           <span class="inp-unit">원</span>
         </div>
-        <input type="range" id="tc_irpR" min="0" max="18000000" step="100000" value="3000000" oninput="syncR('tc_irp','tc_irpR');updateKR('tc_irp');calcTC()">
+        <input type="range" id="tc_irpR" min="0" max="18000000" step="100000" value="3000000" oninput="syncR('tc_irp','tc_irpR');updateKR('tc_irp');capPS();calcTC()">
         <div class="range-row"><span>0원</span><span>1,800만원</span></div>
         <div class="form-hint">연금저축 + IRP 합산 세액공제 한도: 900만원</div>
       </div>
@@ -802,7 +802,6 @@ table.matrix .rh {
         <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-top:3px">
           <span>0원</span><span>납입 한도 1,800만원</span>
         </div>
-        <div id="tc_totalWarn" class="alert alert-warn" style="display:none;margin-top:8px;margin-bottom:0"></div>
       </div>
 
       <hr class="divider">
@@ -1443,6 +1442,30 @@ function calcRetirementTax(pay, years) {
 }
 
 /* ══════════════════════════════════════
+   연금저축 ↔ IRP 합산 1,800만원 연동
+══════════════════════════════════════ */
+function capIRP() {
+  const maxIrp = Math.max(0, 18_000_000 - v('tc_ps'));
+  $('tc_irp').max  = maxIrp;
+  $('tc_irpR').max = maxIrp;
+  if (v('tc_irp') > maxIrp) {
+    $('tc_irp').value  = maxIrp;
+    $('tc_irpR').value = maxIrp;
+    updateKR('tc_irp');
+  }
+}
+function capPS() {
+  const maxPs = Math.max(0, 18_000_000 - v('tc_irp'));
+  $('tc_ps').max  = maxPs;
+  $('tc_psR').max = maxPs;
+  if (v('tc_ps') > maxPs) {
+    $('tc_ps').value  = maxPs;
+    $('tc_psR').value = maxPs;
+    updateKR('tc_ps');
+  }
+}
+
+/* ══════════════════════════════════════
    TAB 2 : 세액공제 계산
 ══════════════════════════════════════ */
 function calcTC() {
@@ -1457,21 +1480,14 @@ function calcTC() {
   const isa    = v('tc_isa');
   const down   = v('tc_down');
 
-  // 합산 납입 한도 표시 (연금저축 + IRP = 연간 1,800만원)
+  // 합산 납입 현황 바 (연금저축 + IRP = 최대 1,800만원)
   const totalInput = ps + irp;
   const pct = Math.min(totalInput / 18_000_000 * 100, 100);
-  const barColor = totalInput > 18_000_000 ? 'var(--red)' : totalInput > 14_000_000 ? 'var(--amber)' : 'var(--blue)';
   $('tc_totalSum').innerHTML =
-    `<strong style="color:${totalInput > 18_000_000 ? 'var(--red)' : 'var(--text)'}">${fmtN(Math.round(totalInput/10000))}만원</strong>` +
+    `<strong>${fmtN(Math.round(totalInput/10000))}만원</strong>` +
     `<span style="color:var(--text3);font-size:11px;margin-left:4px">/ 1,800만원</span>`;
   $('tc_totalBarFill').style.width = pct + '%';
-  $('tc_totalBarFill').style.background = barColor;
-  if (totalInput > 18_000_000) {
-    $('tc_totalWarn').style.display = '';
-    $('tc_totalWarn').textContent = `납입 한도(1,800만원) ${fmtN(Math.round((totalInput - 18_000_000)/10000))}만원 초과 — 초과분은 납입 불가합니다`;
-  } else {
-    $('tc_totalWarn').style.display = 'none';
-  }
+  $('tc_totalBarFill').style.background = totalInput > 14_000_000 ? 'var(--amber)' : 'var(--blue)';
 
   // 세액공제율 판단
   let rate;
