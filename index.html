@@ -626,18 +626,40 @@ table.matrix .rh {
     <div class="card-title">수령 조건 & 연금수령한도</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
       <div>
-        <div class="sub-title">수령 개시 요건 (두 가지 모두 충족)</div>
-        <div style="font-size:13px;line-height:2">
-          <div style="display:flex;align-items:center;gap:8px">
-            <span style="background:var(--green);color:#fff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:10px">조건 1</span>
-            <span>만 <strong>55세 이상</strong></span>
-          </div>
-          <div style="display:flex;align-items:center;gap:8px">
-            <span style="background:var(--green);color:#fff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:10px">조건 2</span>
-            <span>계좌개설일로부터 <strong>5년 이상</strong> 경과</span>
+        <div class="sub-title">재원별 수령 개시 요건</div>
+
+        <!-- 개인 납입금 -->
+        <div style="background:rgba(55,138,221,.07);border:1px solid rgba(55,138,221,.2);border-radius:var(--radius);padding:12px;margin-bottom:10px">
+          <div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:8px">개인 납입금 (연금저축 · IRP 본인 납입)</div>
+          <div style="font-size:12px;line-height:2">
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="background:var(--blue);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;white-space:nowrap">필수</span>
+              <span>만 <strong>55세 이상</strong></span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="background:var(--blue);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;white-space:nowrap">필수</span>
+              <span>계좌개설일로부터 <strong>5년 이상</strong> 경과</span>
+            </div>
           </div>
         </div>
-        <div class="alert alert-warn" style="margin-top:10px;font-size:11px">두 조건 미충족 시 해지로 처리 → 기타소득세 16.5%</div>
+
+        <!-- 퇴직급여 -->
+        <div style="background:rgba(29,158,117,.07);border:1px solid rgba(29,158,117,.2);border-radius:var(--radius);padding:12px;margin-bottom:10px">
+          <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:8px">퇴직급여 (DC형·DB형·퇴직IRP 이전금)</div>
+          <div style="font-size:12px;line-height:2">
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="background:var(--green);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;white-space:nowrap">필수</span>
+              <span>만 <strong>55세 이상</strong></span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="background:var(--bg3);color:var(--text3);border:1px solid var(--border2);font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;white-space:nowrap">면제</span>
+              <span style="color:var(--text3)">계좌 5년 요건 <strong>적용 제외</strong></span>
+            </div>
+          </div>
+          <div style="font-size:11px;color:var(--text3);margin-top:6px">근로자퇴직급여 보장법에 따라 이전된 퇴직급여는 계좌 보유 기간과 무관하게 만 55세 이후 연금 수령 가능 (소득세법 시행령 §40의2)</div>
+        </div>
+
+        <div class="alert alert-warn" style="font-size:11px">요건 미충족 인출 → 연금외수령으로 처리 → 기타소득세 16.5%</div>
       </div>
       <div>
         <div class="sub-title">연금수령한도 (연차별)</div>
