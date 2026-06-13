@@ -1098,17 +1098,8 @@ table.matrix .rh {
   <!-- 왼쪽: 입력 -->
   <div>
 
-    <!-- 계좌 목록 -->
-    <div class="card">
-      <div class="card-title" style="display:flex;justify-content:space-between;align-items:center">
-        <span>계좌 정보</span>
-        <button onclick="addWdAcc()" style="font-size:11px;padding:4px 10px;background:var(--blue);color:#fff;border:none;border-radius:var(--radius);cursor:pointer">+ 계좌 추가</button>
-      </div>
-      <div id="wd_accs"></div>
-    </div>
-
     <!-- 공통 수령 정보 -->
-    <div class="card" style="margin-top:10px">
+    <div class="card" id="wd_age_card" style="transition:background .3s,border-color .3s;border:1.5px solid transparent">
       <div class="card-title">수령 정보</div>
 
       <div class="form-group">
@@ -1119,7 +1110,21 @@ table.matrix .rh {
         </div>
       </div>
 
+      <div id="wd_under55_warn" style="display:none;margin-top:6px" class="alert alert-warn">
+        <strong>55세 미만 — 연금 수령 불가</strong><br>
+        연금계좌 인출 요건(만 55세 이상)을 충족하지 않습니다.<br>
+        ③ 세액공제O+수익 재원에 <strong>기타소득세 16.5%</strong> 적용, 연금소득세 감면 혜택 없음.
+      </div>
 
+    </div>
+
+    <!-- 계좌 목록 -->
+    <div class="card" style="margin-top:10px">
+      <div class="card-title" style="display:flex;justify-content:space-between;align-items:center">
+        <span>계좌 정보</span>
+        <button onclick="addWdAcc()" style="font-size:11px;padding:4px 10px;background:var(--blue);color:#fff;border:none;border-radius:var(--radius);cursor:pointer">+ 계좌 추가</button>
+      </div>
+      <div id="wd_accs"></div>
     </div>
 
     <!-- 퇴직급여 섹션 (IRP+이연퇴직소득 있을 때 노출) -->
@@ -1253,6 +1258,11 @@ table.matrix .rh {
     <div class="card">
       <div class="card-title">인출 세금 계산 결과</div>
       <div id="wd_eligibility" class="alert alert-info" style="font-size:11px;margin-bottom:10px"></div>
+
+      <div id="wd_under55_notice" style="display:none;margin-bottom:10px" class="alert alert-warn">
+        <strong>연금 외 수령만 가능</strong> — 55세 미만으로 연금수령 요건 미충족.<br>
+        ③ 재원은 기타소득세 16.5% 적용. ①은 비과세, ②는 퇴직소득세 그대로 적용.
+      </div>
 
       <div class="result-hero">
         <div class="result-hero-label">세후 연간 수령액 합계</div>
@@ -2006,6 +2016,13 @@ function calcWD() {
     $('wd_eligibility').textContent = eligMsg;
     $('wd_eligibility').className = (elig55 && elig5yr) ? 'alert alert-info' : 'alert alert-warn';
   }
+  var ageCard = $('wd_age_card');
+  if (ageCard) {
+    ageCard.style.background = elig55 ? '' : 'rgba(239,68,68,.04)';
+    ageCard.style.borderColor = elig55 ? 'transparent' : 'rgba(239,68,68,.35)';
+  }
+  var u55w = $('wd_under55_warn');   if (u55w) u55w.style.display = elig55 ? 'none' : '';
+  var u55n = $('wd_under55_notice'); if (u55n) u55n.style.display = elig55 ? 'none' : '';
 
   var totalBal = 0, totalGross = 0;
   var totalTax2 = 0, totalTax3 = 0;
