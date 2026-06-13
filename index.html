@@ -718,8 +718,8 @@ table.matrix .rh {
 
         <!-- IRP (퇴직금 포함) -->
         <div style="font-size:10px;font-weight:700;color:var(--text2);letter-spacing:.08em;text-transform:uppercase;margin-bottom:5px">IRP (퇴직금 포함)</div>
-        <div style="display:flex;gap:6px;align-items:flex-start;margin-bottom:14px">
-          <div style="flex:1;border:1.5px solid var(--bg3);border-radius:var(--radius-lg);overflow:hidden">
+        <div style="margin-bottom:14px">
+          <div style="border:1.5px solid var(--bg3);border-radius:var(--radius-lg);overflow:hidden">
             <!-- 단일 통합 그리드 — 헤더+원금+운용수익 행 정렬 -->
             <div style="display:grid;grid-template-columns:40px 1fr 1fr 1fr">
               <!-- 헤더 행 -->
@@ -758,28 +758,19 @@ table.matrix .rh {
             </div>
           </div>
           <!-- 외부 유입 -->
-          <div style="display:flex;flex-direction:column;gap:5px;padding-top:24px">
-            <div style="display:flex;align-items:center;gap:3px">
-              <span style="font-size:13px;color:var(--text3)">←</span>
-              <div style="border:1px solid var(--bg3);border-radius:var(--radius);padding:5px 8px;background:var(--bg2)">
-                <div style="font-size:10px;font-weight:600;color:var(--text2);white-space:nowrap">ISA 만기</div>
-                <div style="font-size:9px;color:var(--text3);margin-top:2px">공제X 원금→① / 공제O 원금·수익→③</div>
-              </div>
-            </div>
-            <div style="display:flex;align-items:center;gap:3px">
-              <span style="font-size:13px;color:var(--text3)">←</span>
-              <div style="border:1px solid var(--bg3);border-radius:var(--radius);padding:5px 8px;background:var(--bg2)">
-                <div style="font-size:10px;font-weight:600;color:var(--text2);white-space:nowrap">주택다운사이징</div>
-                <div style="font-size:9px;color:var(--text3);margin-top:2px">공제X→① / 공제O→③</div>
-              </div>
+          <div style="display:flex;align-items:center;gap:4px;margin-top:6px">
+            <span style="font-size:14px;color:var(--text3)">↑</span>
+            <div style="border:1px solid var(--bg3);border-radius:var(--radius);padding:5px 8px;background:var(--bg2)">
+              <div style="font-size:10px;font-weight:600;color:var(--text2)">ISA·다운사이징</div>
+              <div style="font-size:9px;color:var(--text3);margin-top:2px">공제X→① / 공제O→③</div>
             </div>
           </div>
         </div>
 
         <!-- 연금저축 (자기부담금만) -->
         <div style="font-size:10px;font-weight:700;color:var(--text2);letter-spacing:.08em;text-transform:uppercase;margin-bottom:5px">연금저축 (자기부담금만)</div>
-        <div style="display:flex;gap:6px;align-items:flex-start;margin-bottom:12px">
-          <div style="flex:1;border:1.5px solid var(--bg3);border-radius:var(--radius-lg);overflow:hidden">
+        <div style="margin-bottom:12px">
+          <div style="border:1.5px solid var(--bg3);border-radius:var(--radius-lg);overflow:hidden">
             <div style="display:grid;grid-template-columns:40px 1fr 1fr">
               <!-- 헤더 행 -->
               <div style="background:var(--bg3);padding:5px 4px"></div>
@@ -808,20 +799,11 @@ table.matrix .rh {
             </div>
           </div>
           <!-- 외부 유입 -->
-          <div style="display:flex;flex-direction:column;gap:5px;padding-top:24px">
-            <div style="display:flex;align-items:center;gap:3px">
-              <span style="font-size:13px;color:var(--text3)">←</span>
-              <div style="border:1px solid var(--bg3);border-radius:var(--radius);padding:5px 8px;background:var(--bg2)">
-                <div style="font-size:10px;font-weight:600;color:var(--text2);white-space:nowrap">ISA 만기</div>
-                <div style="font-size:9px;color:var(--text3);margin-top:2px">공제X 원금→① / 공제O 원금·수익→③</div>
-              </div>
-            </div>
-            <div style="display:flex;align-items:center;gap:3px">
-              <span style="font-size:13px;color:var(--text3)">←</span>
-              <div style="border:1px solid var(--bg3);border-radius:var(--radius);padding:5px 8px;background:var(--bg2)">
-                <div style="font-size:10px;font-weight:600;color:var(--text2);white-space:nowrap">주택다운사이징</div>
-                <div style="font-size:9px;color:var(--text3);margin-top:2px">공제X→① / 공제O→③</div>
-              </div>
+          <div style="display:flex;align-items:center;gap:4px;margin-top:6px">
+            <span style="font-size:14px;color:var(--text3)">↑</span>
+            <div style="border:1px solid var(--bg3);border-radius:var(--radius);padding:5px 8px;background:var(--bg2)">
+              <div style="font-size:10px;font-weight:600;color:var(--text2)">ISA·다운사이징</div>
+              <div style="font-size:9px;color:var(--text3);margin-top:2px">공제X→① / 공제O→③</div>
             </div>
           </div>
         </div>
@@ -1046,8 +1028,8 @@ table.matrix .rh {
     <!-- IRP -->
     <div style="flex:1;min-width:260px">
       <div style="font-size:10px;font-weight:700;color:var(--text2);letter-spacing:.08em;margin-bottom:5px">IRP (퇴직금 포함)</div>
-      <div style="display:flex;gap:6px;align-items:flex-start">
-        <div style="flex:1;border:1.5px solid var(--bg3);border-radius:var(--radius-lg);overflow:hidden">
+      <div>
+        <div style="border:1.5px solid var(--bg3);border-radius:var(--radius-lg);overflow:hidden">
           <div style="display:grid;grid-template-columns:40px 1fr 1fr 1fr">
             <div style="background:var(--bg3);padding:5px 4px"></div>
             <div style="background:var(--bg3);padding:4px 5px;font-size:9px;color:var(--text3);text-align:center;border-left:1px solid var(--bg2);line-height:1.4">이연<br>퇴직소득</div>
@@ -1063,17 +1045,20 @@ table.matrix .rh {
             <div style="padding:8px 6px;background:var(--gold-pale);border-left:3px solid var(--gold);display:flex;align-items:center;gap:5px;border-top:1px solid var(--bg3)"><span style="width:18px;height:18px;border-radius:50%;background:var(--gold);color:#fff;font-size:10px;display:inline-flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0">③</span><span style="font-size:10px;color:var(--amber);font-weight:600">연금소득세</span></div>
           </div>
         </div>
-        <div style="display:flex;flex-direction:column;gap:5px;padding-top:24px">
-          <div style="display:flex;align-items:center;gap:3px"><span style="font-size:13px;color:var(--text3)">←</span><div style="border:1px solid var(--bg3);border-radius:var(--radius);padding:5px 8px;background:var(--bg2)"><div style="font-size:10px;font-weight:600;color:var(--text2);white-space:nowrap">ISA 만기</div><div style="font-size:9px;color:var(--text3);margin-top:2px">공제X 원금→① / 공제O 원금·수익→③</div></div></div>
-          <div style="display:flex;align-items:center;gap:3px"><span style="font-size:13px;color:var(--text3)">←</span><div style="border:1px solid var(--bg3);border-radius:var(--radius);padding:5px 8px;background:var(--bg2)"><div style="font-size:10px;font-weight:600;color:var(--text2);white-space:nowrap">주택다운사이징</div><div style="font-size:9px;color:var(--text3);margin-top:2px">공제X→① / 공제O→③</div></div></div>
+        <div style="display:flex;align-items:center;gap:4px;margin-top:6px">
+          <span style="font-size:14px;color:var(--text3)">↑</span>
+          <div style="border:1px solid var(--bg3);border-radius:var(--radius);padding:5px 8px;background:var(--bg2)">
+            <div style="font-size:10px;font-weight:600;color:var(--text2)">ISA·다운사이징</div>
+            <div style="font-size:9px;color:var(--text3);margin-top:2px">공제X→① / 공제O→③</div>
+          </div>
         </div>
       </div>
     </div>
     <!-- 연금저축 -->
     <div style="flex:1;min-width:200px">
       <div style="font-size:10px;font-weight:700;color:var(--text2);letter-spacing:.08em;margin-bottom:5px">연금저축 (자기부담금만)</div>
-      <div style="display:flex;gap:6px;align-items:flex-start">
-        <div style="flex:1;border:1.5px solid var(--bg3);border-radius:var(--radius-lg);overflow:hidden">
+      <div>
+        <div style="border:1.5px solid var(--bg3);border-radius:var(--radius-lg);overflow:hidden">
           <div style="display:grid;grid-template-columns:40px 1fr 1fr">
             <div style="background:var(--bg3);padding:5px 4px"></div>
             <div style="background:var(--bg3);padding:4px 5px;font-size:9px;color:var(--text3);text-align:center;border-left:1px solid var(--bg2);line-height:1.4">자기부담금<br>세액공제O</div>
@@ -1087,9 +1072,12 @@ table.matrix .rh {
           </div>
         </div>
         <!-- 외부 유입 -->
-        <div style="display:flex;flex-direction:column;gap:5px;padding-top:24px">
-          <div style="display:flex;align-items:center;gap:3px"><span style="font-size:13px;color:var(--text3)">←</span><div style="border:1px solid var(--bg3);border-radius:var(--radius);padding:5px 8px;background:var(--bg2)"><div style="font-size:10px;font-weight:600;color:var(--text2);white-space:nowrap">ISA 만기</div><div style="font-size:9px;color:var(--text3);margin-top:2px">공제X 원금→① / 공제O 원금·수익→③</div></div></div>
-          <div style="display:flex;align-items:center;gap:3px"><span style="font-size:13px;color:var(--text3)">←</span><div style="border:1px solid var(--bg3);border-radius:var(--radius);padding:5px 8px;background:var(--bg2)"><div style="font-size:10px;font-weight:600;color:var(--text2);white-space:nowrap">주택다운사이징</div><div style="font-size:9px;color:var(--text3);margin-top:2px">공제X→① / 공제O→③</div></div></div>
+        <div style="display:flex;align-items:center;gap:4px;margin-top:6px">
+          <span style="font-size:14px;color:var(--text3)">↑</span>
+          <div style="border:1px solid var(--bg3);border-radius:var(--radius);padding:5px 8px;background:var(--bg2)">
+            <div style="font-size:10px;font-weight:600;color:var(--text2)">ISA·다운사이징</div>
+            <div style="font-size:9px;color:var(--text3);margin-top:2px">공제X→① / 공제O→③</div>
+          </div>
         </div>
       </div>
     </div>
