@@ -1800,7 +1800,7 @@ var wdAccs = [
 ];
 
 function addWdAcc() {
-  wdAccs.push({ type: 'ps', openDate: '2015-01-01', balance: 100000000, src1: 0, src2: 0, src3: 100000000, withdrawal: 5000000 });
+  wdAccs.push({ type: 'ps', openDate: '2020-01-01', balance: 0, src1: 0, src2: 0, src3: 0, withdrawal: 0 });
   renderWdAccs();
   calcWD();
 }
@@ -1849,7 +1849,6 @@ function renderWdAccs() {
       '<div id="wd_acc_card_' + i + '" style="border:1.5px solid var(--border2);border-radius:var(--radius-lg);margin-bottom:10px;overflow:hidden;transition:border-color .3s,background .3s">',
         '<div style="background:var(--bg3);padding:8px 12px;display:flex;justify-content:space-between;align-items:center">',
           '<span style="font-size:12px;font-weight:700;color:var(--text2)">계좌 ' + (i+1) + ' <span style="color:' + color + '">' + (isIRP ? 'IRP' : '연금저축') + '</span></span>',
-          '<span id="wd_elig_badge_' + i + '" style="font-size:9px;padding:2px 6px;border-radius:10px;background:var(--bg2);color:var(--text3)">—</span>',
           '<div style="display:flex;gap:8px;align-items:center">',
             '<select style="font-size:11px;padding:2px 6px;border:1px solid var(--border2);border-radius:2px;background:var(--bg)" onchange="wdAccs[' + i + '].type=this.value;renderWdAccs();calcWD()">',
               '<option value="ps"' + (acc.type==='ps' ? ' selected' : '') + '>연금저축</option>',
@@ -2043,12 +2042,6 @@ function calcWD() {
     else { totalEligWd3 += wd3; tax3 = wd3 * accPensionRate; }
     totalTax2 += tax2; totalTax3 += tax3;
     accResults.push({ label: '계좌 ' + (i+1) + ' ' + (isIRP ? 'IRP' : '연금저축'), gross: wd1+wd2+wd3, tax: tax2+tax3, eligPS: eligPS });
-    var eligBadge = $('wd_elig_badge_' + i);
-    if (eligBadge) {
-      eligBadge.textContent = eligPS ? '연금소득세 ✓' : '기타소득세 16.5%';
-      eligBadge.style.background = eligPS ? 'rgba(76,175,80,.12)' : 'rgba(239,68,68,.08)';
-      eligBadge.style.color = eligPS ? 'var(--green)' : 'var(--red)';
-    }
     var under5yr = accOpenedYrs < 5;
     var acc5yrWarn = $('wd_under5yr_warn_' + i);
     if (acc5yrWarn) acc5yrWarn.style.display = under5yr ? '' : 'none';
