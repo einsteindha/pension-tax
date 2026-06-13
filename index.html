@@ -983,11 +983,6 @@ table.matrix .rh {
         <span class="rrow-label">세액공제율</span>
         <span class="rrow-val" id="tc_rate">—</span>
       </div>
-      <div class="rrow">
-        <span class="rrow-label">실질 납입 부담액</span>
-        <span class="rrow-val" id="tc_net">—</span>
-      </div>
-
       <hr class="divider">
 
       <div class="breakdown">
@@ -1797,8 +1792,6 @@ function calcTC() {
   $('tc_creditSub').textContent = isaElig>0 ? 'ISA 추가 ' + fmt(isaElig*rate) + ' 포함' : '';
   $('tc_eligible').textContent  = fmt(total);
   $('tc_rate').textContent      = rateStr;
-  $('tc_net').textContent       = fmt(total - credit);
-  $('tc_monthly').textContent   = fmt((total - credit) / 12);
   $('tc_b_ps').textContent  = fmt(psElig);
   $('tc_b_irp').textContent = fmt(irpElig);
   if (isaElig > 0) { $('tc_b_isa_row').style.display = ''; $('tc_b_isa').textContent = '+' + fmt(isaElig); }
