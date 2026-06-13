@@ -840,7 +840,7 @@ table.matrix .rh {
     <div class="key-pt">납입 시 세액공제(최대 16.5%) → 운용 중 완전 비과세 → 수령 시 저율(3.3~5.5%): 3단계 모두 세제 혜택</div>
     <div class="key-pt">연금수령 시 세율(3.3~5.5%)이 해지 시 세율(16.5%)보다 훨씬 낮으므로 연금으로 수령하는 것이 유리</div>
     <div class="key-pt">연간 사적연금소득 1,500만원 이하이면 분리과세 선택으로 종합소득 신고 불필요</div>
-    <div class="key-pt">퇴직금을 IRP로 수령한 후 연금으로 인출하면 퇴직소득세 30~40% 절감 가능</div>
+    <div class="key-pt">퇴직금을 IRP로 수령한 후 연금으로 인출하면 퇴직소득세 30~50% 절감 가능</div>
   </div>
 
 </div>
@@ -986,10 +986,6 @@ table.matrix .rh {
       <div class="rrow">
         <span class="rrow-label">실질 납입 부담액</span>
         <span class="rrow-val" id="tc_net">—</span>
-      </div>
-      <div class="rrow">
-        <span class="rrow-label">월 환산 실질 부담</span>
-        <span class="rrow-val" id="tc_monthly">—</span>
       </div>
 
       <hr class="divider">
@@ -1641,7 +1637,7 @@ table.matrix .rh {
 <footer class="site-footer">
   <div class="disclaimer">
     <strong>본 계산기는 교육·참고 목적으로 제공되며, 실제 투자·금융·세무 결정의 근거로 사용할 수 없습니다.</strong><br>
-    세율 및 공제 기준은 2025년 소득세법 기준이며, 개인 상황에 따라 실제 세금은 다를 수 있습니다.<br>
+    세율 및 공제 기준은 2026년 소득세법 기준이며, 개인 상황에 따라 실제 세금은 다를 수 있습니다.<br>
     정확한 세금 계산은 세무사, 정확한 재무설계는 공인재무설계사(CFP)와 상담하시기 바랍니다.<br>
     <span style="margin-top:6px;display:inline-block">IdentiFi · 정원준 CFP</span>
   </div>
@@ -1798,7 +1794,7 @@ function calcTC() {
   const income = isEarned ? salary : comp, thresh = isEarned ? 55000000 : 45000000;
   $('tc_rateAlert').innerHTML = '<strong>세액공제율 ' + rateStr + '</strong> — ' + (isEarned?'총급여':'종합소득금액') + ' ' + fmtN(thresh/10000) + '만원 ' + (income<=thresh?'이하':'초과') + ' 해당';
   $('tc_credit').textContent    = fmt(credit);
-  $('tc_creditSub').textContent = '월 환산 ' + fmt(credit/12) + (isaElig>0 ? ' · ISA 추가 ' + fmt(isaElig*rate) + ' 포함' : '');
+  $('tc_creditSub').textContent = isaElig>0 ? 'ISA 추가 ' + fmt(isaElig*rate) + ' 포함' : '';
   $('tc_eligible').textContent  = fmt(total);
   $('tc_rate').textContent      = rateStr;
   $('tc_net').textContent       = fmt(total - credit);
