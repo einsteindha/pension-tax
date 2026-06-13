@@ -2034,7 +2034,7 @@ function calcWD() {
         accRtTax = rtCalc.total;
       }
     }
-    var tax2 = (wd2 > 0 && accRtPay > 0) ? (wd2 / accRtPay) * accRtTax * (1 - accDiscount) : 0;
+    var tax2 = (wd2 > 0 && accRtPay > 0) ? (wd2 / accRtPay) * accRtTax * (elig55 ? (1 - accDiscount) : 1) : 0;
     var accIsLife = !isIRP && (acc.lifeAnnuity || false);
     var accPensionRate = accIsLife ? 0.044 : (age >= 80 ? 0.033 : age >= 70 ? 0.044 : 0.055);
     var tax3;
