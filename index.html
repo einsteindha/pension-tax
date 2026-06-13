@@ -2126,8 +2126,10 @@ function calcWD() {
     var hi       = parseFloat($('wd_hi').value)        || 0;
     var otherD   = parseFloat($('wd_otherDed').value)  || 0;
     var taxCredit = parseFloat($('wd_taxCredit').value) || 0;
-    var penAmt     = totalEligWd3 - pensionDeduction(totalEligWd3);
-    var natPenAmt  = natPen > 0 ? Math.max(0, natPen - pensionDeduction(natPen)) : 0;
+    var totalPension = totalEligWd3 + (natPen || 0);
+    var totalPenAmt  = Math.max(0, totalPension - pensionDeduction(totalPension));
+    var penAmt    = totalPension > 0 ? totalPenAmt * (totalEligWd3 / totalPension) : 0;
+    var natPenAmt = totalPension > 0 ? totalPenAmt * ((natPen || 0) / totalPension) : 0;
     var earnAmt    = salary > 0 ? Math.max(0, salary - earnedDeduction(salary)) : 0;
     var bizAmt     = Math.max(0, bizRev - bizExp);
     var intAmt     = Math.max(0, intDiv - 20000000);
