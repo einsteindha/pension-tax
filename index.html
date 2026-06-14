@@ -2011,7 +2011,7 @@ function renderWdAccs() {
             '</div>',
             (isOldPen ? '' : [
               '<div>',
-                '<div style="font-size:11px;font-weight:600;color:var(--text2);margin-bottom:5px">현재 평가금액</div>',
+                '<div style="font-size:11px;font-weight:600;color:var(--text2);margin-bottom:5px">현재 계좌 평가금액</div>',
                 '<div class="inp-row">',
                   '<div class="inp-wrap">',
                     '<input id="wd_bal_input_' + i + '" type="number" value="' + acc.balance + '" min="0" step="1000000" oninput="wdAccs[' + i + '].balance=parseFloat(this.value)||0;updateWdAccLabel(' + i + ');calcWD()">',
