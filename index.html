@@ -1357,14 +1357,6 @@ table.matrix .rh {
       </div>
     </div>
 
-    <!-- 연금수령한도 매트릭스 (계좌별로 이동됨) -->
-    <div id="wd_limit_section" style="display:none">
-      <div class="card">
-        <div class="card-title">연금수령한도 연차별 매트릭스</div>
-        <div class="alert alert-info" style="font-size:11px;margin-bottom:10px">현재 평가액(계좌 합산) 기준 연차별 최대 인출 한도. 한도 초과 인출 시 기타소득세 16.5%.</div>
-        <div id="wd_limit_matrix"></div>
-      </div>
-    </div>
 
   </div><!-- /right -->
 
@@ -2423,37 +2415,6 @@ function calcWD() {
   } else if (accsEl) { accsEl.innerHTML = ''; }
 }
 
-function renderWdLimitMatrix(curYr, isPre, balance) {
-  var el = $('wd_limit_matrix');
-  if (!el) return;
-  var maxYr  = isPre ? 5 : 10;
-  var denom0 = isPre ? 6 : 11;
-  var note   = isPre ? '2013년 2월 이전 — 5년 기준' : '2013년 3월 이후 — 10년 기준';
-  var html = '<div style="font-size:11px;color:var(--text3);margin-bottom:8px">한도 = 평가액 ÷ (' + denom0 + ' − 연차) × 120% &nbsp;·&nbsp; ' + note + '</div>';
-  html += '<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12px;min-width:300px">';
-  html += '<tr style="background:var(--accent-bg)"><th style="padding:6px 8px;border:1px solid var(--bg3);color:var(--gold-light);font-weight:500;text-align:center">연차</th><th style="padding:6px 8px;border:1px solid var(--bg3);color:var(--gold-light);font-weight:500;text-align:center">한도율</th><th style="padding:6px 8px;border:1px solid var(--bg3);color:var(--gold-light);font-weight:500;text-align:right">한도금액</th></tr>';
-  for (var n = 1; n <= maxYr; n++) {
-    var denom = denom0 - n;
-    var limitRate = denom > 0 ? (1.2 / denom) : 1.2;
-    var limitAmt  = balance * limitRate;
-    var isCur = (n === curYr) && curYr <= maxYr;
-    var rowBg = isCur ? 'rgba(196,147,63,.2)' : (n % 2 === 0 ? 'var(--bg2)' : '');
-    var fw = isCur ? 'font-weight:700;' : '';
-    var col = isCur ? 'color:var(--amber);' : '';
-    html += '<tr style="background:' + rowBg + '">';
-    html += '<td style="padding:5px 8px;border:1px solid var(--bg3);text-align:center;' + fw + col + '">' + n + '년차' + (isCur ? ' ◀ 현재' : '') + (curYr > maxYr && n === maxYr ? '<span style="color:var(--green);font-size:10px;margin-left:4px">(현재 한도없음)</span>' : '') + '</td>';
-    html += '<td style="padding:5px 8px;border:1px solid var(--bg3);text-align:center;' + fw + col + '">' + (limitRate*100).toFixed(1) + '%</td>';
-    html += '<td style="padding:5px 8px;border:1px solid var(--bg3);text-align:right;color:var(--blue);' + fw + '">' + (balance > 0 ? fmtN(Math.round(limitAmt/10000)) + '만원' : '—') + '</td>';
-    html += '</tr>';
-  }
-  var unlimitYr = maxYr + 1;
-  var isUnlimit = curYr >= unlimitYr;
-  html += '<tr style="background:' + (isUnlimit ? 'rgba(42,124,111,.1)' : '') + '">';
-  html += '<td style="padding:5px 8px;border:1px solid var(--bg3);text-align:center;' + (isUnlimit ? 'font-weight:700;color:var(--green);' : '') + '">' + unlimitYr + '년차~' + (isUnlimit ? ' ◀ 현재' : '') + '</td>';
-  html += '<td colspan="2" style="padding:5px 8px;border:1px solid var(--bg3);text-align:center;color:var(--green);font-weight:600">한도 없음</td>';
-  html += '</tr></table></div>';
-  el.innerHTML = html;
-}
 
 
 /* ══════════════════════════════════════
@@ -2563,7 +2524,7 @@ function rateColor(r) {
 /* ══════════════════════════════════════
    INIT
 ══════════════════════════════════════ */
-['tc_ps','tc_irp','rt_pay','rt_pay2','wd_rt_pay','wd_rt_pay2','wd_natPen','wd_otherInc','wd_hi','wd_taxCredit'].forEach(updateKR);
+['tc_ps','tc_irp','rt_pay','rt_pay2','wd_natPen','wd_otherInc','wd_hi','wd_taxCredit'].forEach(updateKR);
 capIRP(); capPS();
 calcTC();
 calcRT();
