@@ -2418,35 +2418,8 @@ function calcWD() {
 
 
 /* ══════════════════════════════════════
-   TAB 4 : 퇴직소득세 + 인출 계획
+   TAB 4 : 퇴직소득 실효세율
 ══════════════════════════════════════ */
-var wdRows = [{ yr: 1, amt: 20000000 }];
-
-function addWdRow() {
-  var maxYr = wdRows.length > 0 ? Math.max.apply(null, wdRows.map(function(r){return r.yr;})) + 1 : 1;
-  wdRows.push({ yr: maxYr, amt: 0 });
-  renderWdTable();
-  calcRT();
-}
-function removeWdRow(idx) {
-  wdRows.splice(idx, 1);
-  renderWdTable();
-  calcRT();
-}
-function renderWdTable() {
-  var tbody = $('wd_tbody');
-  if (!tbody) return;
-  tbody.innerHTML = wdRows.map(function(r, i) {
-    return '<tr>' +
-      '<td style="text-align:center"><input class="wd-inp" type="number" value="' + r.yr + '" min="1" max="50" style="width:55px;text-align:center" oninput="wdRows['+i+'].yr=parseInt(this.value)||1;calcRT()">년차</td>' +
-      '<td><input class="wd-inp" type="number" value="' + r.amt + '" min="0" step="1000000" oninput="wdRows['+i+'].amt=parseFloat(this.value)||0;calcRT()"></td>' +
-      '<td id="wd_tax_'+i+'" style="text-align:right;color:var(--red)">—</td>' +
-      '<td id="wd_net_'+i+'" style="text-align:right;color:var(--green)">—</td>' +
-      '<td style="text-align:center"><button class="wd-del-btn" onclick="removeWdRow('+i+')">✕</button></td>' +
-    '</tr>';
-  }).join('');
-}
-
 function setRtMode(mode) {
   $('rt_mAuto').classList.toggle('active', mode === 'auto');
   $('rt_mManual').classList.toggle('active', mode === 'manual');
