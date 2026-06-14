@@ -1136,11 +1136,11 @@ table.matrix .rh {
       <div class="card-title">수령 정보</div>
 
       <div class="form-group">
-        <label class="form-label" for="wd_age">현재 나이 (수령 나이)</label>
+        <label class="form-label" for="wd_birth">생년월일</label>
         <div class="inp-wrap">
-          <input type="number" id="wd_age" value="65" min="18" max="100" oninput="calcWD()">
-          <span class="inp-unit">세</span>
+          <input type="date" id="wd_birth" value="1961-01-01" oninput="calcWD()">
         </div>
+        <div id="wd_age_display" style="font-size:12px;color:var(--text3);margin-top:4px"></div>
       </div>
 
       <div id="wd_under55_warn" style="display:none;margin-top:6px" class="alert alert-warn">
@@ -2064,7 +2064,15 @@ function setAccRtMode(i, isManual) {
 
 function calcWD() {
   var curYear = new Date().getFullYear();
-  var age = parseFloat($('wd_age').value) || 65;
+  var today = new Date();
+  var birthVal = $('wd_birth').value;
+  var birth = birthVal ? new Date(birthVal) : new Date(today.getFullYear() - 65, today.getMonth(), today.getDate());
+  var age = (today - birth) / (365.25 * 24 * 3600 * 1000);
+  var date55 = new Date(birth.getFullYear() + 55, birth.getMonth(), birth.getDate());
+  var elig55 = today >= date55;
+  var ageDisp = $('wd_age_display');
+  if (ageDisp) ageDisp.textContent = '만 ' + Math.floor(age) + '세';
+
   var isPre2013 = wdAccs.some(function(a) { return a.openDate && a.openDate <= '2013-02-28'; });
 
   var totalSrc2 = wdAccs.reduce(function(s, a) { return s + (a.type === 'irp' ? (a.src2 || 0) : 0); }, 0);
@@ -2074,14 +2082,10 @@ function calcWD() {
     if (hasRetirement) renderMatrix('wd_rt_matrix', 'wd_rt_legend');
   }
 
-  // 수령 조건
   var _accOpenYrs = function(a) {
     if (!a.openDate) return 0;
-    return Math.max(0, (new Date() - new Date(a.openDate)) / (365.25 * 24 * 3600 * 1000));
+    return Math.max(0, (today - new Date(a.openDate)) / (365.25 * 24 * 3600 * 1000));
   };
-  var openedYrs = wdAccs.reduce(function(mx, a) { return Math.max(mx, _accOpenYrs(a)); }, 0);
-  var elig55 = age >= 55;
-  var elig5yr = openedYrs >= 5;
 
   var ageCard = $('wd_age_card');
   if (ageCard) {
@@ -2121,7 +2125,9 @@ function calcWD() {
     }
 
     var accOpenedYrs = _accOpenYrs(acc);
-    var eligPS = age >= 55 && accOpenedYrs >= 5;
+    var accOpenDateObj = new Date(acc.openDate || '2020-01-01');
+    var accDate5yr = new Date(accOpenDateObj.getFullYear() + 5, accOpenDateObj.getMonth(), accOpenDateObj.getDate());
+    var eligPS = today >= date55 && today >= accDate5yr;
     totalBal += (acc.balance || 0);
     var remaining = acc.withdrawal || 0;
     var src1 = acc.src1 || 0, src2 = isIRP ? (acc.src2 || 0) : 0, src3 = acc.src3 || 0;
@@ -2151,8 +2157,8 @@ function calcWD() {
     var accMaxYr = accDenom0 - 1;
     var accLimit = Infinity, accPensionYr = 0;
     if (eligPS) {
-      var accQualifyAge = Math.max(55, Math.round(age - accOpenedYrs) + 5);
-      accPensionYr = Math.max(1, age - accQualifyAge + 1);
+      var accEligDate = new Date(Math.max(date55.getTime(), accDate5yr.getTime()));
+      accPensionYr = Math.max(1, Math.floor((today - accEligDate) / (365.25 * 24 * 3600 * 1000)) + 1);
       if (acc.balance > 0) {
         accLimit = acc.balance / (accDenom0 - Math.min(accPensionYr, accDenom0 - 1)) * 1.2;
       }
@@ -2186,7 +2192,7 @@ function calcWD() {
     }
     totalTax2 += tax2; totalTax3 += tax3;
     accResults.push({ label: '계좌 ' + (i+1) + ' ' + (isIRP ? 'IRP' : '연금저축'), gross: wd1+wd2+wd3, tax: tax2+tax3, tax2: tax2, tax3: tax3, elig3: accElig3, eligTax3: accEligTax3, eligPS: eligPS });
-    var under5yr = accOpenedYrs < 5;
+    var under5yr = today < accDate5yr;
     var isMissingBal = eligPS && !(acc.balance > 0) && (wd2 + wd3) > 0;
     if (isMissingBal) needsBalance = true;
     var acc5yrWarn = $('wd_under5yr_warn_' + i);
