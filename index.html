@@ -2082,6 +2082,7 @@ function calcWD() {
   var totalEligWd3 = 0; var totalEligTax3 = 0;
   var accResults = [];
   var needsBalance = false;
+  var needsRetirePay = false;
 
   wdAccs.forEach(function(acc, i) {
     var isIRP = acc.type === 'irp';
@@ -2117,6 +2118,7 @@ function calcWD() {
     var accPY = isIRP ? (acc.retirePensionYr || 1) : 1;
     var accDiscount = accPY <= 10 ? 0.30 : accPY <= 20 ? 0.40 : 0.50;
     var accRtPay = isIRP ? (acc.retirePay || acc.src2 || 0) : 0;
+    if (isIRP && wd2 > 0 && !(accRtPay > 0)) needsRetirePay = true;
     var accRtTax = 0;
     if (isIRP && wd2 > 0 && accRtPay > 0) {
       if ((acc.retireMode || 'auto') === 'manual') {
@@ -2271,6 +2273,18 @@ function calcWD() {
     ['wd_net_annual','wd_gross_total','wd_tax_total','wd_net_monthly','wd_eff_rate',
      'wd_b_src1','wd_b_src2','wd_b_src3','wd_b_tax_sum'].forEach(function(id) { if ($(id)) $(id).textContent = '—'; });
     if ($('wd_net_sub')) $('wd_net_sub').textContent = '평가금액 입력 후 계산됩니다';
+    if ($('wd_accs_result')) $('wd_accs_result').innerHTML = '';
+    if ($('wd_overSection')) $('wd_overSection').classList.remove('visible');
+    if ($('wd_overResult'))  $('wd_overResult').style.display = 'none';
+    if ($('wd_over15_notice')) $('wd_over15_notice').style.display = 'none';
+    return;
+  }
+
+  // 총 퇴직금 미입력 시 결과 블록 (이연퇴직소득 입력된 경우)
+  if (needsRetirePay) {
+    ['wd_net_annual','wd_gross_total','wd_tax_total','wd_net_monthly','wd_eff_rate',
+     'wd_b_src1','wd_b_src2','wd_b_src3','wd_b_tax_sum'].forEach(function(id) { if ($(id)) $(id).textContent = '—'; });
+    if ($('wd_net_sub')) $('wd_net_sub').textContent = '총 퇴직금 입력 후 계산됩니다';
     if ($('wd_accs_result')) $('wd_accs_result').innerHTML = '';
     if ($('wd_overSection')) $('wd_overSection').classList.remove('visible');
     if ($('wd_overResult'))  $('wd_overResult').style.display = 'none';
