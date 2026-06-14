@@ -1938,11 +1938,6 @@ function renderWdAccs() {
               '</div>',
             ].join('')),
           '</div>',
-          (!isOldPen ? '<div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;padding:5px 8px;background:var(--bg3);border-radius:var(--radius)">' +
-            '<label style="font-size:11px;color:var(--text2);display:flex;align-items:center;gap:5px;cursor:pointer">' +
-            '<input type="checkbox" ' + (acc.lifeAnnuity ? 'checked' : '') + ' style="cursor:pointer" onchange="wdAccs[' + i + '].lifeAnnuity=this.checked;calcWD()">' +
-            '종신수령 <span style="font-size:10px;color:var(--text3)">(4.4% 고정)</span>' +
-            '</label></div>' : ''),
           '<div id="wd_under5yr_warn_' + i + '" style="display:none;margin-bottom:8px;padding:8px 10px;background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.25);border-radius:var(--radius);font-size:11px;line-height:1.5">' +
             '<strong>개설 5년 미만 — 연금수령 요건 미충족</strong><br>' +
             '③ 세액공제 받은 납입원금·운용수익 재원에 <strong>기타소득세 16.5%</strong> 적용. ①은 비과세, ②는 퇴직소득세 유지.' +
@@ -2053,6 +2048,9 @@ function renderWdAccs() {
               '<div style="display:flex;align-items:center;gap:6px">',
                 '<div style="padding:5px 10px;background:var(--bg3);border:1.5px solid var(--border);border-radius:2px;font-size:13px;font-weight:600;color:var(--text1);min-width:130px"><span id="wd_wd_num_' + i + '">' + ((acc.withdrawal||0) > 0 ? (acc.withdrawal).toLocaleString() : '0') + '</span></div>',
                 '<span id="wd_wd_lbl_' + i + '" style="font-size:11px;color:var(--text3)">원' + (acc.withdrawal > 0 ? ' · ' + toKorean(acc.withdrawal) : '') + '</span>',
+                '<label style="font-size:11px;color:var(--text2);display:flex;align-items:center;gap:4px;cursor:pointer;margin-left:4px">' +
+                '<input type="checkbox" ' + (acc.lifeAnnuity ? 'checked' : '') + ' style="cursor:pointer" onchange="wdAccs[' + i + '].lifeAnnuity=this.checked;calcWD()">' +
+                '종신수령</label>',
               '</div>',
             '</div>',
             '<div id="wd_limit_block_' + i + '"></div>',
