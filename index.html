@@ -2087,8 +2087,9 @@ function calcWD() {
   var totalNet = totalGross - totalTax;
   var effRate  = totalGross > 0 ? totalTax / totalGross * 100 : 0;
 
-  // 연금수령 연차
-  var pensionYr = (elig55 && elig5yr) ? Math.max(1, Math.round(age - 55 + 1)) : 0;
+  // 연금수령 연차: 55세 요건과 계좌 개설 5년 요건 모두 충족한 나이(qualifyAge)부터 1년차
+  var qualifyAge = Math.max(55, Math.round(age - openedYrs) + 5);
+  var pensionYr = (elig55 && elig5yr) ? Math.max(1, age - qualifyAge + 1) : 0;
 
   if ($('wd_net_annual'))  $('wd_net_annual').textContent  = fmt(totalNet);
   if ($('wd_net_sub'))     $('wd_net_sub').textContent     = '총수령 ' + fmt(totalGross) + ' · 세금 ' + fmt(totalTax);
