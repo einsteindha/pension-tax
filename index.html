@@ -2128,7 +2128,7 @@ function calcWD() {
         accLimit = acc.balance / (accDenom0 - Math.min(accPensionYr, accDenom0 - 1)) * 1.2;
       }
     }
-    var totalWdAcc = wd1 + wd2 + wd3;
+    var totalWdAcc = wd2 + wd3; // ①은 비과세 원금이므로 한도 계산 제외
     var overAmt = (eligPS && totalWdAcc > accLimit) ? totalWdAcc - accLimit : 0;
     var isOverLimit = overAmt > 0;
     // ③ 한도 분리
