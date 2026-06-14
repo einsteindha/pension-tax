@@ -2088,7 +2088,7 @@ function calcWD() {
     totalTax2 += tax2; totalTax3 += tax3;
     accResults.push({ label: '계좌 ' + (i+1) + ' ' + (isIRP ? 'IRP' : '연금저축'), gross: wd1+wd2+wd3, tax: tax2+tax3, tax2: tax2, tax3: tax3, elig3: accElig3, eligTax3: accEligTax3, eligPS: eligPS });
     var under5yr = accOpenedYrs < 5;
-    var isMissingBal = eligPS && !(acc.balance > 0) && totalWdAcc > 0;
+    var isMissingBal = eligPS && !(acc.balance > 0) && (acc.withdrawal || 0) > 0;
     if (isMissingBal) needsBalance = true;
     var acc5yrWarn = $('wd_under5yr_warn_' + i);
     if (acc5yrWarn) acc5yrWarn.style.display = under5yr ? '' : 'none';
