@@ -2545,6 +2545,7 @@ function rateColor(r) {
    INIT
 ══════════════════════════════════════ */
 ['tc_ps','tc_irp','rt_pay','rt_pay2','wd_rt_pay','wd_rt_pay2','wd_natPen','wd_otherInc','wd_hi','wd_taxCredit'].forEach(updateKR);
+capIRP(); capPS();
 calcTC();
 calcRT();
 renderMatrix();
