@@ -821,7 +821,7 @@ table.matrix .rh {
         </div>
 
         <div class="alert alert-warn" style="margin-bottom:0;font-size:11px">
-          <strong>인출 순서:</strong> ① 세액공제X 원금(비과세, ISA 원금·다운사이징 포함) → ② 이연퇴직소득(퇴직소득세, IRP만) → ③ 세액공제O 원금+운용수익(연금소득세, ISA 수익분 포함)
+          <strong>인출 순서:</strong> ① 세액공제 받지 않은 본인 납입원금(비과세, ISA 원금·다운사이징 포함) → ② 이연퇴직소득(퇴직소득세, IRP만) → ③ 세액공제 받은 본인 납입원금과 계좌 운용수익(연금소득세, ISA 수익분 포함)
         </div>
         </div>
       </div>
@@ -1040,9 +1040,9 @@ table.matrix .rh {
   <div class="card-title">재원별 인출 순서</div>
   <div style="font-size:11px;color:var(--text3);margin-bottom:12px">소득세법 시행령 제40조의2 — 재원이 섞여 있을 때 자동 적용</div>
   <div style="display:flex;flex-wrap:wrap;gap:5px 10px;margin-bottom:12px">
-    <span style="display:inline-flex;align-items:center;gap:4px;font-size:10px;color:var(--text2)"><span style="width:16px;height:16px;border-radius:50%;background:var(--purple);color:#fff;font-size:9px;display:inline-flex;align-items:center;justify-content:center;font-weight:700">①</span>비과세 (세액공제X 원금)</span>
+    <span style="display:inline-flex;align-items:center;gap:4px;font-size:10px;color:var(--text2)"><span style="width:16px;height:16px;border-radius:50%;background:var(--purple);color:#fff;font-size:9px;display:inline-flex;align-items:center;justify-content:center;font-weight:700">①</span>비과세 (세액공제 받지 않은 본인 납입원금)</span>
     <span style="display:inline-flex;align-items:center;gap:4px;font-size:10px;color:var(--text2)"><span style="width:16px;height:16px;border-radius:50%;background:var(--blue);color:#fff;font-size:9px;display:inline-flex;align-items:center;justify-content:center;font-weight:700">②</span>퇴직소득세 (30~50% 감면, IRP만)</span>
-    <span style="display:inline-flex;align-items:center;gap:4px;font-size:10px;color:var(--text2)"><span style="width:16px;height:16px;border-radius:50%;background:var(--gold);color:#fff;font-size:9px;display:inline-flex;align-items:center;justify-content:center;font-weight:700">③</span>연금소득세 3.3~5.5% (세액공제O+수익)</span>
+    <span style="display:inline-flex;align-items:center;gap:4px;font-size:10px;color:var(--text2)"><span style="width:16px;height:16px;border-radius:50%;background:var(--gold);color:#fff;font-size:9px;display:inline-flex;align-items:center;justify-content:center;font-weight:700">③</span>연금소득세 3.3~5.5% (세액공제 받은 본인 납입원금과 계좌 운용수익)</span>
   </div>
   <div style="display:flex;flex-wrap:wrap;gap:14px">
     <!-- IRP -->
@@ -1102,7 +1102,7 @@ table.matrix .rh {
       </div>
     </div>
   </div>
-  <div class="alert alert-warn" style="margin-top:10px;margin-bottom:0;font-size:11px"><strong>인출 순서:</strong> ① 세액공제X 원금(비과세) → ② 이연퇴직소득(퇴직소득세, IRP만) → ③ 세액공제O 원금+운용수익(연금소득세)</div>
+  <div class="alert alert-warn" style="margin-top:10px;margin-bottom:0;font-size:11px"><strong>인출 순서:</strong> ① 세액공제 받지 않은 본인 납입원금(비과세) → ② 이연퇴직소득(퇴직소득세, IRP만) → ③ 세액공제 받은 본인 납입원금과 계좌 운용수익(연금소득세)</div>
 </div>
 
 <!-- 메인 2단 레이아웃 -->
@@ -1126,7 +1126,7 @@ table.matrix .rh {
       <div id="wd_under55_warn" style="display:none;margin-top:6px" class="alert alert-warn">
         <strong>55세 미만 — 연금 수령 불가</strong><br>
         연금계좌 인출 요건(만 55세 이상)을 충족하지 않습니다.<br>
-        ③ 세액공제O+수익 재원에 <strong>기타소득세 16.5%</strong> 적용, 연금소득세 감면 혜택 없음.
+        ③ 세액공제 받은 납입원금·운용수익 재원에 <strong>기타소득세 16.5%</strong> 적용, 연금소득세 감면 혜택 없음.
       </div>
 
     </div>
@@ -1918,7 +1918,7 @@ function renderWdAccs() {
             '</label></div>' : ''),
           '<div id="wd_under5yr_warn_' + i + '" style="display:none;margin-bottom:8px;padding:8px 10px;background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.25);border-radius:var(--radius);font-size:11px;line-height:1.5">' +
             '<strong>개설 5년 미만 — 연금수령 요건 미충족</strong><br>' +
-            '③ 세액공제O+수익 재원에 <strong>기타소득세 16.5%</strong> 적용. ①은 비과세, ②는 퇴직소득세 유지.' +
+            '③ 세액공제 받은 납입원금·운용수익 재원에 <strong>기타소득세 16.5%</strong> 적용. ①은 비과세, ②는 퇴직소득세 유지.' +
           '</div>',
           '<div id="wd_nobal_warn_' + i + '" style="display:none;margin-bottom:8px;padding:8px 10px;background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.35);border-radius:var(--radius);font-size:11px;line-height:1.5">' +
             '<strong>⚠ 현재 평가금액 미입력</strong> — 연금수령한도 계산을 위해 위 <strong>현재 평가금액</strong>을 입력해주세요.<br>' +
@@ -1936,7 +1936,7 @@ function renderWdAccs() {
             // 개인연금저축 전용 UI
             '<div style="margin-bottom:10px;padding:8px 10px;background:rgba(29,158,117,.06);border:1px solid rgba(29,158,117,.25);border-radius:var(--radius);font-size:11px;line-height:1.6;color:var(--text2)">',
               '<strong style="color:var(--green)">전액 비과세</strong> — 소득세법 §12 연금소득 비과세 (1994.6.1~2000.12.31 가입 구법 계좌)<br>',
-              '<span style="font-size:10px;color:var(--text3)">수령한도 없음 · 세액공제X 원금(소득공제 방식) · 수익 포함 전액 비과세</span>',
+              '<span style="font-size:10px;color:var(--text3)">수령한도 없음 · 세액공제 받지 않은 본인 납입원금(소득공제 방식) · 수익 포함 전액 비과세</span>',
             '</div>',
             '<div>',
               '<div style="font-size:11px;font-weight:700;color:var(--text2);margin-bottom:4px">연간 수령 금액</div>',
@@ -1947,11 +1947,15 @@ function renderWdAccs() {
             '</div>',
           ].join('') : [
             '<div style="display:grid;gap:5px;margin-bottom:8px">',
-              '<div style="display:flex;align-items:center;gap:6px">',
-                '<span style="width:18px;height:18px;border-radius:50%;background:var(--purple);color:#fff;font-size:10px;font-style:normal;font-family:inherit;display:inline-flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0">1</span>',
-                '<span style="font-size:11px;color:var(--text2);min-width:108px">세액공제X 원금</span>',
-                '<input type="number" value="' + acc.src1 + '" min="0" step="500000" style="width:120px;padding:3px 6px;border:1px solid var(--border2);border-radius:2px;font-size:12px" oninput="wdAccs[' + i + '].src1=parseFloat(this.value)||0;syncWdSrc(' + i + ')">',
-                '<span style="font-size:11px;color:var(--text3)">원</span>',
+              '<div>',
+                '<div style="display:flex;align-items:center;gap:5px;margin-bottom:3px">',
+                  '<span style="width:18px;height:18px;border-radius:50%;background:var(--purple);color:#fff;font-size:10px;font-style:normal;font-family:inherit;display:inline-flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0">1</span>',
+                  '<span style="font-size:11px;color:var(--text2)">세액공제 받지 않은 본인 납입원금</span>',
+                '</div>',
+                '<div style="display:flex;align-items:center;gap:6px;padding-left:24px">',
+                  '<input type="number" value="' + acc.src1 + '" min="0" step="500000" style="width:120px;padding:3px 6px;border:1px solid var(--border2);border-radius:2px;font-size:12px" oninput="wdAccs[' + i + '].src1=parseFloat(this.value)||0;syncWdSrc(' + i + ')">',
+                  '<span style="font-size:11px;color:var(--text3)">원</span>',
+                '</div>',
               '</div>',
               (isIRP ? [
                 '<div style="display:flex;align-items:center;gap:6px">',
@@ -2002,11 +2006,15 @@ function renderWdAccs() {
                   '</div>'
                 ].join(''),
               ].join('') : ''),
-              '<div style="display:flex;align-items:center;gap:6px">',
-                '<span style="width:18px;height:18px;border-radius:50%;background:var(--gold);color:#fff;font-size:10px;font-style:normal;font-family:inherit;display:inline-flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0">3</span>',
-                '<span style="font-size:11px;color:var(--text2);min-width:108px">세액공제O+수익</span>',
-                '<input type="number" value="' + acc.src3 + '" min="0" step="500000" style="width:120px;padding:3px 6px;border:1px solid var(--border2);border-radius:2px;font-size:12px" oninput="wdAccs[' + i + '].src3=parseFloat(this.value)||0;syncWdSrc(' + i + ')">',
-                '<span style="font-size:11px;color:var(--text3)">원</span>',
+              '<div>',
+                '<div style="display:flex;align-items:center;gap:5px;margin-bottom:3px">',
+                  '<span style="width:18px;height:18px;border-radius:50%;background:var(--gold);color:#fff;font-size:10px;font-style:normal;font-family:inherit;display:inline-flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0">3</span>',
+                  '<span style="font-size:11px;color:var(--text2)">세액공제 받은 본인 납입원금과 계좌 운용수익</span>',
+                '</div>',
+                '<div style="display:flex;align-items:center;gap:6px;padding-left:24px">',
+                  '<input type="number" value="' + acc.src3 + '" min="0" step="500000" style="width:120px;padding:3px 6px;border:1px solid var(--border2);border-radius:2px;font-size:12px" oninput="wdAccs[' + i + '].src3=parseFloat(this.value)||0;syncWdSrc(' + i + ')">',
+                  '<span style="font-size:11px;color:var(--text3)">원</span>',
+                '</div>',
               '</div>',
             '</div>',
             '<div>',
@@ -2158,7 +2166,7 @@ function calcWD() {
     totalTax2 += tax2; totalTax3 += tax3;
     accResults.push({ label: '계좌 ' + (i+1) + ' ' + (isIRP ? 'IRP' : '연금저축'), gross: wd1+wd2+wd3, tax: tax2+tax3, tax2: tax2, tax3: tax3, elig3: accElig3, eligTax3: accEligTax3, eligPS: eligPS });
     var under5yr = accOpenedYrs < 5;
-    var isMissingBal = eligPS && !(acc.balance > 0) && (acc.withdrawal || 0) > 0;
+    var isMissingBal = eligPS && !(acc.balance > 0) && (wd2 + wd3) > 0;
     if (isMissingBal) needsBalance = true;
     var acc5yrWarn = $('wd_under5yr_warn_' + i);
     if (acc5yrWarn) acc5yrWarn.style.display = under5yr ? '' : 'none';
