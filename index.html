@@ -2118,17 +2118,6 @@ function calcWD() {
   if ($('wd_over15_notice')) $('wd_over15_notice').style.display = over15 ? '' : 'none';
   if (over15) {
     var sepTax   = totalEligWd3 * 0.165;
-    var adjTax3  = (totalTax3 - totalEligTax3) + sepTax;
-    var adjTax   = totalTax2 + adjTax3;
-    var adjNet   = totalGross - adjTax;
-    var adjEff   = totalGross > 0 ? adjTax / totalGross * 100 : 0;
-    if ($('wd_net_annual'))  $('wd_net_annual').textContent  = fmt(adjNet);
-    if ($('wd_net_sub'))     $('wd_net_sub').textContent     = '총수령 ' + fmt(totalGross) + ' · 세금 ' + fmt(adjTax);
-    if ($('wd_tax_total'))   $('wd_tax_total').textContent   = fmt(adjTax);
-    if ($('wd_net_monthly')) $('wd_net_monthly').textContent = fmt(adjNet / 12);
-    if ($('wd_eff_rate'))    $('wd_eff_rate').textContent    = adjEff.toFixed(2) + '%';
-    if ($('wd_b_src3'))      $('wd_b_src3').textContent      = fmt(adjTax3);
-    if ($('wd_b_tax_sum'))   $('wd_b_tax_sum').textContent   = fmt(adjTax);
     var salary   = parseFloat($('wd_salary').value)    || 0;
     var bizRev   = parseFloat($('wd_bizRev').value)    || 0;
     var bizExp   = parseFloat($('wd_bizExp').value)    || 0;
@@ -2193,6 +2182,22 @@ function calcWD() {
         if ($('wd_b_comptax'))  $('wd_b_comptax').textContent  = fmt(compTax);
       }
     } else if (rec) { rec.style.display = 'none'; }
+    var useTax  = hasInput && compTax < sepTax ? compTax : sepTax;
+    var adjTax3 = (totalTax3 - totalEligTax3) + useTax;
+    var adjTax  = totalTax2 + adjTax3;
+    var adjNet  = totalGross - adjTax;
+    var adjEff  = totalGross > 0 ? adjTax / totalGross * 100 : 0;
+    if ($('wd_net_annual'))  $('wd_net_annual').textContent  = fmt(adjNet);
+    if ($('wd_net_sub'))     $('wd_net_sub').textContent     = '총수령 ' + fmt(totalGross) + ' · 세금 ' + fmt(adjTax);
+    if ($('wd_tax_total'))   $('wd_tax_total').textContent   = fmt(adjTax);
+    if ($('wd_net_monthly')) $('wd_net_monthly').textContent = fmt(adjNet / 12);
+    if ($('wd_eff_rate'))    $('wd_eff_rate').textContent    = adjEff.toFixed(2) + '%';
+    if ($('wd_b_src3'))      $('wd_b_src3').textContent      = fmt(adjTax3);
+    if ($('wd_b_tax_sum'))   $('wd_b_tax_sum').textContent   = fmt(adjTax);
+    var noticeEl = $('wd_over15_notice');
+    if (noticeEl) noticeEl.textContent = hasInput && compTax < sepTax
+      ? '* 사적연금소득 1,500만원 초과 — ③ 세금은 종합과세 기준 반영 (간이 추정값, 전문가 상담 권장).'
+      : '* 사적연금소득 1,500만원 초과 — ③ 세금은 분리과세(16.5%) 기준 반영. 타 소득 입력 시 종합과세와 비교.';
   }
 
   renderWdLimitMatrix(pensionYr, isPre2013, totalBal);
