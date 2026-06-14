@@ -2224,7 +2224,7 @@ function calcWD() {
       }
     }
     var rtPayKrEl = $('wd_rt_pay_kr_' + i);
-    if (rtPayKrEl && isIRP) rtPayKrEl.textContent = accRtPay > 0 ? toKorean(accRtPay) : '';
+    if (rtPayKrEl && isIRP) rtPayKrEl.textContent = acc.retirePay > 0 ? toKorean(acc.retirePay) : '';
     // 계좌별 연금수령한도 블록
     var limitBlock = $('wd_limit_block_' + i);
     if (limitBlock) {
