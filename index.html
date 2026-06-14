@@ -137,13 +137,16 @@ body {
 }
 .form-hint { font-size: 11px; color: var(--text3); margin-top: 4px; line-height: 1.55; }
 .inp-wrap { position: relative; display: flex; align-items: center; }
-.inp-wrap input[type="number"] {
+.inp-wrap input[type="number"],
+.inp-wrap input[type="date"] {
   width: 100%; padding: 9px 38px 9px 11px;
   border: 1px solid var(--bg3); border-radius: var(--radius);
   background: var(--bg); color: var(--text);
   font-size: 14px; font-family: inherit; transition: border-color .2s;
 }
-.inp-wrap input[type="number"]:focus { outline: none; border-color: var(--gold); }
+.inp-wrap input[type="date"] { padding: 9px 11px; }
+.inp-wrap input[type="number"]:focus,
+.inp-wrap input[type="date"]:focus { outline: none; border-color: var(--gold); }
 .inp-unit {
   position: absolute; right: 10px;
   font-size: 11px; color: var(--text3); pointer-events: none;
@@ -1867,6 +1870,16 @@ function removeWdAcc(idx) {
   renderWdAccs();
   calcWD();
 }
+function setWdAccType(i, type) {
+  wdAccs[i].type = type;
+  if (type === 'oldpen') {
+    wdAccs[i].openDate = '1999-01-01';
+  } else if ((wdAccs[i].openDate || '') < '2001-01-01') {
+    wdAccs[i].openDate = '2020-01-01';
+  }
+  renderWdAccs();
+  calcWD();
+}
 
 function syncWdSrc(i) {
   var acc = wdAccs[i];
@@ -1905,6 +1918,7 @@ function renderWdAccs() {
     var openedYrs = Math.max(0, Math.floor(accOpenMs / (365.25 * 24 * 3600 * 1000)));
     var yrLabel = '개설 ' + openedYrs + '년';
     var color = isIRP ? 'var(--blue)' : isOldPen ? 'var(--green)' : 'var(--gold)';
+    var psActive = !isIRP && !isOldPen;
     var py = acc.retirePensionYr || 1;
     var pyDisc = py <= 10 ? '30%↓' : py <= 20 ? '40%↓' : '50%↓';
     var pyColor = py <= 10 ? 'var(--blue)' : py <= 20 ? 'var(--green)' : 'var(--gold)';
@@ -1913,11 +1927,11 @@ function renderWdAccs() {
         '<div style="background:var(--bg3);padding:8px 12px;display:flex;justify-content:space-between;align-items:center">',
           '<span style="font-size:12px;font-weight:700;color:var(--text2)">계좌 ' + (i+1) + ' <span style="color:' + color + '">' + (isIRP ? 'IRP' : isOldPen ? '개인연금저축' : '연금저축') + '</span></span>',
           '<div style="display:flex;gap:8px;align-items:center">',
-            '<select style="font-size:11px;padding:2px 6px;border:1px solid var(--border2);border-radius:2px;background:var(--bg)" onchange="wdAccs[' + i + '].type=this.value;if(this.value===\'oldpen\'){wdAccs[' + i + '].openDate=\'1999-01-01\';}else if(wdAccs[' + i + '].openDate<\'2001-01-01\'){wdAccs[' + i + '].openDate=\'2020-01-01\';}renderWdAccs();calcWD()">',
-              '<option value="ps"' + (acc.type==='ps' ? ' selected' : '') + '>연금저축</option>',
-              '<option value="irp"' + (acc.type==='irp' ? ' selected' : '') + '>IRP</option>',
-              '<option value="oldpen"' + (isOldPen ? ' selected' : '') + '>개인연금저축 (구법)</option>',
-            '</select>',
+            '<div style="display:flex;gap:3px">',
+              '<button style="font-size:10px;padding:3px 8px;border-radius:var(--radius);cursor:pointer;transition:all .15s;border:1px solid ' + (psActive ? 'var(--gold)' : 'var(--border2)') + ';background:' + (psActive ? 'var(--gold)' : 'var(--bg3)') + ';color:' + (psActive ? '#fff' : 'var(--text3)') + ';font-weight:' + (psActive ? '700' : '400') + '" onclick="setWdAccType(' + i + ',\'ps\')">연금저축</button>',
+              '<button style="font-size:10px;padding:3px 8px;border-radius:var(--radius);cursor:pointer;transition:all .15s;border:1px solid ' + (isIRP ? 'var(--blue)' : 'var(--border2)') + ';background:' + (isIRP ? 'var(--blue)' : 'var(--bg3)') + ';color:' + (isIRP ? '#fff' : 'var(--text3)') + ';font-weight:' + (isIRP ? '700' : '400') + '" onclick="setWdAccType(' + i + ',\'irp\')">IRP</button>',
+              '<button style="font-size:10px;padding:3px 8px;border-radius:var(--radius);cursor:pointer;transition:all .15s;border:1px solid ' + (isOldPen ? 'var(--green)' : 'var(--border2)') + ';background:' + (isOldPen ? 'var(--green)' : 'var(--bg3)') + ';color:' + (isOldPen ? '#fff' : 'var(--text3)') + ';font-weight:' + (isOldPen ? '700' : '400') + '" onclick="setWdAccType(' + i + ',\'oldpen\')">구법</button>',
+            '</div>',
             (wdAccs.length > 1 ? '<button onclick="removeWdAcc(' + i + ')" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:15px;line-height:1;padding:0 4px">✕</button>' : ''),
           '</div>',
         '</div>',
@@ -1925,10 +1939,10 @@ function renderWdAccs() {
           '<div style="display:grid;grid-template-columns:' + (isOldPen ? '1fr' : '1fr 1fr') + ';gap:8px;margin-bottom:10px">',
             '<div>',
               '<div class="form-label">계좌 개설일</div>',
-              '<div style="display:flex;align-items:center;gap:5px">',
-                '<input type="date" value="' + (acc.openDate||(isOldPen?'1999-01-01':'2020-01-01')) + '"' + (isOldPen ? ' min="1994-06-01" max="2000-12-31"' : ' max="' + todayStr + '"' + (isIRP ? ' min="2012-07-26"' : ' min="2001-01-01"')) + ' style="padding:4px 6px;border:1px solid var(--border2);border-radius:2px;font-size:12px" oninput="wdAccs[' + i + '].openDate=this.value;updateWdAccLabel(' + i + ');calcWD()">',
-                '<span id="wd_yr_lbl_' + i + '" style="font-size:11px;color:var(--text3)">' + yrLabel + '</span>',
+              '<div class="inp-wrap">',
+                '<input type="date" value="' + (acc.openDate||(isOldPen?'1999-01-01':'2020-01-01')) + '"' + (isOldPen ? ' min="1994-06-01" max="2000-12-31"' : ' max="' + todayStr + '"' + (isIRP ? ' min="2012-07-26"' : ' min="2001-01-01"')) + ' oninput="wdAccs[' + i + '].openDate=this.value;updateWdAccLabel(' + i + ');calcWD()">',
               '</div>',
+              '<div id="wd_yr_lbl_' + i + '" style="font-size:11px;color:var(--text3);margin-top:3px">' + yrLabel + '</div>',
             '</div>',
             (isOldPen ? '' : [
               '<div>',
