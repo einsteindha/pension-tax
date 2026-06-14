@@ -944,7 +944,7 @@ table.matrix .rh {
           <span class="inp-unit">원</span>
         </div>
         <input type="range" id="tc_dcR" min="0" max="30000000" step="100000" value="0" oninput="syncR('tc_dc','tc_dcR');updateKR('tc_dc');calcTC()">
-        <div class="range-row"><span>0원</span><span>3,000만원</span></div>
+        <div class="range-row"><span>0원</span><span></span></div>
         <div class="form-hint">납입 한도 없음 · 세액공제는 IRP와 합산하여 900만원 한도 내</div>
       </div>
 
@@ -1923,7 +1923,7 @@ function renderWdAccs() {
             '<div>',
               '<div style="font-size:11px;color:var(--text3);margin-bottom:3px">계좌 개설일</div>',
               '<div style="display:flex;align-items:center;gap:5px">',
-                '<input type="date" value="' + (acc.openDate||(isOldPen?'1999-01-01':'2020-01-01')) + '"' + (isOldPen ? ' min="1994-06-01" max="2000-12-31"' : ' max="' + todayStr + '"' + (!isIRP ? ' min="2001-01-01"' : '')) + ' style="padding:4px 6px;border:1px solid var(--border2);border-radius:2px;font-size:12px" oninput="wdAccs[' + i + '].openDate=this.value;updateWdAccLabel(' + i + ');calcWD()">',
+                '<input type="date" value="' + (acc.openDate||(isOldPen?'1999-01-01':'2020-01-01')) + '"' + (isOldPen ? ' min="1994-06-01" max="2000-12-31"' : ' max="' + todayStr + '"' + (isIRP ? ' min="2012-07-26"' : ' min="2001-01-01"')) + ' style="padding:4px 6px;border:1px solid var(--border2);border-radius:2px;font-size:12px" oninput="wdAccs[' + i + '].openDate=this.value;updateWdAccLabel(' + i + ');calcWD()">',
                 '<span id="wd_yr_lbl_' + i + '" style="font-size:11px;color:var(--text3)">' + yrLabel + '</span>',
               '</div>',
             '</div>',
