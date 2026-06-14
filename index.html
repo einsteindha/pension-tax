@@ -1604,13 +1604,7 @@ table.matrix .rh {
   <div>
     <div class="card">
       <div class="card-title">퇴직소득세 모의계산</div>
-      <div class="mode-toggle">
-        <button class="mode-btn active" id="rt_mAuto" onclick="setRtMode('auto')">자동 계산 (근속연수 입력)</button>
-        <button class="mode-btn" id="rt_mManual" onclick="setRtMode('manual')">실효세율 직접 입력</button>
-      </div>
-
-      <!-- 자동 모드 -->
-      <div class="mode-panel active" id="rt_autoPanel">
+      <div id="rt_autoPanel">
         <div class="form-group">
           <label class="form-label" for="rt_pay">퇴직금(퇴직급여)</label>
           <div class="kr-num" id="rt_pay_kr"></div>
@@ -1632,25 +1626,6 @@ table.matrix .rh {
         </div>
       </div>
 
-      <!-- 수동 모드 -->
-      <div class="mode-panel" id="rt_manualPanel">
-        <div class="form-group">
-          <label class="form-label" for="rt_pay2">퇴직금(퇴직급여)</label>
-          <div class="kr-num" id="rt_pay2_kr"></div>
-          <div class="inp-wrap">
-            <input type="number" id="rt_pay2" value="200000000" min="0" step="1000000" oninput="updateKR('rt_pay2');calcRT()">
-            <span class="inp-unit">원</span>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="form-label" for="rt_manRate">퇴직소득세 실효세율 (%)</label>
-<div class="inp-wrap">
-            <input type="number" id="rt_manRate" value="10" min="0" max="50" step="0.1" oninput="calcRT()">
-            <span class="inp-unit">%</span>
-          </div>
-          <div class="form-hint">아래 참고 매트릭스에서 해당 구간을 확인하세요</div>
-        </div>
-      </div>
     </div>
 
     <!-- 매트릭스 -->
@@ -2582,37 +2557,20 @@ function calcWD() {
 /* ══════════════════════════════════════
    TAB 4 : 퇴직소득 실효세율
 ══════════════════════════════════════ */
-function setRtMode(mode) {
-  $('rt_mAuto').classList.toggle('active', mode === 'auto');
-  $('rt_mManual').classList.toggle('active', mode === 'manual');
-  $('rt_autoPanel').classList.toggle('active', mode === 'auto');
-  $('rt_manualPanel').classList.toggle('active', mode === 'manual');
-  calcRT();
-}
-
 function calcRT() {
-  var isAuto = $('rt_mAuto').classList.contains('active');
-  var pay, totalTax, rate, showBreakdown;
+  var pay = v('rt_pay');
+  var years = v('rt_years');
+  var res = calcRetirementTax(pay, years);
+  var totalTax = res.total; var rate = res.rate;
 
-  if (isAuto) {
-    pay = v('rt_pay');
-    var years = v('rt_years');
-    var res = calcRetirementTax(pay, years);
-    totalTax = res.total; rate = res.rate; showBreakdown = true;
-    $('rt_b_pay').textContent  = fmt(pay);
-    $('rt_b_ysd').textContent  = fmt(res.ysD);
-    $('rt_b_conv').textContent = fmt(res.conv);
-    $('rt_b_cd').textContent   = fmt(res.cD);
-    $('rt_b_base').textContent = fmt(res.taxBase);
-    $('rt_b_tax').textContent  = fmt(res.total);
-  } else {
-    pay = v('rt_pay2');
-    totalTax = pay * (v('rt_manRate') / 100);
-    rate = v('rt_manRate');
-    showBreakdown = false;
-  }
+  $('rt_breakdown').style.display = '';
+  $('rt_b_pay').textContent  = fmt(pay);
+  $('rt_b_ysd').textContent  = fmt(res.ysD);
+  $('rt_b_conv').textContent = fmt(res.conv);
+  $('rt_b_cd').textContent   = fmt(res.cD);
+  $('rt_b_base').textContent = fmt(res.taxBase);
+  $('rt_b_tax').textContent  = fmt(res.total);
 
-  $('rt_breakdown').style.display = showBreakdown ? '' : 'none';
   $('rt_lumpTax').textContent  = fmt(totalTax);
   $('rt_lumpRate').textContent = rate.toFixed(2) + '%';
 
@@ -2659,7 +2617,7 @@ function rateColor(r) {
 /* ══════════════════════════════════════
    INIT
 ══════════════════════════════════════ */
-['tc_ps','tc_irp','rt_pay','rt_pay2','wd_natPen','wd_otherInc','wd_hi','wd_taxCredit'].forEach(updateKR);
+['tc_ps','tc_irp','rt_pay','wd_natPen','wd_otherInc','wd_hi','wd_taxCredit'].forEach(updateKR);
 capIRP(); capPS();
 calcTC();
 calcRT();
