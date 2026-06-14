@@ -425,7 +425,7 @@ table.matrix .rh {
     <div class="tab-grp-hd">인출(수령)</div>
     <div class="tab-grp-tabs">
       <button class="tab-btn" onclick="switchTab(2)">③ 인출 세금계산</button>
-      <button class="tab-btn" onclick="switchTab(3)">④ 퇴직소득 실효세율</button>
+      <button class="tab-btn" onclick="switchTab(3)">④ 퇴직소득세 실효세율</button>
     </div>
   </div>
 </nav>
@@ -1817,7 +1817,7 @@ function calcTC() {
    TAB 3 : 인출 세금계산
 ══════════════════════════════════════ */
 var wdAccs = [
-  { type: 'irp', openDate: '2020-01-01', balance: 0, src1: 0, src2: 0, src3: 0, withdrawal: 0, retirePensionYr: 1, retireMode: 'auto', retirePay: 0, retireYears: 20, retireManRate: 10 },
+  { type: 'irp', openDate: '2020-01-01', balance: 0, src1: 0, src2: 0, src3: 0, withdrawal: 0, retirePensionYr: 1, retireMode: 'auto', retirePay: 0, retireYears: 20, retireManRate: 10, lifeAnnuity: false },
   { type: 'ps',  openDate: '2020-01-01', balance: 0, src1: 0, src2: 0, src3: 0, withdrawal: 0, lifeAnnuity: false }
 ];
 
@@ -1874,7 +1874,7 @@ function renderWdAccs() {
         '<div style="background:var(--bg3);padding:8px 12px;display:flex;justify-content:space-between;align-items:center">',
           '<span style="font-size:12px;font-weight:700;color:var(--text2)">계좌 ' + (i+1) + ' <span style="color:' + color + '">' + (isIRP ? 'IRP' : isOldPen ? '개인연금저축' : '연금저축') + '</span></span>',
           '<div style="display:flex;gap:8px;align-items:center">',
-            '<select style="font-size:11px;padding:2px 6px;border:1px solid var(--border2);border-radius:2px;background:var(--bg)" onchange="wdAccs[' + i + '].type=this.value;if(this.value===\'oldpen\'){wdAccs[' + i + '].openDate=\'1999-01-01\';}renderWdAccs();calcWD()">',
+            '<select style="font-size:11px;padding:2px 6px;border:1px solid var(--border2);border-radius:2px;background:var(--bg)" onchange="wdAccs[' + i + '].type=this.value;if(this.value===\'oldpen\'){wdAccs[' + i + '].openDate=\'1999-01-01\';}else if(wdAccs[' + i + '].openDate<\'2001-01-01\'){wdAccs[' + i + '].openDate=\'2020-01-01\';}renderWdAccs();calcWD()">',
               '<option value="ps"' + (acc.type==='ps' ? ' selected' : '') + '>연금저축</option>',
               '<option value="irp"' + (acc.type==='irp' ? ' selected' : '') + '>IRP</option>',
               '<option value="oldpen"' + (isOldPen ? ' selected' : '') + '>개인연금저축 (구법)</option>',
@@ -1902,7 +1902,7 @@ function renderWdAccs() {
               '</div>',
             ].join('')),
           '</div>',
-          (!isIRP && !isOldPen ? '<div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;padding:5px 8px;background:var(--bg3);border-radius:var(--radius)">' +
+          (!isOldPen ? '<div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;padding:5px 8px;background:var(--bg3);border-radius:var(--radius)">' +
             '<label style="font-size:11px;color:var(--text2);display:flex;align-items:center;gap:5px;cursor:pointer">' +
             '<input type="checkbox" ' + (acc.lifeAnnuity ? 'checked' : '') + ' style="cursor:pointer" onchange="wdAccs[' + i + '].lifeAnnuity=this.checked;calcWD()">' +
             '종신수령 <span style="font-size:10px;color:var(--text3)">(4.4% 고정)</span>' +
@@ -2114,7 +2114,7 @@ function calcWD() {
         accRtTax = rtCalc.total;
       }
     }
-    var accIsLife = !isIRP && (acc.lifeAnnuity || false);
+    var accIsLife = !isOldPen && (acc.lifeAnnuity || false);
     var accPensionRate = accIsLife ? 0.044 : (age >= 80 ? 0.033 : age >= 70 ? 0.044 : 0.055);
     // 연금수령한도 계산 (eligPS인 계좌만)
     var accIsPre = acc.openDate && acc.openDate <= '2013-02-28';
