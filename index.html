@@ -1029,12 +1029,16 @@ table.matrix .rh {
 
       <div style="margin-top:12px">
         <div class="rrow">
-          <span class="rrow-label" style="font-size:12px">연금저축 한도 초과 납입분</span>
+          <span class="rrow-label" style="font-size:12px">연금저축 세액공제 한도 초과 납입분</span>
           <span class="rrow-val green" id="tc_psOver" style="font-size:12px">—</span>
         </div>
         <div class="rrow">
-          <span class="rrow-label" style="font-size:12px">IRP 한도 초과 납입분</span>
+          <span class="rrow-label" style="font-size:12px">IRP 세액공제 한도 초과 납입분</span>
           <span class="rrow-val green" id="tc_irpOver" style="font-size:12px">—</span>
+        </div>
+        <div class="rrow" id="tc_dcOver_row" style="display:none">
+          <span class="rrow-label" style="font-size:12px">DC형 세액공제 한도 초과 납입분</span>
+          <span class="rrow-val green" id="tc_dcOver" style="font-size:12px">—</span>
         </div>
         <div class="form-hint" style="margin-top:6px">한도 초과분은 수령 시 비과세 처리됩니다</div>
       </div>
@@ -1290,7 +1294,7 @@ table.matrix .rh {
         <span class="rrow-val red" id="wd_tax_total">—</span>
       </div>
       <div class="rrow">
-        <span class="rrow-label">세후 월 수령액</span>
+        <span class="rrow-label">세후 월 평균 수령액</span>
         <span class="rrow-val green" id="wd_net_monthly">—</span>
       </div>
       <div class="rrow">
@@ -1831,8 +1835,11 @@ function calcTC() {
   if (down > 0) { $('tc_b_down_row').style.display = ''; $('tc_b_down').textContent = fmt(down) + ' (비과세)'; }
   else $('tc_b_down_row').style.display = 'none';
   $('tc_b_total').textContent  = fmt(total);
+  const dcOver = Math.max(0, dc - dcElig);
   $('tc_psOver').textContent   = psOver  > 0 ? fmt(psOver)  : '없음';
   $('tc_irpOver').textContent  = irpOver > 0 ? fmt(irpOver) : '없음';
+  if (dc > 0) { $('tc_dcOver_row').style.display = ''; $('tc_dcOver').textContent = dcOver > 0 ? fmt(dcOver) : '없음'; }
+  else $('tc_dcOver_row').style.display = 'none';
 }
 
 /* ══════════════════════════════════════
