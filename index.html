@@ -1040,6 +1040,10 @@ table.matrix .rh {
           <span class="rrow-label" style="font-size:12px">DC형 세액공제 한도 초과 납입분</span>
           <span class="rrow-val green" id="tc_dcOver" style="font-size:12px">—</span>
         </div>
+        <div class="rrow" id="tc_isaOver_row" style="display:none">
+          <span class="rrow-label" style="font-size:12px">ISA 추가 세액공제 한도 초과분</span>
+          <span class="rrow-val green" id="tc_isaOver" style="font-size:12px">—</span>
+        </div>
         <div class="form-hint" style="margin-top:6px">한도 초과분은 수령 시 비과세 처리됩니다</div>
       </div>
     </div>
@@ -1835,11 +1839,14 @@ function calcTC() {
   if (down > 0) { $('tc_b_down_row').style.display = ''; $('tc_b_down').textContent = fmt(down) + ' (비과세)'; }
   else $('tc_b_down_row').style.display = 'none';
   $('tc_b_total').textContent  = fmt(total);
-  const dcOver = Math.max(0, dc - dcElig);
+  const dcOver  = Math.max(0, dc - dcElig);
+  const isaOver = Math.max(0, isa * 0.1 - 3000000);
   $('tc_psOver').textContent   = psOver  > 0 ? fmt(psOver)  : '없음';
   $('tc_irpOver').textContent  = irpOver > 0 ? fmt(irpOver) : '없음';
-  if (dc > 0) { $('tc_dcOver_row').style.display = ''; $('tc_dcOver').textContent = dcOver > 0 ? fmt(dcOver) : '없음'; }
+  if (dc > 0)  { $('tc_dcOver_row').style.display  = ''; $('tc_dcOver').textContent  = dcOver  > 0 ? fmt(dcOver)  : '없음'; }
   else $('tc_dcOver_row').style.display = 'none';
+  if (isa > 0) { $('tc_isaOver_row').style.display = ''; $('tc_isaOver').textContent = isaOver > 0 ? fmt(isaOver) : '없음'; }
+  else $('tc_isaOver_row').style.display = 'none';
 }
 
 /* ══════════════════════════════════════
