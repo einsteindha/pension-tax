@@ -1868,7 +1868,7 @@ function renderWdAccs() {
             '<div>',
               '<div style="font-size:11px;color:var(--text3);margin-bottom:3px">계좌 개설일</div>',
               '<div style="display:flex;align-items:center;gap:5px">',
-                '<input type="date" value="' + (acc.openDate||(isOldPen?'1999-01-01':'2020-01-01')) + '"' + (isOldPen ? ' min="1994-06-01" max="2000-12-31"' : '') + ' style="padding:4px 6px;border:1px solid var(--border2);border-radius:2px;font-size:12px" oninput="wdAccs[' + i + '].openDate=this.value;updateWdAccLabel(' + i + ');calcWD()">',
+                '<input type="date" value="' + (acc.openDate||(isOldPen?'1999-01-01':'2020-01-01')) + '"' + (isOldPen ? ' min="1994-06-01" max="2000-12-31"' : (!isIRP ? ' min="2001-01-01"' : '')) + ' style="padding:4px 6px;border:1px solid var(--border2);border-radius:2px;font-size:12px" oninput="wdAccs[' + i + '].openDate=this.value;updateWdAccLabel(' + i + ');calcWD()">',
                 '<span id="wd_yr_lbl_' + i + '" style="font-size:11px;color:var(--text3)">' + yrLabel + '</span>',
               '</div>',
             '</div>',
