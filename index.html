@@ -1875,6 +1875,9 @@ function syncWdSrc(i) {
   if (numEl) numEl.textContent = acc.withdrawal > 0 ? acc.withdrawal.toLocaleString() : '0';
   var lblEl = $('wd_wd_lbl_' + i);
   if (lblEl) lblEl.textContent = '원' + (acc.withdrawal > 0 ? ' · ' + toKorean(acc.withdrawal) : '');
+  var kr1 = $('wd_src1_kr_' + i); if (kr1) kr1.textContent = acc.src1 > 0 ? toKorean(acc.src1) : '';
+  var kr2 = $('wd_src2_kr_' + i); if (kr2) kr2.textContent = acc.src2 > 0 ? toKorean(acc.src2) : '';
+  var kr3 = $('wd_src3_kr_' + i); if (kr3) kr3.textContent = acc.src3 > 0 ? toKorean(acc.src3) : '';
   calcWD();
 }
 
@@ -1977,6 +1980,7 @@ function renderWdAccs() {
                 '<div style="display:flex;align-items:center;gap:6px;padding-left:24px">',
                   '<input type="number" value="' + acc.src1 + '" min="0" step="500000" style="width:120px;padding:3px 6px;border:1px solid var(--border2);border-radius:2px;font-size:12px" oninput="wdAccs[' + i + '].src1=parseFloat(this.value)||0;syncWdSrc(' + i + ')">',
                   '<span style="font-size:11px;color:var(--text3)">원</span>',
+                  '<span id="wd_src1_kr_' + i + '" style="font-size:10px;color:var(--text3)">' + (acc.src1 > 0 ? toKorean(acc.src1) : '') + '</span>',
                 '</div>',
               '</div>',
               (isIRP ? [
@@ -1988,6 +1992,7 @@ function renderWdAccs() {
                   '<div style="display:flex;align-items:center;gap:6px;padding-left:24px">',
                     '<input type="number" value="' + acc.src2 + '" min="0" step="1000000" style="width:120px;padding:3px 6px;border:1px solid var(--border2);border-radius:2px;font-size:12px" oninput="wdAccs[' + i + '].src2=parseFloat(this.value)||0;syncWdSrc(' + i + ')">',
                     '<span style="font-size:11px;color:var(--text3)">원</span>',
+                    '<span id="wd_src2_kr_' + i + '" style="font-size:10px;color:var(--text3)">' + (acc.src2 > 0 ? toKorean(acc.src2) : '') + '</span>',
                     '<span style="font-size:11px;color:var(--border2);padding:0 3px">|</span>',
                     '<span style="font-size:11px;color:var(--text2)">수령</span>',
                     '<input type="number" value="' + py + '" min="1" max="50" style="width:42px;padding:3px 4px;border:1px solid var(--border2);border-radius:2px;font-size:12px;text-align:center" oninput="wdAccs[' + i + '].retirePensionYr=parseInt(this.value)||1;calcWD()">',
@@ -2040,6 +2045,7 @@ function renderWdAccs() {
                 '<div style="display:flex;align-items:center;gap:6px;padding-left:24px">',
                   '<input type="number" value="' + acc.src3 + '" min="0" step="500000" style="width:120px;padding:3px 6px;border:1px solid var(--border2);border-radius:2px;font-size:12px" oninput="wdAccs[' + i + '].src3=parseFloat(this.value)||0;syncWdSrc(' + i + ')">',
                   '<span style="font-size:11px;color:var(--text3)">원</span>',
+                  '<span id="wd_src3_kr_' + i + '" style="font-size:10px;color:var(--text3)">' + (acc.src3 > 0 ? toKorean(acc.src3) : '') + '</span>',
                 '</div>',
               '</div>',
             '</div>',
