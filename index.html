@@ -1332,7 +1332,7 @@ table.matrix .rh {
           <div class="breakdown-row"><span>종합소득공제</span><span id="wd_b_ded">—</span></div>
           <div class="breakdown-row total"><span>과세표준</span><span id="wd_b_base">—</span></div>
           <div class="breakdown-row"><span>종합소득세 (지방세 포함)</span><span id="wd_b_comptax">—</span></div>
-          <div class="breakdown-row"><span style="padding-left:10px;color:var(--text3)">└ 사적연금③ 귀속분 추정 (안분)</span><span id="wd_b_pencomp" style="color:var(--red)">—</span></div>
+          <div class="breakdown-row"><span style="padding-left:10px;color:var(--text3)">└ 사적연금③ 귀속분 추정 (한계세율)</span><span id="wd_b_pencomp" style="color:var(--red)">—</span></div>
         </div>
       </div>
     </div>
@@ -2150,7 +2150,7 @@ function calcWD() {
       earnTaxCredit = Math.min(earnTaxCredit, earnTCcap);
     }
     var compTax = Math.max(0, compTaxBefore - earnTaxCredit - taxCredit);
-    var penCompTax = totInc > 0 ? compTax * (penAmt / totInc) : 0;
+    var penCompTax = (baseTax(totInc) - baseTax(Math.max(0, totInc - penAmt))) * 1.1;
     var hasInput = salary>0||bizRev>0||intDiv>0||natPen>0||otherInc>0||dep>0||np>0||hi>0||otherD>0||taxCredit>0;
     var sepEff  = '16.5';
     var compEff = totalEligWd3 > 0 ? (penCompTax / totalEligWd3 * 100).toFixed(1) : '0.0';
