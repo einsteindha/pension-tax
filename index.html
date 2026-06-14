@@ -1254,8 +1254,6 @@ table.matrix .rh {
 
     <div class="card">
       <div class="card-title">인출 세금 계산 결과</div>
-      <div id="wd_eligibility" class="alert alert-info" style="font-size:11px;margin-bottom:10px"></div>
-
       <div id="wd_under55_notice" style="display:none;margin-bottom:10px" class="alert alert-warn">
         <strong>연금 외 수령만 가능</strong> — 55세 미만으로 연금수령 요건 미충족.<br>
         ③ 재원은 기타소득세 16.5% 적용. ①은 비과세, ②는 퇴직소득세 그대로 적용.
@@ -2056,11 +2054,6 @@ function calcWD() {
   var elig55 = age >= 55;
   var elig5yr = openedYrs >= 5;
 
-  var eligMsg = '나이 ' + age + '세: ' + (elig55 ? '✓ 55세 이상' : '✗ 55세 미만') + ' · 가장 오래된 계좌 개설 ' + Math.floor(openedYrs) + '년: ' + (elig5yr ? '✓ 5년 이상' : '✗ 5년 미만');
-  if ($('wd_eligibility')) {
-    $('wd_eligibility').textContent = eligMsg;
-    $('wd_eligibility').className = (elig55 && elig5yr) ? 'alert alert-info' : 'alert alert-warn';
-  }
   var ageCard = $('wd_age_card');
   if (ageCard) {
     ageCard.style.background = elig55 ? '' : 'rgba(239,68,68,.04)';
