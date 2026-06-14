@@ -2103,7 +2103,7 @@ function calcWD() {
     totalGross += (wd1 + wd2 + wd3);
     var accPY = isIRP ? (acc.retirePensionYr || 1) : 1;
     var accDiscount = accPY <= 10 ? 0.30 : accPY <= 20 ? 0.40 : 0.50;
-    var accRtPay = isIRP ? (acc.retirePay || acc.src2 || 0) : 0;
+    var accRtPay = isIRP ? (acc.retirePay || 0) : 0;
     if (isIRP && wd2 > 0 && !(accRtPay > 0)) needsRetirePay = true;
     var accRtTax = 0;
     if (isIRP && wd2 > 0 && accRtPay > 0) {
