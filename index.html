@@ -148,8 +148,8 @@ body {
 .inp-wrap input[type="number"]:focus,
 .inp-wrap input[type="date"]:focus { outline: none; border-color: var(--gold); }
 .inp-row { display: flex; align-items: center; gap: 10px; }
-.inp-row .inp-wrap { flex: 1; }
-.inp-row .kr-num { margin-bottom: 0; min-height: auto; flex-shrink: 0; }
+.inp-row .inp-wrap { flex: 2; }
+.inp-row .kr-num { flex: 1; margin-bottom: 0; min-height: auto; }
 .inp-unit {
   position: absolute; right: 10px;
   font-size: 11px; color: var(--text3); pointer-events: none;
@@ -1163,9 +1163,9 @@ table.matrix .rh {
 
     <!-- 계좌 목록 -->
     <div class="card" style="margin-top:10px">
-      <div class="card-title" style="display:flex;justify-content:space-between;align-items:center">
-        <span>계좌 정보</span>
-        <button onclick="addWdAcc()" style="font-size:11px;padding:4px 10px;background:var(--blue);color:#fff;border:none;border-radius:var(--radius);cursor:pointer">+ 계좌 추가</button>
+      <div class="card-title">
+        계좌 정보
+        <button onclick="addWdAcc()" style="font-size:11px;padding:4px 10px;background:var(--blue);color:#fff;border:none;border-radius:var(--radius);cursor:pointer;margin-left:auto;text-transform:none;letter-spacing:0">+ 계좌 추가</button>
       </div>
       <div id="wd_accs"></div>
     </div>
@@ -1948,9 +1948,9 @@ function renderWdAccs() {
           '</div>',
         '</div>',
         '<div style="padding:10px 12px">',
-          '<div style="display:grid;grid-template-columns:' + (isOldPen ? '1fr' : '1fr 1fr') + ';gap:8px;margin-bottom:10px">',
+          '<div style="display:grid;grid-template-columns:1fr;gap:8px;margin-bottom:10px">',
             '<div>',
-              '<div class="form-label">계좌 개설일</div>',
+              '<div style="font-size:11px;font-weight:600;color:var(--text2);margin-bottom:5px">계좌 개설일</div>',
               '<div class="inp-row">',
                 '<div class="inp-wrap">',
                   '<input type="date" value="' + (acc.openDate||(isOldPen?'1999-01-01':'2020-01-01')) + '"' + (isOldPen ? ' min="1994-06-01" max="2000-12-31"' : ' max="' + todayStr + '"' + (isIRP ? ' min="2012-07-26"' : ' min="2001-01-01"')) + ' oninput="wdAccs[' + i + '].openDate=this.value;updateWdAccLabel(' + i + ');calcWD()">',
@@ -1960,7 +1960,7 @@ function renderWdAccs() {
             '</div>',
             (isOldPen ? '' : [
               '<div>',
-                '<div class="form-label">현재 평가금액</div>',
+                '<div style="font-size:11px;font-weight:600;color:var(--text2);margin-bottom:5px">현재 평가금액</div>',
                 '<div class="inp-row">',
                   '<div id="wd_bal_lbl_' + i + '" class="kr-num">' + (acc.balance > 0 ? toKorean(acc.balance) : '') + '</div>',
                   '<div class="inp-wrap">',
@@ -2052,12 +2052,9 @@ function renderWdAccs() {
                     '<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">',
                       '<div>',
                         '<div style="font-size:10px;color:var(--text3);margin-bottom:2px">총 퇴직금</div>',
-                        '<div class="inp-row">',
-                          '<div id="wd_rt_pay_kr_' + i + '" class="kr-num">' + (acc.retirePay > 0 ? toKorean(acc.retirePay) : '') + '</div>',
-                          '<div class="inp-wrap">',
-                            '<input type="number" value="' + (acc.retirePay || 0) + '" min="0" step="1000000" oninput="wdAccs[' + i + '].retirePay=parseFloat(this.value)||0;calcWD()">',
-                            '<span class="inp-unit">원</span>',
-                          '</div>',
+                        '<div class="inp-wrap">',
+                          '<input type="number" value="' + (acc.retirePay || 0) + '" min="0" step="1000000" oninput="wdAccs[' + i + '].retirePay=parseFloat(this.value)||0;calcWD()">',
+                          '<span class="inp-unit">원</span>',
                         '</div>',
                       '</div>',
                       (acc.retireMode !== 'manual' ? [
@@ -2077,6 +2074,7 @@ function renderWdAccs() {
                           '</div>',
                         '</div>',
                       ].join('')),
+                      '<div id="wd_rt_pay_kr_' + i + '" class="kr-num" style="margin-bottom:0;align-self:center">' + (acc.retirePay > 0 ? toKorean(acc.retirePay) : '') + '</div>',
                     '</div>',
                     '<div id="wd_rt_result_' + i + '" style="font-size:10px;color:var(--text3);margin-top:6px;padding-top:5px;border-top:1px solid rgba(43,94,167,.15)">퇴직소득세: —</div>',
                   '</div>'
