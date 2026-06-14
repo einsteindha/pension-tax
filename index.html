@@ -1283,6 +1283,7 @@ table.matrix .rh {
           <span>합산 세금</span>
           <span id="wd_b_tax_sum">—</span>
         </div>
+        <div id="wd_over15_notice" style="display:none;font-size:10px;color:var(--text3);padding:5px 2px 0;line-height:1.5">* 사적연금소득 1,500만원 초과 — ③ 세금은 분리과세(16.5%) 기준 반영. 아래 모의계산에서 종합과세와 비교하세요.</div>
       </div>
 
       <!-- 계좌별 상세 -->
@@ -1318,6 +1319,7 @@ table.matrix .rh {
           </div>
         </div>
         <div id="wd_recommendation" class="alert" style="margin-top:12px;display:none"></div>
+        <div class="alert" style="margin-top:8px;font-size:10px;color:var(--text3);background:rgba(0,0,0,.03);border-color:var(--border)">⚠ 종합과세 모의계산은 간이 추정값으로 실제 납부세액과 다를 수 있습니다. 정확한 세액은 세무사 등 전문가 상담을 권장합니다.</div>
         <div class="breakdown" id="wd_compBreakdown" style="display:none">
           <div class="breakdown-title">종합과세 계산 내역</div>
           <div class="breakdown-row"><span>사적연금소득금액 (③)</span><span id="wd_b_pension">—</span></div>
@@ -2007,7 +2009,7 @@ function calcWD() {
   var totalBal = 0, totalGross = 0;
   var totalTax2 = 0, totalTax3 = 0;
   var totalWd1 = 0, totalWd2 = 0, totalWd3 = 0;
-  var totalEligWd3 = 0;
+  var totalEligWd3 = 0; var totalEligTax3 = 0;
   var accResults = [];
 
   wdAccs.forEach(function(acc, i) {
@@ -2039,7 +2041,7 @@ function calcWD() {
     var accPensionRate = accIsLife ? 0.044 : (age >= 80 ? 0.033 : age >= 70 ? 0.044 : 0.055);
     var tax3;
     if (!eligPS) { tax3 = wd3 * 0.165; }
-    else { totalEligWd3 += wd3; tax3 = wd3 * accPensionRate; }
+    else { totalEligWd3 += wd3; tax3 = wd3 * accPensionRate; totalEligTax3 += tax3; }
     totalTax2 += tax2; totalTax3 += tax3;
     accResults.push({ label: '계좌 ' + (i+1) + ' ' + (isIRP ? 'IRP' : '연금저축'), gross: wd1+wd2+wd3, tax: tax2+tax3, eligPS: eligPS });
     var under5yr = accOpenedYrs < 5;
@@ -2113,8 +2115,20 @@ function calcWD() {
   var over15 = totalEligWd3 > 15000000;
   if ($('wd_overSection')) $('wd_overSection').classList.toggle('visible', over15);
   if ($('wd_overResult'))  $('wd_overResult').style.display = over15 ? '' : 'none';
+  if ($('wd_over15_notice')) $('wd_over15_notice').style.display = over15 ? '' : 'none';
   if (over15) {
     var sepTax   = totalEligWd3 * 0.165;
+    var adjTax3  = (totalTax3 - totalEligTax3) + sepTax;
+    var adjTax   = totalTax2 + adjTax3;
+    var adjNet   = totalGross - adjTax;
+    var adjEff   = totalGross > 0 ? adjTax / totalGross * 100 : 0;
+    if ($('wd_net_annual'))  $('wd_net_annual').textContent  = fmt(adjNet);
+    if ($('wd_net_sub'))     $('wd_net_sub').textContent     = '총수령 ' + fmt(totalGross) + ' · 세금 ' + fmt(adjTax);
+    if ($('wd_tax_total'))   $('wd_tax_total').textContent   = fmt(adjTax);
+    if ($('wd_net_monthly')) $('wd_net_monthly').textContent = fmt(adjNet / 12);
+    if ($('wd_eff_rate'))    $('wd_eff_rate').textContent    = adjEff.toFixed(2) + '%';
+    if ($('wd_b_src3'))      $('wd_b_src3').textContent      = fmt(adjTax3);
+    if ($('wd_b_tax_sum'))   $('wd_b_tax_sum').textContent   = fmt(adjTax);
     var salary   = parseFloat($('wd_salary').value)    || 0;
     var bizRev   = parseFloat($('wd_bizRev').value)    || 0;
     var bizExp   = parseFloat($('wd_bizExp').value)    || 0;
