@@ -416,6 +416,12 @@ table.matrix .rh {
 .wd-add-btn { display:inline-flex; align-items:center; gap:5px; padding:6px 14px; background:var(--accent-bg); color:var(--gold-light); border:none; border-radius:var(--radius); cursor:pointer; font-size:12px; font-family:inherit; margin-top:10px; letter-spacing:.03em; }
 .wd-add-btn:hover { opacity:.85; }
 .wd-del-btn { background:none; border:none; cursor:pointer; color:var(--red); font-size:14px; line-height:1; padding:2px 6px; }
+/* ── MOBILE VISIBILITY ── */
+.mobile-notice { display: none; }
+@media (max-width: 640px) {
+  .hide-mobile { display: none !important; }
+  .mobile-notice { display: block; margin-bottom: 16px; }
+}
 </style>
 </head>
 <body>
@@ -460,7 +466,11 @@ table.matrix .rh {
 <div id="tab0" class="tab-content active">
 <div class="container">
 
-  <div class="card" style="margin-bottom:18px;border-left:3px solid var(--blue)">
+  <div class="mobile-notice alert alert-info" style="text-align:center;padding:14px 16px">
+    <strong>PC 웹 브라우저에서 이용을 권장합니다</strong><br>
+    <span style="font-size:12px;line-height:1.8">모바일에서는 표·매트릭스 등 일부 콘텐츠가 생략됩니다.<br>더 많은 정보를 한눈에 보시려면 PC에서 접속해주세요.</span>
+  </div>
+  <div class="card hide-mobile" style="margin-bottom:18px;border-left:3px solid var(--blue)">
     <div class="card-title" style="margin-bottom:10px">왜 이 도구를 만들었나</div>
     <div style="font-size:13px;color:var(--text2);line-height:1.9">
       <p style="margin:0 0 10px">재무설계사(CFP)로서 매년 250여 명의 공공영역 상담을 하다 보면, 파편적인 정보에서 비롯된 오해를 자주 마주칩니다.</p>
@@ -851,7 +861,7 @@ table.matrix .rh {
 
   </div><!-- /flow-wrap -->
 
-  <div class="key-box">
+  <div class="key-box hide-mobile">
     <div class="key-box-title">핵심 포인트</div>
     <div class="key-pt">납입 시 세액공제(최대 16.5%) → 운용 중 완전 비과세 → 수령 시 저율(3.3~5.5%): 3단계 모두 세제 혜택</div>
     <div class="key-pt">연금수령 시 세율(3.3~5.5%)이 해지 시 세율(16.5%)보다 훨씬 낮으므로 연금으로 수령하는 것이 유리</div>
@@ -1082,7 +1092,7 @@ table.matrix .rh {
 <div class="container">
 
 <!-- 재원별 인출 순서 (상단 full-width) -->
-<div class="card" style="margin-bottom:14px">
+<div class="card hide-mobile" style="margin-bottom:14px">
   <div class="card-title">재원별 인출 순서</div>
   <div style="font-size:11px;color:var(--text3);margin-bottom:12px">소득세법 시행령 제40조의2 — 재원이 섞여 있을 때 자동 적용</div>
   <div style="display:flex;flex-wrap:wrap;gap:5px 10px;margin-bottom:12px">
@@ -1407,7 +1417,7 @@ table.matrix .rh {
     </div>
 
     <!-- 퇴직소득세 실효세율 매트릭스 (이연퇴직소득 있을 때 노출) -->
-    <div id="wd_rt_matrix_card" style="display:none;margin-top:10px">
+    <div id="wd_rt_matrix_card" class="hide-mobile" style="display:none;margin-top:10px">
       <div class="card">
         <div class="card-title">퇴직소득세 실효세율 매트릭스</div>
         <div class="alert alert-info" style="margin-bottom:12px;font-size:11px">지방소득세 10% 포함 실효세율. 색이 진할수록 높은 세율.</div>
@@ -1468,7 +1478,7 @@ table.matrix .rh {
 <div class="container">
 
 <!-- 개념 설명 (full width) -->
-<div class="card" style="margin-bottom:14px">
+<div class="card hide-mobile" style="margin-bottom:14px">
   <div class="card-title">퇴직급여 수령 방식 비교</div>
 
   <!-- 퇴직급여 발생 -->
@@ -1644,7 +1654,7 @@ table.matrix .rh {
     </div>
 
     <!-- 매트릭스 -->
-    <div class="card">
+    <div class="card hide-mobile">
       <div class="card-title">실효세율 매트릭스</div>
       <div class="alert alert-info" style="margin-bottom:12px">지방소득세 10% 포함 실효세율. 색이 진할수록 높은 세율.</div>
       <div class="matrix-wrap">
