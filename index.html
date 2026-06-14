@@ -1842,21 +1842,23 @@ function renderWdAccs() {
   var curYear = 2026;
   container.innerHTML = wdAccs.map(function(acc, i) {
     var isIRP = acc.type === 'irp';
+    var isOldPen = acc.type === 'oldpen';
     var accOpenMs = acc.openDate ? (new Date() - new Date(acc.openDate)) : 0;
     var openedYrs = Math.max(0, Math.floor(accOpenMs / (365.25 * 24 * 3600 * 1000)));
     var yrLabel = '개설 ' + openedYrs + '년';
-    var color = isIRP ? 'var(--blue)' : 'var(--gold)';
+    var color = isIRP ? 'var(--blue)' : isOldPen ? 'var(--green)' : 'var(--gold)';
     var py = acc.retirePensionYr || 1;
     var pyDisc = py <= 10 ? '30%↓' : py <= 20 ? '40%↓' : '50%↓';
     var pyColor = py <= 10 ? 'var(--blue)' : py <= 20 ? 'var(--green)' : 'var(--gold)';
     return [
       '<div id="wd_acc_card_' + i + '" style="border:1.5px solid var(--border2);border-radius:var(--radius-lg);margin-bottom:10px;overflow:hidden;transition:border-color .3s,background .3s">',
         '<div style="background:var(--bg3);padding:8px 12px;display:flex;justify-content:space-between;align-items:center">',
-          '<span style="font-size:12px;font-weight:700;color:var(--text2)">계좌 ' + (i+1) + ' <span style="color:' + color + '">' + (isIRP ? 'IRP' : '연금저축') + '</span></span>',
+          '<span style="font-size:12px;font-weight:700;color:var(--text2)">계좌 ' + (i+1) + ' <span style="color:' + color + '">' + (isIRP ? 'IRP' : isOldPen ? '개인연금저축' : '연금저축') + '</span></span>',
           '<div style="display:flex;gap:8px;align-items:center">',
-            '<select style="font-size:11px;padding:2px 6px;border:1px solid var(--border2);border-radius:2px;background:var(--bg)" onchange="wdAccs[' + i + '].type=this.value;renderWdAccs();calcWD()">',
+            '<select style="font-size:11px;padding:2px 6px;border:1px solid var(--border2);border-radius:2px;background:var(--bg)" onchange="wdAccs[' + i + '].type=this.value;if(this.value===\'oldpen\'){wdAccs[' + i + '].openDate=\'1999-01-01\';}renderWdAccs();calcWD()">',
               '<option value="ps"' + (acc.type==='ps' ? ' selected' : '') + '>연금저축</option>',
               '<option value="irp"' + (acc.type==='irp' ? ' selected' : '') + '>IRP</option>',
+              '<option value="oldpen"' + (isOldPen ? ' selected' : '') + '>개인연금저축 (구법)</option>',
             '</select>',
             (wdAccs.length > 1 ? '<button onclick="removeWdAcc(' + i + ')" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:15px;line-height:1;padding:0 4px">✕</button>' : ''),
           '</div>',
@@ -1866,7 +1868,7 @@ function renderWdAccs() {
             '<div>',
               '<div style="font-size:11px;color:var(--text3);margin-bottom:3px">계좌 개설일</div>',
               '<div style="display:flex;align-items:center;gap:5px">',
-                '<input type="date" value="' + (acc.openDate||'2020-01-01') + '" style="padding:4px 6px;border:1px solid var(--border2);border-radius:2px;font-size:12px" oninput="wdAccs[' + i + '].openDate=this.value;updateWdAccLabel(' + i + ');calcWD()">',
+                '<input type="date" value="' + (acc.openDate||(isOldPen?'1999-01-01':'2020-01-01')) + '"' + (isOldPen ? ' min="1994-06-01" max="2000-12-31"' : '') + ' style="padding:4px 6px;border:1px solid var(--border2);border-radius:2px;font-size:12px" oninput="wdAccs[' + i + '].openDate=this.value;updateWdAccLabel(' + i + ');calcWD()">',
                 '<span id="wd_yr_lbl_' + i + '" style="font-size:11px;color:var(--text3)">' + yrLabel + '</span>',
               '</div>',
             '</div>',
@@ -1879,7 +1881,7 @@ function renderWdAccs() {
               '<div id="wd_bal_lbl_' + i + '" style="font-size:10px;color:var(--text3);margin-top:2px">' + (acc.balance > 0 ? toKorean(acc.balance) : '') + '</div>',
             '</div>',
           '</div>',
-          (!isIRP ? '<div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;padding:5px 8px;background:var(--bg3);border-radius:var(--radius)">' +
+          (!isIRP && !isOldPen ? '<div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;padding:5px 8px;background:var(--bg3);border-radius:var(--radius)">' +
             '<label style="font-size:11px;color:var(--text2);display:flex;align-items:center;gap:5px;cursor:pointer">' +
             '<input type="checkbox" ' + (acc.lifeAnnuity ? 'checked' : '') + ' style="cursor:pointer" onchange="wdAccs[' + i + '].lifeAnnuity=this.checked;calcWD()">' +
             '종신수령 <span style="font-size:10px;color:var(--text3)">(4.4% 고정)</span>' +
@@ -1896,80 +1898,95 @@ function renderWdAccs() {
             '<strong>⚠ 연금수령한도 초과</strong> — <span id="wd_overlimit_detail_' + i + '"></span><br>' +
             '초과분 ③→기타소득세 16.5% · 초과분 ②→퇴직소득세 감면 없음(100%)' +
           '</div>',
-          '<div style="font-size:11px;font-weight:700;color:var(--text2);margin-bottom:4px">인출금액 (순서: ①→②→③)</div>',
-          (isIRP
+          (isOldPen ? '' : '<div style="font-size:11px;font-weight:700;color:var(--text2);margin-bottom:4px">인출금액 (순서: ①→②→③)</div>'),
+          (isOldPen ? '' : (isIRP
             ? '<div style="font-size:10px;color:var(--text3);margin-bottom:6px;line-height:1.5">② 이연퇴직소득은 원금만 입력(운용수익→③) · ISA이전/주택다운사이징: 세액공제 받은 금액→③, 미적용→①</div>'
-            : '<div style="font-size:10px;color:var(--text3);margin-bottom:6px;line-height:1.5">ISA 만기금/주택다운사이징 모두 연금저축에 납입 가능 · 세액공제 받은 금액→③, 미적용 금액→①</div>'),
-          '<div style="display:grid;gap:5px;margin-bottom:8px">',
-            '<div style="display:flex;align-items:center;gap:6px">',
-              '<span style="width:18px;height:18px;border-radius:50%;background:var(--purple);color:#fff;font-size:10px;font-style:normal;font-family:inherit;display:inline-flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0">1</span>',
-              '<span style="font-size:11px;color:var(--text2);min-width:108px">세액공제X 원금</span>',
-              '<input type="number" value="' + acc.src1 + '" min="0" step="500000" style="width:120px;padding:3px 6px;border:1px solid var(--border2);border-radius:2px;font-size:12px" oninput="wdAccs[' + i + '].src1=parseFloat(this.value)||0;syncWdSrc(' + i + ')">',
-              '<span style="font-size:11px;color:var(--text3)">원</span>',
+            : '<div style="font-size:10px;color:var(--text3);margin-bottom:6px;line-height:1.5">ISA 만기금/주택다운사이징 모두 연금저축에 납입 가능 · 세액공제 받은 금액→③, 미적용 금액→①</div>')),
+          (isOldPen ? [
+            // 개인연금저축 전용 UI
+            '<div style="margin-bottom:10px;padding:8px 10px;background:rgba(29,158,117,.06);border:1px solid rgba(29,158,117,.25);border-radius:var(--radius);font-size:11px;line-height:1.6;color:var(--text2)">',
+              '<strong style="color:var(--green)">전액 비과세</strong> — 소득세법 §12 연금소득 비과세 (1994.6.1~2000.12.31 가입 구법 계좌)<br>',
+              '<span style="font-size:10px;color:var(--text3)">수령한도 없음 · 세액공제X 원금(소득공제 방식) · 수익 포함 전액 비과세</span>',
             '</div>',
-            (isIRP ? [
+            '<div>',
+              '<div style="font-size:11px;font-weight:700;color:var(--text2);margin-bottom:4px">연간 수령 금액</div>',
               '<div style="display:flex;align-items:center;gap:6px">',
-                '<span style="width:18px;height:18px;border-radius:50%;background:var(--blue);color:#fff;font-size:10px;font-style:normal;font-family:inherit;display:inline-flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0">2</span>',
-                '<span style="font-size:11px;color:var(--text2);min-width:108px">이연퇴직소득 원금</span>',
-                '<input type="number" value="' + acc.src2 + '" min="0" step="1000000" style="width:120px;padding:3px 6px;border:1px solid var(--border2);border-radius:2px;font-size:12px" oninput="wdAccs[' + i + '].src2=parseFloat(this.value)||0;syncWdSrc(' + i + ')">',
-                '<span style="font-size:11px;color:var(--text3)">원</span>',
-                '<span style="font-size:11px;color:var(--border2);padding:0 3px">|</span>',
-                '<span style="font-size:11px;color:var(--text2)">수령</span>',
-                '<input type="number" value="' + py + '" min="1" max="50" style="width:42px;padding:3px 4px;border:1px solid var(--border2);border-radius:2px;font-size:12px;text-align:center" oninput="wdAccs[' + i + '].retirePensionYr=parseInt(this.value)||1;calcWD()">',
-                '<span id="wd_py_lbl_' + i + '" style="font-size:10px;font-weight:600;color:' + pyColor + '">' + py + '년차 (' + pyDisc + ')</span>',
+                '<input type="number" value="' + (acc.withdrawal||0) + '" min="0" step="500000" style="width:140px;padding:4px 8px;border:1px solid var(--border2);border-radius:2px;font-size:13px;font-weight:600" oninput="wdAccs[' + i + '].withdrawal=parseFloat(this.value)||0;calcWD()">',
+                '<span id="wd_wd_lbl_' + i + '" style="font-size:11px;color:var(--text3)">원' + ((acc.withdrawal||0)>0 ? ' · ' + toKorean(acc.withdrawal) : '') + '</span>',
               '</div>',
-              [
-                '<div id="wd_rt_block_' + i + '" style="display:' + ((acc.src2||0) > 0 ? '' : 'none') + ';margin:6px 0 4px 24px;padding:8px 10px;background:rgba(43,94,167,.06);border-radius:var(--radius);border:1px solid rgba(43,94,167,.2)">',
-                  '<div style="font-size:10px;font-weight:700;color:var(--blue);margin-bottom:6px">퇴직급여 세금 정보</div>',
-                  '<div style="display:flex;gap:4px;margin-bottom:7px">',
-                    '<button style="' + (acc.retireMode !== 'manual' ? 'background:var(--blue);color:#fff' : 'background:var(--bg3);color:var(--text2)') + ';font-size:10px;padding:3px 9px;border:1px solid var(--border2);border-radius:var(--radius);cursor:pointer" onclick="setAccRtMode(' + i + ',0)">자동 (근속연수)</button>',
-                    '<button style="' + (acc.retireMode === 'manual' ? 'background:var(--blue);color:#fff' : 'background:var(--bg3);color:var(--text2)') + ';font-size:10px;padding:3px 9px;border:1px solid var(--border2);border-radius:var(--radius);cursor:pointer" onclick="setAccRtMode(' + i + ',1)">실효세율 직접입력</button>',
-                  '</div>',
-                  '<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">',
-                    '<div>',
-                      '<div style="font-size:10px;color:var(--text3);margin-bottom:2px">총 퇴직금</div>',
-                      '<div style="display:flex;align-items:center;gap:3px">',
-                        '<input type="number" value="' + (acc.retirePay || 0) + '" min="0" step="1000000" style="width:120px;padding:3px 6px;border:1px solid var(--border2);border-radius:2px;font-size:12px" oninput="wdAccs[' + i + '].retirePay=parseFloat(this.value)||0;calcWD()">',
-                        '<span style="font-size:11px;color:var(--text3)">원</span>',
-                      '</div>',
-                      '<div id="wd_rt_pay_kr_' + i + '" style="font-size:10px;color:var(--text3);margin-top:2px">' + (acc.retirePay > 0 ? toKorean(acc.retirePay) : '') + '</div>',
+            '</div>',
+          ].join('') : [
+            '<div style="display:grid;gap:5px;margin-bottom:8px">',
+              '<div style="display:flex;align-items:center;gap:6px">',
+                '<span style="width:18px;height:18px;border-radius:50%;background:var(--purple);color:#fff;font-size:10px;font-style:normal;font-family:inherit;display:inline-flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0">1</span>',
+                '<span style="font-size:11px;color:var(--text2);min-width:108px">세액공제X 원금</span>',
+                '<input type="number" value="' + acc.src1 + '" min="0" step="500000" style="width:120px;padding:3px 6px;border:1px solid var(--border2);border-radius:2px;font-size:12px" oninput="wdAccs[' + i + '].src1=parseFloat(this.value)||0;syncWdSrc(' + i + ')">',
+                '<span style="font-size:11px;color:var(--text3)">원</span>',
+              '</div>',
+              (isIRP ? [
+                '<div style="display:flex;align-items:center;gap:6px">',
+                  '<span style="width:18px;height:18px;border-radius:50%;background:var(--blue);color:#fff;font-size:10px;font-style:normal;font-family:inherit;display:inline-flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0">2</span>',
+                  '<span style="font-size:11px;color:var(--text2);min-width:108px">이연퇴직소득 원금</span>',
+                  '<input type="number" value="' + acc.src2 + '" min="0" step="1000000" style="width:120px;padding:3px 6px;border:1px solid var(--border2);border-radius:2px;font-size:12px" oninput="wdAccs[' + i + '].src2=parseFloat(this.value)||0;syncWdSrc(' + i + ')">',
+                  '<span style="font-size:11px;color:var(--text3)">원</span>',
+                  '<span style="font-size:11px;color:var(--border2);padding:0 3px">|</span>',
+                  '<span style="font-size:11px;color:var(--text2)">수령</span>',
+                  '<input type="number" value="' + py + '" min="1" max="50" style="width:42px;padding:3px 4px;border:1px solid var(--border2);border-radius:2px;font-size:12px;text-align:center" oninput="wdAccs[' + i + '].retirePensionYr=parseInt(this.value)||1;calcWD()">',
+                  '<span id="wd_py_lbl_' + i + '" style="font-size:10px;font-weight:600;color:' + pyColor + '">' + py + '년차 (' + pyDisc + ')</span>',
+                '</div>',
+                [
+                  '<div id="wd_rt_block_' + i + '" style="display:' + ((acc.src2||0) > 0 ? '' : 'none') + ';margin:6px 0 4px 24px;padding:8px 10px;background:rgba(43,94,167,.06);border-radius:var(--radius);border:1px solid rgba(43,94,167,.2)">',
+                    '<div style="font-size:10px;font-weight:700;color:var(--blue);margin-bottom:6px">퇴직급여 세금 정보</div>',
+                    '<div style="display:flex;gap:4px;margin-bottom:7px">',
+                      '<button style="' + (acc.retireMode !== 'manual' ? 'background:var(--blue);color:#fff' : 'background:var(--bg3);color:var(--text2)') + ';font-size:10px;padding:3px 9px;border:1px solid var(--border2);border-radius:var(--radius);cursor:pointer" onclick="setAccRtMode(' + i + ',0)">자동 (근속연수)</button>',
+                      '<button style="' + (acc.retireMode === 'manual' ? 'background:var(--blue);color:#fff' : 'background:var(--bg3);color:var(--text2)') + ';font-size:10px;padding:3px 9px;border:1px solid var(--border2);border-radius:var(--radius);cursor:pointer" onclick="setAccRtMode(' + i + ',1)">실효세율 직접입력</button>',
                     '</div>',
-                    (acc.retireMode !== 'manual' ? [
+                    '<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">',
                       '<div>',
-                        '<div style="font-size:10px;color:var(--text3);margin-bottom:2px">근속연수</div>',
+                        '<div style="font-size:10px;color:var(--text3);margin-bottom:2px">총 퇴직금</div>',
                         '<div style="display:flex;align-items:center;gap:3px">',
-                          '<input type="number" value="' + (acc.retireYears || 20) + '" min="1" max="50" style="width:55px;padding:3px 6px;border:1px solid var(--border2);border-radius:2px;font-size:12px;text-align:center" oninput="wdAccs[' + i + '].retireYears=parseInt(this.value)||1;calcWD()">',
-                          '<span style="font-size:11px;color:var(--text3)">년</span>',
+                          '<input type="number" value="' + (acc.retirePay || 0) + '" min="0" step="1000000" style="width:120px;padding:3px 6px;border:1px solid var(--border2);border-radius:2px;font-size:12px" oninput="wdAccs[' + i + '].retirePay=parseFloat(this.value)||0;calcWD()">',
+                          '<span style="font-size:11px;color:var(--text3)">원</span>',
                         '</div>',
+                        '<div id="wd_rt_pay_kr_' + i + '" style="font-size:10px;color:var(--text3);margin-top:2px">' + (acc.retirePay > 0 ? toKorean(acc.retirePay) : '') + '</div>',
                       '</div>',
-                    ].join('') : [
-                      '<div>',
-                        '<div style="font-size:10px;color:var(--text3);margin-bottom:2px">실효세율</div>',
-                        '<div style="display:flex;align-items:center;gap:3px">',
-                          '<input type="number" value="' + (acc.retireManRate || 10) + '" min="0" max="50" step="0.1" style="width:55px;padding:3px 6px;border:1px solid var(--border2);border-radius:2px;font-size:12px;text-align:center" oninput="wdAccs[' + i + '].retireManRate=parseFloat(this.value)||0;calcWD()">',
-                          '<span style="font-size:11px;color:var(--text3)">%</span>',
+                      (acc.retireMode !== 'manual' ? [
+                        '<div>',
+                          '<div style="font-size:10px;color:var(--text3);margin-bottom:2px">근속연수</div>',
+                          '<div style="display:flex;align-items:center;gap:3px">',
+                            '<input type="number" value="' + (acc.retireYears || 20) + '" min="1" max="50" style="width:55px;padding:3px 6px;border:1px solid var(--border2);border-radius:2px;font-size:12px;text-align:center" oninput="wdAccs[' + i + '].retireYears=parseInt(this.value)||1;calcWD()">',
+                            '<span style="font-size:11px;color:var(--text3)">년</span>',
+                          '</div>',
                         '</div>',
-                      '</div>',
-                    ].join('')),
-                  '</div>',
-                  '<div id="wd_rt_result_' + i + '" style="font-size:10px;color:var(--text3);margin-top:6px;padding-top:5px;border-top:1px solid rgba(43,94,167,.15)">퇴직소득세: —</div>',
-                '</div>'
-              ].join(''),
-            ].join('') : ''),
-            '<div style="display:flex;align-items:center;gap:6px">',
-              '<span style="width:18px;height:18px;border-radius:50%;background:var(--gold);color:#fff;font-size:10px;font-style:normal;font-family:inherit;display:inline-flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0">3</span>',
-              '<span style="font-size:11px;color:var(--text2);min-width:108px">세액공제O+수익</span>',
-              '<input type="number" value="' + acc.src3 + '" min="0" step="500000" style="width:120px;padding:3px 6px;border:1px solid var(--border2);border-radius:2px;font-size:12px" oninput="wdAccs[' + i + '].src3=parseFloat(this.value)||0;syncWdSrc(' + i + ')">',
-              '<span style="font-size:11px;color:var(--text3)">원</span>',
+                      ].join('') : [
+                        '<div>',
+                          '<div style="font-size:10px;color:var(--text3);margin-bottom:2px">실효세율</div>',
+                          '<div style="display:flex;align-items:center;gap:3px">',
+                            '<input type="number" value="' + (acc.retireManRate || 10) + '" min="0" max="50" step="0.1" style="width:55px;padding:3px 6px;border:1px solid var(--border2);border-radius:2px;font-size:12px;text-align:center" oninput="wdAccs[' + i + '].retireManRate=parseFloat(this.value)||0;calcWD()">',
+                            '<span style="font-size:11px;color:var(--text3)">%</span>',
+                          '</div>',
+                        '</div>',
+                      ].join('')),
+                    '</div>',
+                    '<div id="wd_rt_result_' + i + '" style="font-size:10px;color:var(--text3);margin-top:6px;padding-top:5px;border-top:1px solid rgba(43,94,167,.15)">퇴직소득세: —</div>',
+                  '</div>'
+                ].join(''),
+              ].join('') : ''),
+              '<div style="display:flex;align-items:center;gap:6px">',
+                '<span style="width:18px;height:18px;border-radius:50%;background:var(--gold);color:#fff;font-size:10px;font-style:normal;font-family:inherit;display:inline-flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0">3</span>',
+                '<span style="font-size:11px;color:var(--text2);min-width:108px">세액공제O+수익</span>',
+                '<input type="number" value="' + acc.src3 + '" min="0" step="500000" style="width:120px;padding:3px 6px;border:1px solid var(--border2);border-radius:2px;font-size:12px" oninput="wdAccs[' + i + '].src3=parseFloat(this.value)||0;syncWdSrc(' + i + ')">',
+                '<span style="font-size:11px;color:var(--text3)">원</span>',
+              '</div>',
             '</div>',
-          '</div>',
-          '<div>',
-            '<div style="font-size:11px;color:var(--text3);margin-bottom:3px">연간 수령 금액 <span style="font-size:10px;opacity:.7">(①+②+③ 합산)</span></div>',
-            '<div style="display:flex;align-items:center;gap:6px">',
-              '<div style="padding:5px 10px;background:var(--bg3);border:1.5px solid var(--border);border-radius:2px;font-size:13px;font-weight:600;color:var(--text1);min-width:130px"><span id="wd_wd_num_' + i + '">' + ((acc.withdrawal||0) > 0 ? (acc.withdrawal).toLocaleString() : '0') + '</span></div>',
-              '<span id="wd_wd_lbl_' + i + '" style="font-size:11px;color:var(--text3)">원' + (acc.withdrawal > 0 ? ' · ' + toKorean(acc.withdrawal) : '') + '</span>',
+            '<div>',
+              '<div style="font-size:11px;color:var(--text3);margin-bottom:3px">연간 수령 금액 <span style="font-size:10px;opacity:.7">(①+②+③ 합산)</span></div>',
+              '<div style="display:flex;align-items:center;gap:6px">',
+                '<div style="padding:5px 10px;background:var(--bg3);border:1.5px solid var(--border);border-radius:2px;font-size:13px;font-weight:600;color:var(--text1);min-width:130px"><span id="wd_wd_num_' + i + '">' + ((acc.withdrawal||0) > 0 ? (acc.withdrawal).toLocaleString() : '0') + '</span></div>',
+                '<span id="wd_wd_lbl_' + i + '" style="font-size:11px;color:var(--text3)">원' + (acc.withdrawal > 0 ? ' · ' + toKorean(acc.withdrawal) : '') + '</span>',
+              '</div>',
             '</div>',
-          '</div>',
+          ].join('')),
         '</div>',
       '</div>'
     ].join('');
@@ -2025,6 +2042,25 @@ function calcWD() {
 
   wdAccs.forEach(function(acc, i) {
     var isIRP = acc.type === 'irp';
+    var isOldPen = acc.type === 'oldpen';
+
+    // 개인연금저축 (구법): 전액 비과세, 한도 없음
+    if (isOldPen) {
+      var opWd = acc.withdrawal || 0;
+      totalBal += (acc.balance || 0);
+      totalGross += opWd;
+      totalWd1 += opWd;
+      accResults.push({ label: '계좌 ' + (i+1) + ' 개인연금저축', gross: opWd, tax: 0, tax2: 0, tax3: 0, elig3: 0, eligTax3: 0, eligPS: false });
+      var acc5yrW = $('wd_under5yr_warn_' + i); if (acc5yrW) acc5yrW.style.display = 'none';
+      var nbW = $('wd_nobal_warn_' + i); if (nbW) nbW.style.display = 'none';
+      var olW = $('wd_overlimit_warn_' + i); if (olW) olW.style.display = 'none';
+      var accCd = $('wd_acc_card_' + i); if (accCd) { accCd.style.borderColor = ''; accCd.style.background = ''; }
+      var yrLbl2 = $('wd_yr_lbl_' + i); if (yrLbl2) yrLbl2.textContent = '개설 ' + Math.floor(_accOpenYrs(acc)) + '년';
+      var balLbl2 = $('wd_bal_lbl_' + i); if (balLbl2) balLbl2.textContent = acc.balance > 0 ? toKorean(acc.balance) : '';
+      var wdLbl2 = $('wd_wd_lbl_' + i); if (wdLbl2) wdLbl2.textContent = '원' + (opWd > 0 ? ' · ' + toKorean(opWd) + ' (비과세)' : '');
+      return;
+    }
+
     var accOpenedYrs = _accOpenYrs(acc);
     var eligPS = age >= 55 && accOpenedYrs >= 5;
     totalBal += (acc.balance || 0);
