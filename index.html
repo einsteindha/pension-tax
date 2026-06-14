@@ -1216,7 +1216,7 @@ table.matrix .rh {
         <hr class="divider">
         <div class="sub-title">세액공제</div>
         <div class="form-group">
-          <label class="form-label" for="wd_taxCredit">기타 세액공제 합계</label>
+          <label class="form-label" for="wd_taxCredit">기타 세액공제 합계 <span style="font-weight:400;color:var(--text3)">(자녀·의료비·교육비 등)</span></label>
           <div class="kr-num" id="wd_taxCredit_kr"></div>
           <div class="inp-wrap">
             <input type="number" id="wd_taxCredit" value="0" min="0" step="100000" oninput="updateKR('wd_taxCredit');calcWD()">
@@ -1331,7 +1331,8 @@ table.matrix .rh {
           <div class="breakdown-row total"><span>종합소득금액</span><span id="wd_b_total">—</span></div>
           <div class="breakdown-row"><span>종합소득공제</span><span id="wd_b_ded">—</span></div>
           <div class="breakdown-row total"><span>과세표준</span><span id="wd_b_base">—</span></div>
-          <div class="breakdown-row"><span>산출세액 (지방세 포함)</span><span id="wd_b_comptax">—</span></div>
+          <div class="breakdown-row"><span>종합소득세 (지방세 포함)</span><span id="wd_b_comptax">—</span></div>
+          <div class="breakdown-row"><span style="padding-left:10px;color:var(--text3)">└ 사적연금③ 귀속분 추정 (안분)</span><span id="wd_b_pencomp" style="color:var(--red)">—</span></div>
         </div>
       </div>
     </div>
@@ -2149,25 +2150,26 @@ function calcWD() {
       earnTaxCredit = Math.min(earnTaxCredit, earnTCcap);
     }
     var compTax = Math.max(0, compTaxBefore - earnTaxCredit - taxCredit);
+    var penCompTax = totInc > 0 ? compTax * (penAmt / totInc) : 0;
     var hasInput = salary>0||bizRev>0||intDiv>0||natPen>0||otherInc>0||dep>0||np>0||hi>0||otherD>0||taxCredit>0;
     var sepEff  = '16.5';
-    var compEff = totInc > 0 ? (compTax / totInc * 100).toFixed(1) : '0.0';
+    var compEff = totalEligWd3 > 0 ? (penCompTax / totalEligWd3 * 100).toFixed(1) : '0.0';
     if ($('wd_sepTax'))    $('wd_sepTax').textContent    = sepEff + '%';
     if ($('wd_sepDetail')) $('wd_sepDetail').textContent  = '세금 ' + fmtN(Math.round(sepTax/10000)) + '만원';
     if ($('wd_compTax'))   $('wd_compTax').textContent   = hasInput ? compEff + '%' : '—';
-    if ($('wd_compDetail')) $('wd_compDetail').textContent = hasInput ? '세금 ' + fmtN(Math.round(compTax/10000)) + '만원' : '위 항목 입력';
+    if ($('wd_compDetail')) $('wd_compDetail').textContent = hasInput ? '귀속추정 ' + fmtN(Math.round(penCompTax/10000)) + '만원' : '위 항목 입력';
     var rec = $('wd_recommendation'), sepCard = $('wd_sepCard'), compCard = $('wd_compCard');
     if (sepCard)  { sepCard.className  = 'cmp-card'; sepCard.style.outline  = ''; }
     if (compCard) { compCard.className = 'cmp-card'; compCard.style.outline = ''; }
     if (hasInput && rec && sepCard && compCard) {
-      var better = compTax < sepTax ? 'comp' : 'sep';
+      var better = penCompTax < sepTax ? 'comp' : 'sep';
       sepCard.style.outline  = better === 'sep'  ? '2px solid var(--green)' : '';
       compCard.style.outline = better === 'comp' ? '2px solid var(--green)' : '';
       rec.style.display = '';
       rec.className = 'alert alert-info';
       rec.innerHTML = better === 'sep'
-        ? '<strong>분리과세 실효세율 16.5%</strong> — 종합과세(' + compEff + '%)보다 절세에 유리합니다.'
-        : '<strong>종합과세 실효세율 ' + compEff + '%</strong> — 분리과세(16.5%)보다 절세에 유리합니다.';
+        ? '<strong>분리과세 16.5%</strong> — 종합과세 귀속추정(' + compEff + '%)보다 절세에 유리합니다.'
+        : '<strong>종합과세 귀속추정 ' + compEff + '%</strong> — 분리과세(16.5%)보다 절세에 유리합니다.';
       if ($('wd_compBreakdown')) {
         $('wd_compBreakdown').style.display = '';
         if ($('wd_b_pension'))  $('wd_b_pension').textContent  = fmt(penAmt);
@@ -2180,9 +2182,10 @@ function calcWD() {
         if ($('wd_b_ded'))      $('wd_b_ded').textContent      = fmt(totDed);
         if ($('wd_b_base'))     $('wd_b_base').textContent     = fmt(taxBase);
         if ($('wd_b_comptax'))  $('wd_b_comptax').textContent  = fmt(compTax);
+        if ($('wd_b_pencomp'))  $('wd_b_pencomp').textContent  = fmt(Math.round(penCompTax));
       }
     } else if (rec) { rec.style.display = 'none'; }
-    var useTax  = hasInput && compTax < sepTax ? compTax : sepTax;
+    var useTax  = hasInput && penCompTax < sepTax ? penCompTax : sepTax;
     var adjTax3 = (totalTax3 - totalEligTax3) + useTax;
     var adjTax  = totalTax2 + adjTax3;
     var adjNet  = totalGross - adjTax;
@@ -2195,8 +2198,8 @@ function calcWD() {
     if ($('wd_b_src3'))      $('wd_b_src3').textContent      = fmt(adjTax3);
     if ($('wd_b_tax_sum'))   $('wd_b_tax_sum').textContent   = fmt(adjTax);
     var noticeEl = $('wd_over15_notice');
-    if (noticeEl) noticeEl.textContent = hasInput && compTax < sepTax
-      ? '* 사적연금소득 1,500만원 초과 — ③ 세금은 종합과세 기준 반영 (간이 추정값, 전문가 상담 권장).'
+    if (noticeEl) noticeEl.textContent = hasInput && penCompTax < sepTax
+      ? '* 사적연금소득 1,500만원 초과 — ③ 세금은 종합과세 귀속추정분 반영 (간이 추정값, 전문가 상담 권장).'
       : '* 사적연금소득 1,500만원 초과 — ③ 세금은 분리과세(16.5%) 기준 반영. 타 소득 입력 시 종합과세와 비교.';
   }
 
