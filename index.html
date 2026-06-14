@@ -1840,7 +1840,7 @@ function calcTC() {
   else $('tc_b_down_row').style.display = 'none';
   $('tc_b_total').textContent  = fmt(total);
   const dcOver  = Math.max(0, dc - dcElig);
-  const isaOver = Math.max(0, isa * 0.1 - 3000000);
+  const isaOver = Math.max(0, isa - isaElig);
   $('tc_psOver').textContent   = psOver  > 0 ? fmt(psOver)  : '없음';
   $('tc_irpOver').textContent  = irpOver > 0 ? fmt(irpOver) : '없음';
   if (dc > 0)  { $('tc_dcOver_row').style.display  = ''; $('tc_dcOver').textContent  = dcOver  > 0 ? fmt(dcOver)  : '없음'; }
