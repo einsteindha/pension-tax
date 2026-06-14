@@ -1338,8 +1338,8 @@ table.matrix .rh {
       </div>
     </div>
 
-    <!-- 연금수령한도 매트릭스 -->
-    <div id="wd_limit_section" style="margin-top:10px">
+    <!-- 연금수령한도 매트릭스 (계좌별로 이동됨) -->
+    <div id="wd_limit_section" style="display:none">
       <div class="card">
         <div class="card-title">연금수령한도 연차별 매트릭스</div>
         <div class="alert alert-info" style="font-size:11px;margin-bottom:10px">현재 평가액(계좌 합산) 기준 연차별 최대 인출 한도. 한도 초과 인출 시 기타소득세 16.5%.</div>
@@ -1864,7 +1864,7 @@ function renderWdAccs() {
           '</div>',
         '</div>',
         '<div style="padding:10px 12px">',
-          '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">',
+          '<div style="display:grid;grid-template-columns:' + (isOldPen ? '1fr' : '1fr 1fr') + ';gap:8px;margin-bottom:10px">',
             '<div>',
               '<div style="font-size:11px;color:var(--text3);margin-bottom:3px">계좌 개설일</div>',
               '<div style="display:flex;align-items:center;gap:5px">',
@@ -1872,14 +1872,16 @@ function renderWdAccs() {
                 '<span id="wd_yr_lbl_' + i + '" style="font-size:11px;color:var(--text3)">' + yrLabel + '</span>',
               '</div>',
             '</div>',
-            '<div>',
-              '<div style="font-size:11px;color:var(--text3);margin-bottom:3px">현재 평가금액</div>',
-              '<div style="display:flex;align-items:center;gap:4px">',
-                '<input id="wd_bal_input_' + i + '" type="number" value="' + acc.balance + '" min="0" step="1000000" style="width:115px;padding:4px 6px;border:1px solid var(--border2);border-radius:2px;font-size:12px" oninput="wdAccs[' + i + '].balance=parseFloat(this.value)||0;updateWdAccLabel(' + i + ');calcWD()">',
-                '<span style="font-size:11px;color:var(--text3)">원</span>',
+            (isOldPen ? '' : [
+              '<div>',
+                '<div style="font-size:11px;color:var(--text3);margin-bottom:3px">현재 평가금액</div>',
+                '<div style="display:flex;align-items:center;gap:4px">',
+                  '<input id="wd_bal_input_' + i + '" type="number" value="' + acc.balance + '" min="0" step="1000000" style="width:115px;padding:4px 6px;border:1px solid var(--border2);border-radius:2px;font-size:12px" oninput="wdAccs[' + i + '].balance=parseFloat(this.value)||0;updateWdAccLabel(' + i + ');calcWD()">',
+                  '<span style="font-size:11px;color:var(--text3)">원</span>',
+                '</div>',
+                '<div id="wd_bal_lbl_' + i + '" style="font-size:10px;color:var(--text3);margin-top:2px">' + (acc.balance > 0 ? toKorean(acc.balance) : '') + '</div>',
               '</div>',
-              '<div id="wd_bal_lbl_' + i + '" style="font-size:10px;color:var(--text3);margin-top:2px">' + (acc.balance > 0 ? toKorean(acc.balance) : '') + '</div>',
-            '</div>',
+            ].join('')),
           '</div>',
           (!isIRP && !isOldPen ? '<div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;padding:5px 8px;background:var(--bg3);border-radius:var(--radius)">' +
             '<label style="font-size:11px;color:var(--text2);display:flex;align-items:center;gap:5px;cursor:pointer">' +
@@ -1986,6 +1988,7 @@ function renderWdAccs() {
                 '<span id="wd_wd_lbl_' + i + '" style="font-size:11px;color:var(--text3)">원' + (acc.withdrawal > 0 ? ' · ' + toKorean(acc.withdrawal) : '') + '</span>',
               '</div>',
             '</div>',
+            '<div id="wd_limit_block_' + i + '"></div>',
           ].join('')),
         '</div>',
       '</div>'
@@ -2086,13 +2089,16 @@ function calcWD() {
     var accIsLife = !isIRP && (acc.lifeAnnuity || false);
     var accPensionRate = accIsLife ? 0.044 : (age >= 80 ? 0.033 : age >= 70 ? 0.044 : 0.055);
     // 연금수령한도 계산 (eligPS인 계좌만)
+    var accIsPre = acc.openDate && acc.openDate <= '2013-02-28';
+    var accDenom0 = accIsPre ? 6 : 11;
+    var accMaxYr = accDenom0 - 1;
     var accLimit = Infinity, accPensionYr = 0;
-    if (eligPS && acc.balance > 0) {
-      var accIsPre = acc.openDate && acc.openDate <= '2013-02-28';
-      var accDenom0 = accIsPre ? 6 : 11;
+    if (eligPS) {
       var accQualifyAge = Math.max(55, Math.round(age - accOpenedYrs) + 5);
       accPensionYr = Math.max(1, age - accQualifyAge + 1);
-      accLimit = acc.balance / (accDenom0 - Math.min(accPensionYr, accDenom0 - 1)) * 1.2;
+      if (acc.balance > 0) {
+        accLimit = acc.balance / (accDenom0 - Math.min(accPensionYr, accDenom0 - 1)) * 1.2;
+      }
     }
     var totalWdAcc = wd1 + wd2 + wd3;
     var overAmt = (eligPS && totalWdAcc > accLimit) ? totalWdAcc - accLimit : 0;
@@ -2183,6 +2189,37 @@ function calcWD() {
     }
     var rtPayKrEl = $('wd_rt_pay_kr_' + i);
     if (rtPayKrEl && isIRP) rtPayKrEl.textContent = accRtPay > 0 ? toKorean(accRtPay) : '';
+    // 계좌별 연금수령한도 블록
+    var limitBlock = $('wd_limit_block_' + i);
+    if (limitBlock) {
+      if (eligPS && acc.balance > 0 && accPensionYr <= accMaxYr) {
+        var lbNote = accIsPre ? '2013년 2월 이전 계좌 (5년 기준)' : '2013년 3월 이후 계좌 (10년 기준)';
+        var lbHtml = '<div style="margin-top:8px;padding:8px 10px;background:rgba(43,94,167,.04);border:1px solid rgba(43,94,167,.15);border-radius:var(--radius)">';
+        lbHtml += '<div style="font-size:10px;font-weight:700;color:var(--blue);margin-bottom:4px">연금수령한도 연차별</div>';
+        lbHtml += '<div style="font-size:10px;color:var(--text3);margin-bottom:6px">' + lbNote + ' &nbsp;·&nbsp; 한도 = 평가액 ÷ (' + accDenom0 + ' − 연차) × 120%</div>';
+        lbHtml += '<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:11px">';
+        lbHtml += '<tr style="background:var(--accent-bg)"><th style="padding:4px 6px;border:1px solid var(--bg3);color:var(--gold-light);font-weight:500;text-align:center">연차</th><th style="padding:4px 6px;border:1px solid var(--bg3);color:var(--gold-light);font-weight:500;text-align:center">한도율</th><th style="padding:4px 6px;border:1px solid var(--bg3);color:var(--gold-light);font-weight:500;text-align:right">한도금액</th></tr>';
+        for (var n = 1; n <= accMaxYr; n++) {
+          var lbDenom = accDenom0 - n;
+          var lbRate = lbDenom > 0 ? 1.2 / lbDenom : 1.2;
+          var lbAmt = acc.balance * lbRate;
+          var lbIsCur = (n === accPensionYr);
+          var lbBg = lbIsCur ? 'rgba(196,147,63,.2)' : (n % 2 === 0 ? 'var(--bg2)' : '');
+          var lbFw = lbIsCur ? 'font-weight:700;' : '';
+          var lbCol = lbIsCur ? 'color:var(--amber);' : '';
+          lbHtml += '<tr style="background:' + lbBg + '">';
+          lbHtml += '<td style="padding:4px 6px;border:1px solid var(--bg3);text-align:center;' + lbFw + lbCol + '">' + n + '년차' + (lbIsCur ? ' ◀ 현재' : '') + '</td>';
+          lbHtml += '<td style="padding:4px 6px;border:1px solid var(--bg3);text-align:center;' + lbFw + lbCol + '">' + (lbRate * 100).toFixed(1) + '%</td>';
+          lbHtml += '<td style="padding:4px 6px;border:1px solid var(--bg3);text-align:right;color:var(--blue);' + lbFw + '">' + fmtN(Math.round(lbAmt / 10000)) + '만원</td>';
+          lbHtml += '</tr>';
+        }
+        lbHtml += '<tr><td style="padding:4px 6px;border:1px solid var(--bg3);text-align:center">' + (accMaxYr + 1) + '년차~</td><td colspan="2" style="padding:4px 6px;border:1px solid var(--bg3);text-align:center;color:var(--green);font-weight:600">한도 없음</td></tr>';
+        lbHtml += '</table></div></div>';
+        limitBlock.innerHTML = lbHtml;
+      } else {
+        limitBlock.innerHTML = '';
+      }
+    }
   });
 
   // 연금수령 연차: 55세 요건과 계좌 개설 5년 요건 모두 충족한 나이(qualifyAge)부터 1년차
@@ -2198,7 +2235,6 @@ function calcWD() {
     if ($('wd_overSection')) $('wd_overSection').classList.remove('visible');
     if ($('wd_overResult'))  $('wd_overResult').style.display = 'none';
     if ($('wd_over15_notice')) $('wd_over15_notice').style.display = 'none';
-    renderWdLimitMatrix(pensionYr, isPre2013, totalBal);
     return;
   }
 
@@ -2330,8 +2366,6 @@ function calcWD() {
     html += '</div>';
     accsEl.innerHTML = html;
   } else if (accsEl) { accsEl.innerHTML = ''; }
-
-  renderWdLimitMatrix(pensionYr, isPre2013, totalBal);
 }
 
 function renderWdLimitMatrix(curYr, isPre, balance) {
