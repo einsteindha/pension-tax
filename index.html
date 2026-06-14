@@ -856,11 +856,11 @@ table.matrix .rh {
         <label class="form-label">소득 유형</label>
         <div class="radio-group">
           <div class="radio-opt">
-            <input type="radio" name="incomeType" id="it_earned" value="earned" checked onchange="calcTC()">
+            <input type="radio" name="incomeType" id="it_earned" value="earned" checked onchange="tcIncomeHigh=false;calcTC()">
             <label for="it_earned">근로소득</label>
           </div>
           <div class="radio-opt">
-            <input type="radio" name="incomeType" id="it_comp" value="comp" onchange="calcTC()">
+            <input type="radio" name="incomeType" id="it_comp" value="comp" onchange="tcIncomeHigh=false;calcTC()">
             <label for="it_comp">종합소득</label>
           </div>
         </div>
@@ -1821,8 +1821,11 @@ function calcTC() {
   $('tc_rate').textContent      = rateStr;
   $('tc_b_ps').textContent  = fmt(psElig);
   $('tc_b_irp').textContent = fmt(irpElig);
-  if (dcElig > 0) { $('tc_b_dc_row').style.display = ''; $('tc_b_dc').textContent = fmt(dcElig); }
-  else $('tc_b_dc_row').style.display = 'none';
+  if (dc > 0) {
+    $('tc_b_dc_row').style.display = '';
+    $('tc_b_dc').textContent = dcElig > 0 ? fmt(dcElig) : '0 (한도 소진)';
+    $('tc_b_dc').style.color = dcElig > 0 ? '' : 'var(--amber)';
+  } else { $('tc_b_dc_row').style.display = 'none'; }
   if (isaElig > 0) { $('tc_b_isa_row').style.display = ''; $('tc_b_isa').textContent = '+' + fmt(isaElig); }
   else $('tc_b_isa_row').style.display = 'none';
   if (down > 0) { $('tc_b_down_row').style.display = ''; $('tc_b_down').textContent = fmt(down) + ' (비과세)'; }
@@ -2268,10 +2271,6 @@ function calcWD() {
       }
     }
   });
-
-  // 연금수령 연차: 55세 요건과 계좌 개설 5년 요건 모두 충족한 나이(qualifyAge)부터 1년차
-  var qualifyAge = Math.max(55, Math.round(age - openedYrs) + 5);
-  var pensionYr = (elig55 && elig5yr) ? Math.max(1, age - qualifyAge + 1) : 0;
 
   // 평가금액 미입력 시 결과 블록
   if (needsBalance) {
