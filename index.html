@@ -612,6 +612,30 @@ table.matrix .rh {
         </div>
         </div>
       </div>
+      <div class="card hide-mobile" style="margin-top:14px">
+        <div class="card-title" style="cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none" onclick="toggleSection('t0_dbdc')"><span style="color:var(--blue)">💡 DB형 vs DC형 선택 기준</span><i id="t0_dbdc_chev" style="font-size:10px;transition:transform .2s;font-style:normal">▼</i></div>
+        <div id="t0_dbdc_body" class="stoggle-body hidden" style="padding:0">
+        <div class="fitem" style="border-bottom:none;padding-bottom:0">
+          <div class="fitem-body">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+              <div style="padding:10px;background:rgba(43,94,167,.07);border-radius:var(--radius);border:1px solid rgba(43,94,167,.2)">
+                <div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:5px">DB형 (확정급여형)</div>
+                <div style="font-size:11px;color:var(--text2);line-height:1.7">퇴직급여 = 퇴직 직전<br>평균임금 × 근속연수<br><span style="color:var(--text3)">회사가 운용 책임</span></div>
+                <div style="margin-top:8px;font-size:11px;font-weight:600;color:var(--blue)">임금상승률 高 → 유리</div>
+              </div>
+              <div style="padding:10px;background:rgba(91,72,144,.07);border-radius:var(--radius);border:1px solid rgba(91,72,144,.2)">
+                <div style="font-size:12px;font-weight:700;color:var(--purple);margin-bottom:5px">DC형 (확정기여형)</div>
+                <div style="font-size:11px;color:var(--text2);line-height:1.7">연간 임금 1/12 매년 적립<br>근로자가 직접 투자 운용<br><span style="color:var(--text3)">투자 손익 본인 귀속</span></div>
+                <div style="margin-top:8px;font-size:11px;font-weight:600;color:var(--purple)">투자수익률 高 → 유리</div>
+              </div>
+            </div>
+            <div class="alert alert-info" style="margin-bottom:0;font-size:11px">
+              <strong>판단 기준:</strong> 예상 <strong>임금상승률 &gt; 투자수익률</strong> → DB형 선택 &nbsp;|&nbsp; 예상 <strong>투자수익률 &gt; 임금상승률</strong> → DC형 선택
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
     </div>
 
     <!-- ③ 인출(수령) 컬럼 -->
