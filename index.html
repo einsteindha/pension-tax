@@ -42,25 +42,34 @@ body {
 
 /* ── HEADER ── */
 .site-header {
-  background: var(--accent-bg);
-  padding: 22px 32px;
+  position: sticky; top: 0; z-index: 100;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border2);
+  padding: 0 24px;
   display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  flex-wrap: wrap;
+  align-items: center;
+  height: 54px;
   gap: 10px;
-  border-bottom: 1px solid rgba(255,255,255,.05);
 }
-.header-title h1 {
+.header-logo {
+  text-decoration: none; color: inherit;
+  display: flex; flex-direction: column; justify-content: center;
+}
+.header-logo-title {
   font-family: 'DM Serif Display', serif;
-  font-size: 24px; font-weight: 400; color: #fff; letter-spacing: .01em;
+  font-size: 20px; font-weight: 400; line-height: 1;
+  color: var(--text);
 }
-.header-title h1 span { color: var(--gold); font-style: italic; }
-.header-title p { font-size: 11px; color: rgba(255,255,255,.4); margin-top: 4px; letter-spacing: .1em; text-transform: uppercase; }
+.header-logo-title span { color: var(--gold); font-style: italic; }
+.header-logo-sub {
+  font-size: 10px; color: var(--text3);
+  margin-top: 3px; letter-spacing: .02em;
+}
 .header-badge {
-  font-size: 11px; color: rgba(255,255,255,.5);
-  border: 1px solid rgba(255,255,255,.14);
-  padding: 4px 14px; border-radius: 2px; white-space: nowrap; letter-spacing: .08em;
+  margin-left: auto;
+  font-size: 10px; color: var(--text3);
+  border: 1px solid var(--border2);
+  padding: 4px 10px; border-radius: 2px; white-space: nowrap; letter-spacing: .04em;
 }
 
 /* ── TAB NAV ── */
@@ -108,7 +117,7 @@ body {
 .split { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
 .split-55 { grid-template-columns: 55% 1fr; }
 @media (max-width: 860px) { .split, .split-55 { grid-template-columns: 1fr; } }
-@media (max-width: 600px) { .container { padding: 16px; } .site-header { padding: 16px 20px; } .site-footer { padding: 18px 16px; } }
+@media (max-width: 600px) { .container { padding: 16px; } .site-header { padding: 0 16px; } .site-footer { padding: 18px 16px; } }
 
 /* ── CARD ── */
 .card {
@@ -428,11 +437,11 @@ table.matrix .rh {
 
 <!-- HEADER -->
 <header class="site-header">
-  <div class="header-title">
-    <h1>연금계좌 <span>세금 정리</span></h1>
-    <p>연금저축 · IRP 과세 구조 이해 및 세금 계산 (2026년 기준)</p>
-  </div>
-  <div class="header-badge">IdentiFi · 정원준 CFP</div>
+  <a href="https://identifi.co.kr" target="_blank" rel="noopener" class="header-logo">
+    <div class="header-logo-title">Identi<span>Fi</span></div>
+    <div class="header-logo-sub">연금계좌 세금 정리</div>
+  </a>
+  <div class="header-badge">연금저축 · IRP 과세 구조 이해 및 세금 계산 (2026년 기준)</div>
 </header>
 
 <!-- TAB NAV -->
