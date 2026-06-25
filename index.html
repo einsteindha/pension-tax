@@ -45,32 +45,16 @@ body {
   position: sticky; top: 0; z-index: 100;
   background: var(--bg);
   border-bottom: 1px solid var(--border2);
-  padding: 0 24px;
+  padding: 1.2rem 2rem;
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  height: 54px;
-  gap: 10px;
 }
-.header-logo {
-  text-decoration: none; color: inherit;
-  display: flex; flex-direction: column; justify-content: center;
-}
-.header-logo-title {
-  font-family: 'DM Serif Display', serif;
-  font-size: 20px; font-weight: 400; line-height: 1;
-  color: var(--text);
-}
-.header-logo-title span { color: var(--gold); font-style: italic; }
-.header-logo-sub {
-  font-size: 10px; color: var(--text3);
-  margin-top: 3px; letter-spacing: .02em;
-}
-.header-badge {
-  margin-left: auto;
-  font-size: 10px; color: var(--text3);
-  border: 1px solid var(--border2);
-  padding: 4px 10px; border-radius: 2px; white-space: nowrap; letter-spacing: .04em;
-}
+.header-left { display: flex; align-items: center; gap: 1.5rem; }
+.logo { font-family: 'DM Serif Display', serif; font-size: 24px; color: var(--text); font-weight: 400; text-decoration: none; }
+.logo span { color: var(--gold); font-style: italic; }
+.page-title { font-family: 'Noto Serif KR', serif; font-size: 1.15rem; font-weight: 500; color: var(--text); }
+.page-sub { font-size: .82rem; color: var(--text3); }
 
 /* ── TAB NAV ── */
 .tab-nav {
@@ -117,7 +101,7 @@ body {
 .split { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
 .split-55 { grid-template-columns: 55% 1fr; }
 @media (max-width: 860px) { .split, .split-55 { grid-template-columns: 1fr; } }
-@media (max-width: 600px) { .container { padding: 16px; } .site-header { padding: 0 16px; } .site-footer { padding: 18px 16px; } }
+@media (max-width: 600px) { .container { padding: 16px; } .site-header { padding: .9rem 1rem; } .page-sub { display: none; } .site-footer { padding: 18px 16px; } }
 
 /* ── CARD ── */
 .card {
@@ -437,11 +421,13 @@ table.matrix .rh {
 
 <!-- HEADER -->
 <header class="site-header">
-  <a href="https://identifi.co.kr" target="_blank" rel="noopener" class="header-logo">
-    <div class="header-logo-title">Identi<span>Fi</span></div>
-    <div class="header-logo-sub">연금계좌 세금 정리</div>
-  </a>
-  <div class="header-badge">연금저축 · IRP 과세 구조 이해 및 세금 계산 (2026년 기준)</div>
+  <div class="header-left">
+    <a href="https://identifi.co.kr" target="_blank" rel="noopener" class="logo">Identi<span>Fi</span></a>
+    <div>
+      <div class="page-title">연금계좌 세금 정리</div>
+      <div class="page-sub">연금저축 · IRP 과세 구조 이해 및 세금 계산 (2026년 기준)</div>
+    </div>
+  </div>
 </header>
 
 <!-- TAB NAV -->
